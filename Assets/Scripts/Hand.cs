@@ -38,8 +38,7 @@ public class Hand : MonoBehaviour {
         Vector3 sigilTransform = sigilDirection * SIGIL_DISTANCE;
         sigilAnchor.transform.position = handAnchor.transform.position + sigilTransform;
 
-        sigilAnchor.transform.right = sigilDirection * -1; //rotation is broken.
-        sigilAnchor.transform.rotation = new Quaternion();
+        sigilAnchor.transform.forward = sigilDirection;
     }
 
     // switches the hand, if it's the dominant one, between sword and magic
