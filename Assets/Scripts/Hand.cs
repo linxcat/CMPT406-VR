@@ -8,7 +8,7 @@ public class Hand : MonoBehaviour {
 
     public float SIGIL_DISTANCE = 1.5F;
 
-    bool swordIsOn = true;
+    bool swordIsOn = false;
     bool locked = false;
 
     GameObject sigilAnchor;
@@ -18,10 +18,12 @@ public class Hand : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-        sigilAnchor = GameObject.Find("SigilAnchor");
-        swordAnchor = GameObject.Find("SwordAnchor");
+        sigilAnchor = GameObject.Find("Sigil Anchor");
+        swordAnchor = GameObject.Find("Sword Anchor");
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
-        handAnchor = GameObject.Find("Hand-Dominant");
+        handAnchor = GameObject.Find("Hand-Dominant"); // TODO find by tag and get primary
+
+        switchMode();
     }
 	
 	// Update is called once per frame
