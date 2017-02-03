@@ -4,48 +4,34 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour {
 
-
+            
 	public int PLAYER_HEALTH = 100;
 	public int PLAYER_MANA = 100;
 	public int PLAYER_STAMINA = 100;
 
-	// Use this for initialization
-	void Start () 
-	{
+	// Update is called once per frame
+	void Update () {
+		if(PLAYER_HEALTH == 0) death();
 		
 	}
 
-	// Update is called once per frame
-	void Update () 
-	{
-		if(PLAYER_HEALTH == 0)
-		{
-			death();
-		}
-	}
-
 	/** Cause the player to loose health = damage */
-	public void takeDamage(int damage)
-	{	
-		if(PLAYER_HEALTH > damage)
-		{
+	public void takeDamage(int damage) {	
+		if(PLAYER_HEALTH > damage) {
 			PLAYER_HEALTH = PLAYER_HEALTH - damage;
 		}
-		else
-		{
+		else {
 			PLAYER_HEALTH = 0;
 		}
 	}
 
 	/** Increment the amount of health the player has  by amount*/
-	public void addHealth(int amount) 
-	{
+	public void addHealth(int amount) {
 		PLAYER_HEALTH=PLAYER_HEALTH+amount;
 	}
 
 	/** get the amount of health the player has */
-	public int getHealth() 
-	{
+	public int getHealth() {
 		return PLAYER_HEALTH;
 	}
 
@@ -54,56 +40,40 @@ public class NewBehaviourScript : MonoBehaviour {
 		True if players mana is >= amount
 		False if amount is greater than players mana
 	*/
-	public bool removeMana(int amount)
-	{
-		if(PLAYER_MANA >= amount)
-		{
+	public bool removeMana(int amount) {
+		if(PLAYER_MANA >= amount) {
 			PLAYER_MANA = PLAYER_MANA - amount;
 			return true;
 		}
-		else
-		{
+		else {
 			return false;
 		}
 	}
 
 	/** Add amount to the mana pool */
-	public void addMana(int amount)
-	{
+	public void addMana(int amount) {
 		PLAYER_MANA = PLAYER_MANA+amount;
 	}
 
-
+	public int getStamina() { 
+		return PLAYER_STAMINA;
+	}
+		
 	/** Removes the amount from players stamina 
-	returns:
-		True if players stamina is >= amount
-		False if amount is greater than players stamina
+		Call getStamina to check value before removing
 	*/
-	public bool removeStamina(int amount)
-	{
-		if(PLAYER_STAMINA >= amount)
-		{
-			PLAYER_STAMINA = PLAYER_STAMINA - amount;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	public void removeStamina(int amount) {
+		PLAYER_STAMINA = PLAYER_STAMINA - amount;
 	}
 
 	/** Add amount to the stamina pool */
-	public void addStamina(int amount) 
-	{
+	public void addStamina(int amount) {
 		PLAYER_STAMINA= PLAYER_STAMINA + amount;
 	}
 
-
 	//TODO
 	/** PLayer has died end game */
-	public void death()
-    {
+	public void death() {
    
     }
-
 }
