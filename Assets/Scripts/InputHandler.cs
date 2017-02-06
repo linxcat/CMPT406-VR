@@ -32,7 +32,7 @@ public class InputHandler : MonoBehaviour {
     {
         foreach (Hand hand in hands)
         {
-            hand.lockSigils(locking);
+            hand.setLock(locking);
         }
     }
 }
