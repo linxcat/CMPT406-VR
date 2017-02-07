@@ -9,11 +9,11 @@ public class HitArray : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		for (int i = 0; i < points.Length; i ++) {
-            points[i] = GameObject.Find(((SwingSet.DIRECTIONS)i).ToString());
+            points[i] = GameObject.Find(((Hit.DIRECTION)i).ToString());
         }
 	}
 
-    public Vector3 getDirection(SwingSet.DIRECTIONS direction) {
+    public Vector3 getDirection(Hit.DIRECTION direction) {
         return points[(int)direction].transform.forward;
     }
 }
