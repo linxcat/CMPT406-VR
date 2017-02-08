@@ -26,6 +26,6 @@ namespace GUIPubSub {
         }
 
 
-        //TODO: Get event 
+        //TODO: Get event loop (Is it a loop in this case?)
     }
 }
