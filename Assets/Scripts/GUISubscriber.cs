@@ -55,5 +55,20 @@ namespace GUIPubSub {
         }
     }
 
+    public class GUIEnemyLeftSubscriber : GUISubscriber {
+        private GUIText ENEMY_TEXT;
+
+        public GUIEnemyLeftSubscriber (GUIText enemyText) {
+            ENEMY_TEXT = enemyText;
+        }
+
+
+        public void getPublication(GUIEvent e) {
+            if (e.getType().Equals("enemy")) {
+                ENEMY_TEXT.text = "Enemies left: " + e.getValue();
+            }
+        }
+    }
+
 
 }
