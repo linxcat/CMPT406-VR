@@ -137,7 +137,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0b080748197e10d49afe68a86acd86e1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1300,7 +1300,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1648840621}
   - component: {fileID: 1648840620}
-  - component: {fileID: 1648840622}
   m_Layer: 0
   m_Name: Input Manager
   m_TagString: Untagged
@@ -1332,17 +1331,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1648840622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1648840619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1d25bd28498b3041ae62256f7d446c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1664163214
 GameObject:
   m_ObjectHideFlags: 0

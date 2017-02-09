@@ -83,6 +83,10 @@ public class Hand : MonoBehaviour {
         // TODO handle active slashes and sigils on switch
     }
 
+    public void switchDebug() {
+        if (IS_PRIMARY) sword.switchDebug();
+    }
+
     public void setLock(bool value)
     {
         locking = value;

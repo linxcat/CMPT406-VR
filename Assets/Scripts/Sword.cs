@@ -12,7 +12,10 @@ public class Sword : MonoBehaviour {
     bool isSwinging = false;
     int timeStep = 0;
     int DAMPENING = 5;
-    
+
+    bool debugMode = false;
+    LinkedList<float> directionDeviationSaves = new LinkedList<float>();
+    LinkedList<float> alignmentDeviationSaves = new LinkedList<float>();
 
     Vector3 startPoint;
     Vector3 lastPoint;
@@ -89,8 +92,11 @@ public class Sword : MonoBehaviour {
         }
         enemyContacts.Clear();
 
-        // TODO if debug mode, store best deviations into an array for averaging
-        Debug.Log("Swing in " + correctedDirection + " direction with deviation of " + bestDirectionDeviation + " direction and " + bestAlignmentDeviation + " alignment.");
+        if (debugMode) {
+            directionDeviationSaves.AddFirst(bestDirectionDeviation);
+            alignmentDeviationSaves.AddFirst(bestAlignmentDeviation);
+        }
+        //Debug.Log("Swing in " + correctedDirection + " direction with deviation of " + bestDirectionDeviation + " direction and " + bestAlignmentDeviation + " alignment.");
     }
 
     void accumulateDeviations(Vector3 direction, Vector3 alignment) {
@@ -129,5 +135,32 @@ public class Sword : MonoBehaviour {
                 break;
         }
         return actualDirection;
+    }
+
+    public void switchDebug() {
+        if (debugMode) {
+            float averageDirectionDeviation = 0F;
+            float averageAlignmentDeviation = 0F;
+            foreach (float directionDeviation in directionDeviationSaves) {
+                averageDirectionDeviation += directionDeviation;
+            }
+            averageDirectionDeviation = averageDirectionDeviation / directionDeviationSaves.Count;
+
+            foreach (float alignmentDeviation in alignmentDeviationSaves) {
+                averageAlignmentDeviation += alignmentDeviation;
+            }
+            averageAlignmentDeviation = averageAlignmentDeviation / alignmentDeviationSaves.Count;
+
+            Debug.Log("Average Direction Deviation = " + averageDirectionDeviation + "\nAverage Alignment Deviation: " + averageAlignmentDeviation);
+
+            directionDeviationSaves.Clear();
+            alignmentDeviationSaves.Clear();
+
+            GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        }
+        else {
+            GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
+        }
+        debugMode = !debugMode;
     }
 }
