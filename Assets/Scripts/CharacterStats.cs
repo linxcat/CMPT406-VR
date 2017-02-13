@@ -32,12 +32,12 @@ public class NewBehaviourScript : MonoBehaviour {
     public void takeDamage(int damage) {
         if (PLAYER_HEALTH > damage) {
             PLAYER_HEALTH = PLAYER_HEALTH - damage;
-            HEALTH_SLIDER.value = PLAYER_HEALTH;
         }
         else {
             PLAYER_HEALTH = 0;
-            HEALTH_SLIDER.value = PLAYER_HEALTH;
+            
         }
+      HEALTH_SLIDER.value = PLAYER_HEALTH;
     }
 
     /** Increment the amount of health the player has  by amount*/
@@ -56,6 +56,7 @@ public class NewBehaviourScript : MonoBehaviour {
 		True if players mana is >= amount
 		False if amount is greater than players mana
 	*/
+
     public bool removeMana(int amount) {
         if (PLAYER_MANA >= amount) {
             PLAYER_MANA = PLAYER_MANA - amount;

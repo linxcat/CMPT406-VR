@@ -13,6 +13,11 @@ TagManager:
   - UI
   - 
   - 
+  - Player
+  - Sword
+  - Gauntlet
+  - Enemy
+  - EnemyWeapon
   - 
   - 
   - 
@@ -31,12 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - nothing
   m_SortingLayers:
   - name: Default
     uniqueID: 0

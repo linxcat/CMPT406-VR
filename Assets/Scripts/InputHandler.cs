@@ -15,8 +15,10 @@ public class InputHandler : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         bool modeSwitch = OVRInput.GetDown(OVRInput.Button.One);
+        bool debugSwitch = OVRInput.GetDown(OVRInput.Button.Three);
         bool locking = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
         if (modeSwitch) switchHandMode();
+        if (debugSwitch) switchDebug();
         lockHand(locking);
 	}
 
@@ -28,11 +30,17 @@ public class InputHandler : MonoBehaviour {
         }
     }
 
+    void switchDebug() {
+        foreach (Hand hand in hands) {
+            hand.switchDebug();
+        }
+    }
+
     void lockHand(bool locking)
     {
         foreach (Hand hand in hands)
         {
-            hand.lockSigils(locking);
+            hand.setLock(locking);
         }
     }
 }
