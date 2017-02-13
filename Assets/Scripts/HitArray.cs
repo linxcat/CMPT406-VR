@@ -16,4 +16,8 @@ public class HitArray : MonoBehaviour {
     public Vector3 getDirection(Hit.DIRECTION direction) {
         return points[(int)direction].transform.forward;
     }
+
+    public Vector3 getNormal(Hit.DIRECTION direction) {
+        return points[(int)direction].transform.up;
+    }
 }

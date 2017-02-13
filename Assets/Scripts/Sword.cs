@@ -14,8 +14,8 @@ public class Sword : MonoBehaviour {
     int DAMPENING = 5;
 
     bool debugMode = false;
-    LinkedList<float> directionDeviationSaves = new LinkedList<float>();
-    LinkedList<float> alignmentDeviationSaves = new LinkedList<float>();
+    LinkedList<double> directionDeviationSaves = new LinkedList<double>();
+    LinkedList<double> alignmentDeviationSaves = new LinkedList<double>();
 
     Vector3 startPoint;
     Vector3 lastPoint;
@@ -102,7 +102,9 @@ public class Sword : MonoBehaviour {
     void accumulateDeviations(Vector3 direction, Vector3 alignment) {
         for (int i = 0; i < directionDeviations.Length; i++) {
             directionDeviations[i] += Mathf.Abs((Vector3.Cross(direction, hitArray.getDirection((Hit.DIRECTION)i))).magnitude);
-            alignmentDeviations[i] += Mathf.Abs((Vector3.Cross(alignment, hitArray.getDirection((Hit.DIRECTION)i))).magnitude);
+
+            Vector3 planarAlignment = Vector3.ProjectOnPlane(alignment, hitArray.getNormal((Hit.DIRECTION)i));
+            alignmentDeviations[i] += Mathf.Abs((Vector3.Cross(planarAlignment, hitArray.getDirection((Hit.DIRECTION)i))).magnitude);
         }
     }
 
@@ -139,19 +141,44 @@ public class Sword : MonoBehaviour {
 
     public void switchDebug() {
         if (debugMode) {
-            float averageDirectionDeviation = 0F;
-            float averageAlignmentDeviation = 0F;
-            foreach (float directionDeviation in directionDeviationSaves) {
-                averageDirectionDeviation += directionDeviation;
+            double averageDirectionDeviation = 0.0;
+            double averageAlignmentDeviation = 0.0;
+            double stdDevDirection = 0.0;
+            double stdDevAlignment = 0.0;
+
+            double M = 0.0;
+            double S = 0.0;
+            int k = 1;
+            foreach (double directionDeviation in directionDeviationSaves) {
+                averageDirectionDeviation += directionDeviation; //average
+
+                double tmpM = M; //std deviation
+                M += (directionDeviation - tmpM) / k;
+                S += (directionDeviation - tmpM) * (directionDeviation - M);
+                k++;
             }
             averageDirectionDeviation = averageDirectionDeviation / directionDeviationSaves.Count;
+            stdDevDirection = System.Math.Sqrt(S / (k - 2));
 
-            foreach (float alignmentDeviation in alignmentDeviationSaves) {
-                averageAlignmentDeviation += alignmentDeviation;
+            M = 0.0;
+            S = 0.0;
+            k = 1;
+            foreach (double alignmentDeviation in alignmentDeviationSaves) {
+                averageAlignmentDeviation += alignmentDeviation; //average
+
+                double tmpM = M; //std deviation
+                M += (alignmentDeviation - tmpM) / k;
+                S += (alignmentDeviation - tmpM) * (alignmentDeviation - M);
+                k++;
             }
             averageAlignmentDeviation = averageAlignmentDeviation / alignmentDeviationSaves.Count;
-
-            Debug.Log("Average Direction Deviation = " + averageDirectionDeviation + "\nAverage Alignment Deviation: " + averageAlignmentDeviation);
+            stdDevAlignment = System.Math.Sqrt(S / (k - 2));
+            
+            Debug.Log("Average Direction Deviation = " + averageDirectionDeviation +
+                "\nStandard Deviation = " + stdDevDirection +
+                "\n------------------------" +
+                "\nAverage Alignment Deviation: " + averageAlignmentDeviation +
+                "\nStandard Deviation = " + stdDevAlignment + "\n");
 
             directionDeviationSaves.Clear();
             alignmentDeviationSaves.Clear();
