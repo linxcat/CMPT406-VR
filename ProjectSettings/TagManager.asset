@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Sigil
   layers:
   - Default
   - TransparentFX
@@ -13,6 +14,11 @@ TagManager:
   - UI
   - 
   - 
+  - Player
+  - Sword
+  - Gauntlet
+  - Enemy
+  - EnemyWeapon
   - 
   - 
   - 
@@ -31,12 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - nothing
   m_SortingLayers:
   - name: Default
     uniqueID: 0
