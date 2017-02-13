@@ -5,31 +5,24 @@ using UnityEngine;
 public class Gauntlet : MonoBehaviour {
 
     private float validSpeed = 10;
-	private float[] pastSpeed;
+	private float[] pastSpeed = new float[10];
 	private int counter;
 	private float totalSpeed, avgSpeed;
 
 	// Use this for initialization
 	void Start () {
-		pastSpeed = new float[10];
-		counter = 0;
-		for(int i = 0; i < 10; i++){
-			pastSpeed [i] = 0;
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		pastSpeed [counter++] = this.GetComponent<Rigidbody> ().velocity.magnitude;
-		if (counter == 10)
+		if (counter == pastSpeed.Length)
 			counter = 0;
 		totalSpeed = 0;
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < pastSpeed.Length; i++){
 			totalSpeed += pastSpeed [i];
 		}
-		if (totalSpeed == 0)
-			avgSpeed = 0;
-		avgSpeed = totalSpeed / 10;
+		avgSpeed = totalSpeed / pastSpeed.Length;
 	}
 
     private void OnTriggerEnter(Collider other)
