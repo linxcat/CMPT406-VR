@@ -9,8 +9,8 @@ public class Hit {
 
     static float directionPerfectThreshold = 0.4F;
     static float directionGoodThreshold = 0.5F;
-    static float alignmentPerfectThreshold = 2.5F;
-    static float alignmentGoodThreshold = 3F;
+    static float alignmentPerfectThreshold = 0.75F;
+    static float alignmentGoodThreshold = 1.5F;
 
     ACCURACY accuracy;
     DIRECTION direction;
