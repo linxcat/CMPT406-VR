@@ -8,8 +8,12 @@ public class Enemy : MonoBehaviour {
     GameObject weapon;
     Transform pivot;
 
+    Vector3 weaponStartPosition;
+
     float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
     bool swingDown = true;
+
+    float parryTime = 2F;
 
 	// Use this for initialization
 	void Start () {
@@ -17,14 +21,14 @@ public class Enemy : MonoBehaviour {
         {
             if (child.name == "weapon") {
                 weapon = child.gameObject;
-                Debug.Log("weapon found");
+                weaponStartPosition = child.localPosition;
             }
-            if (child.name == "pivot") { pivot = child.transform;
-                Debug.Log("pivot found");
+            if (child.name == "pivot") {
+                pivot = child.transform;
             }
             if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
         }
-        StartCoroutine("swingWeapon");
+        StartCoroutine("swingWeapon", 0F);
 	}
 	
 	// Update is called once per frame
@@ -53,8 +57,11 @@ public class Enemy : MonoBehaviour {
         colourMaterial.SetColor("_Color", Color.white);
     }
 
-    IEnumerator swingWeapon()
+    IEnumerator swingWeapon(float delay)
     {
+        yield return new WaitForSeconds(delay);
+        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+
         while (true)
         {
             if (swingDown)
@@ -70,5 +77,16 @@ public class Enemy : MonoBehaviour {
 
             yield return null;
         }
+    }
+
+    public void counter() {
+        if (!swingDown) return;
+
+        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        weapon.transform.up = pivot.up;
+        weapon.transform.localPosition = weaponStartPosition;
+        swingDown = true;
+        StopCoroutine("swingWeapon");
+        StartCoroutine("swingWeapon", parryTime);
     }
 }

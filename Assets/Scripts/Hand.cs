@@ -14,6 +14,9 @@ public class Hand : MonoBehaviour {
     bool locked = false;
     bool locking = false;
 
+    public float gauntletSpeedThreshold = 0.025F;
+    private float[] pastSpeeds = new float[10];
+
     GameObject sigilAnchor;
     GameObject hitArray;
     Sword sword;
@@ -29,6 +32,7 @@ public class Hand : MonoBehaviour {
         handAnchor = GameObject.Find("Hand-Dominant"); // TODO find by tag and get primary
 
         switchMode(); // both must start enabled, this sets the sword to start as on.
+        if (!IS_PRIMARY) StartCoroutine("trackGauntletSpeed");
     }
 	
 	// Update is called once per frame
@@ -70,6 +74,35 @@ public class Hand : MonoBehaviour {
 
         hitArray.transform.position = anchorTransform;
         hitArray.transform.forward = headFacing;
+    }
+
+    IEnumerator trackGauntletSpeed() {
+        int counter = 0;
+        Vector3 lastPoint = transform.position;
+        Rigidbody handRB = GetComponent<Rigidbody>();
+        while (true) {
+            pastSpeeds[counter++] = (transform.position - lastPoint).magnitude;
+            lastPoint = transform.position;
+            if (counter == pastSpeeds.Length) counter = 0;
+            yield return null;
+        }
+    }
+
+    private float getGauntletSpeed() {
+        float totalSpeed = 0F;
+        for (int i = 0; i < pastSpeeds.Length; i++) {
+            totalSpeed += pastSpeeds[i];
+        }
+        return totalSpeed / pastSpeeds.Length;
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (IS_PRIMARY) return;
+
+        Debug.Log("Gauntlet check with average speed: " + getGauntletSpeed());
+        if (getGauntletSpeed() > gauntletSpeedThreshold) {
+            other.SendMessageUpwards("counter");
+        }
     }
 
     // switches the hand, if it's the dominant one, between sword and magic
