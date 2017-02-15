@@ -9,8 +9,7 @@ public class Teleport : MonoBehaviour {
 
     private bool active = false;
     private bool teleporting = false;
-    private Vector3[] linePositions = new Vector3[3];
-
+    private Transform[] linePoints = new Transform[3];
     GameObject player;
     GameObject avatar;
     LineRenderer teleportArc;
@@ -35,9 +34,9 @@ public class Teleport : MonoBehaviour {
         teleportMask = LayerMask.GetMask(new string[3] { "Ground", "EnemyRange", "TeleportCollider" });
         secondArcMask = LayerMask.GetMask(new string[2] { "Ground", "EnemyRange" });
 
-        linePositions[0] = teleLineSpawn.position;
-        linePositions[1] = apex.position;
-        linePositions[2] = groundLocation.position;
+        linePoints[0] = teleLineSpawn;
+        linePoints[1] = apex;
+        linePoints[2] = groundLocation;
     }
 	
 	// Update is called once per frame
@@ -95,6 +94,10 @@ public class Teleport : MonoBehaviour {
     }
 
     void setSmoothedPoints() {
+        Vector3[] linePositions = new Vector3[3];
+        for (int i = 0; i < 3; i ++) {
+            linePositions[i] = linePoints[i].position;
+        }
         Vector3[] smoothedPoints = LineSmoother.SmoothLine(linePositions, lineSegmentSize);
 
         teleportArc.numPositions = smoothedPoints.Length;
