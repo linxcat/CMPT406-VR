@@ -5,12 +5,16 @@ using UnityEngine;
 public class Teleport : MonoBehaviour {
 
     public const float FADE_DURATION = 0.2f; // TODO change all constants to constant type
+    public float lineSegmentSize = 0.15f;
+
     private bool active = false;
     private bool teleporting = false;
+    private Vector3[] linePositions = new Vector3[3];
 
     GameObject player;
-    GameObject teleHand;
     GameObject avatar;
+    LineRenderer teleportArc;
+    Transform teleLineSpawn;
     Transform apex;
     Transform groundLocation;
     SphereCollider groundSphereCollider;
@@ -19,69 +23,86 @@ public class Teleport : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        
+
         player = GameObject.Find("Player");
-        teleHand = GameObject.Find("Hand-Dominant"); // TODO pull from InputManager once hands are arbitrary
+        avatar = GameObject.Find("LocalAvatar");
+        teleportArc = GetComponent<LineRenderer>();
+        teleLineSpawn = GameObject.Find("teleLineSpawn").transform;
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
         teleportMask = LayerMask.GetMask(new string[3] { "Ground", "EnemyRange", "TeleportCollider" });
         secondArcMask = LayerMask.GetMask(new string[2] { "Ground", "EnemyRange" });
+
+        linePositions[0] = teleLineSpawn.position;
+        linePositions[1] = apex.position;
+        linePositions[2] = groundLocation.position;
     }
 	
 	// Update is called once per frame
 	void Update () {
 		if (active) {
-            drawArc();
+            teleportArc.enabled = true;
+            setPoints();
+            setSmoothedPoints();
+        }
+        else {
+            teleportArc.enabled = false;
         }
 	}
 
-    void drawArc() {
+    void setPoints() {
         RaycastHit hitInfo = new RaycastHit();
-        if (!Physics.Raycast(teleHand.transform.position, teleHand.transform.forward, out hitInfo, float.MaxValue, teleportMask)) Debug.Log("HOLE IN TELEPORT BOUNDARIES!!");
-        int layerOfHit = hitInfo.collider.gameObject.layer;
+        RaycastHit secondHit = new RaycastHit();
 
+        if (!Physics.Raycast(teleLineSpawn.position, teleLineSpawn.forward, out hitInfo, float.MaxValue, teleportMask)) Debug.Log("HOLE IN TELEPORT BOUNDARIES!!");
+        int layerOfHit = hitInfo.collider.gameObject.layer;
         
-        if (layerOfHit == LayerMask.NameToLayer("TeleportCollider")) {
-            apex.transform.position = hitInfo.point;
+        if (layerOfHit == LayerMask.NameToLayer("TeleportCollider")) { 
             Vector3 secondDirection;
             if (hitInfo.collider.tag == "coneCap") {
-                Vector3 incomingVec = hitInfo.point - teleHand.transform.position;
+                Vector3 incomingVec = hitInfo.point - teleLineSpawn.position;
                 secondDirection = Vector3.Reflect(incomingVec, hitInfo.normal);
             }
             else {
-                Vector3 downwardAngle = teleHand.transform.forward;
-                downwardAngle.Normalize();
-                secondDirection = Quaternion.AngleAxis(-45, -Vector3.up) * downwardAngle;
+                Vector3 downwardAngle = teleLineSpawn.forward;
+                Vector3.ProjectOnPlane(downwardAngle, Vector3.up);
+                Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(teleLineSpawn.right, Vector3.up);
+                secondDirection = Quaternion.AngleAxis(45, flattenedHandAxis) * downwardAngle;
             }
-            RaycastHit secondHit = new RaycastHit();
-            Physics.Raycast(hitInfo.point, secondDirection, out secondHit, float.MaxValue, secondArcMask);
+            Debug.DrawRay(hitInfo.point, secondDirection, Color.red, 1F);
+            if (!Physics.Raycast(hitInfo.point, secondDirection, out secondHit, float.MaxValue, secondArcMask)) Debug.Log("MISSED THEGROUND!!");
             int layerOfSecondHit = secondHit.collider.gameObject.layer;
 
-            if (layerOfSecondHit == LayerMask.NameToLayer("Ground")) groundLocation.position = hitInfo.point;
+            apex.transform.position = hitInfo.point;
+            if (layerOfSecondHit == LayerMask.NameToLayer("Ground")) groundLocation.position = secondHit.point;
             else if (layerOfSecondHit == LayerMask.NameToLayer("EnemyRange")) groundLocation.position = findOffsetPoint(secondHit.collider, secondHit.transform.position);
-
-            drawWithApex();
         }
         else if (layerOfHit == LayerMask.NameToLayer("Ground")) {
             groundLocation.position = hitInfo.point;
-            drawNoApex();
+            placeStraightApex();
         }
         else if (layerOfHit == LayerMask.NameToLayer("EnemyRange")) {
             groundLocation.position = findOffsetPoint(hitInfo.collider, hitInfo.transform.position);
-            drawNoApex();
-        }
+            placeStraightApex();
+        }   
     }
 
-    void drawWithApex() {
-
+    void placeStraightApex() {
+        Vector3 apexDispacement = (groundLocation.position - teleLineSpawn.position)/2;
+        apex.position = teleLineSpawn.position + apexDispacement;
     }
 
-    void drawNoApex() {
+    void setSmoothedPoints() {
+        Vector3[] smoothedPoints = LineSmoother.SmoothLine(linePositions, lineSegmentSize);
 
+        teleportArc.numPositions = smoothedPoints.Length;
+        teleportArc.SetPositions(smoothedPoints);
     }
 
     public void go() {
-        if (teleporting) return;
+        if (teleporting || !active) return;
         StartCoroutine("TeleportPosition");
     }
 
