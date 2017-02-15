@@ -79,7 +79,6 @@ public class Hand : MonoBehaviour {
     IEnumerator trackGauntletSpeed() {
         int counter = 0;
         Vector3 lastPoint = transform.position;
-        Rigidbody handRB = GetComponent<Rigidbody>();
         while (true) {
             pastSpeeds[counter++] = (transform.position - lastPoint).magnitude;
             lastPoint = transform.position;

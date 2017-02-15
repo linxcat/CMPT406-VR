@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Sigil
+  - coneCap
   layers:
   - Default
   - TransparentFX
@@ -28,13 +30,13 @@ TagManager:
   - 
   - 
   - 
+  - EnemyRange
+  - 
+  - Ground
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - TeleportCollider
   - 
   - nothing
   m_SortingLayers:
