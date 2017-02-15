@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class NewBehaviourScript : MonoBehaviour {
+public class CharacterStats : MonoBehaviour {
 
 
     public int PLAYER_HEALTH = 100;
