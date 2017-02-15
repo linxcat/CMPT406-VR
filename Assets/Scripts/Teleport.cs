@@ -44,7 +44,7 @@ public class Teleport : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (active) {
+		if (active && !teleporting) {
             teleportArc.enabled = true;
             groundLocation.gameObject.SetActive(true);
             setPoints();
@@ -123,7 +123,7 @@ public class Teleport : MonoBehaviour {
 
         avatar.SetActive(true);
         Vector3 newPosition = new Vector3(groundLocation.position.x, player.transform.position.y, groundLocation.position.z);
-        player.transform.position = newPosition; // TODO robust for hills
+        player.transform.position = newPosition;
         player.transform.forward = groundLocation.forward;
         fadeIn();
         teleporting = false;
@@ -131,7 +131,7 @@ public class Teleport : MonoBehaviour {
 
     public Vector3 findOffsetPoint(Collider collider, Vector3 hitLocation) {
         Vector3 direction = hitLocation - collider.transform.position;
-        Vector3.ProjectOnPlane(direction, Vector3.up); // maybe fragile?
+        Vector3.ProjectOnPlane(direction, Vector3.up);
         direction.Normalize();
         direction *= (groundSphereCollider.radius);
         hitLocation += direction;
@@ -141,6 +141,7 @@ public class Teleport : MonoBehaviour {
     }
 
     public void setRotation(Vector2 vector) {
+        groundLocation.forward = Vector3.ProjectOnPlane(teleLineSpawn.forward, Vector3.up); // TODO robust for hills (use normal)
         float angle = Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         groundLocation.RotateAround(groundLocation.position, Vector3.up, angle);
         active = true;
@@ -151,10 +152,10 @@ public class Teleport : MonoBehaviour {
     }
 
     private void fadeOut() {
-        fader.SetActive(false);
+        fader.SetActive(true);
     }
 
     private void fadeIn() {
-        fader.SetActive(true);
+        fader.SetActive(false);
     }
 }
