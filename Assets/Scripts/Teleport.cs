@@ -12,6 +12,7 @@ public class Teleport : MonoBehaviour {
     private Transform[] linePoints = new Transform[3];
     GameObject player;
     GameObject avatar;
+    GameObject fader;
     LineRenderer teleportArc;
     Transform teleLineSpawn;
     Transform apex;
@@ -26,6 +27,8 @@ public class Teleport : MonoBehaviour {
 
         player = GameObject.Find("Player");
         avatar = GameObject.Find("LocalAvatar");
+        fader = GameObject.Find("Fader");
+        fader.SetActive(false);
         teleportArc = GetComponent<LineRenderer>();
         teleLineSpawn = GameObject.Find("teleLineSpawn").transform;
         apex = GameObject.Find("apex").transform;
@@ -43,11 +46,13 @@ public class Teleport : MonoBehaviour {
 	void Update () {
 		if (active) {
             teleportArc.enabled = true;
+            groundLocation.gameObject.SetActive(true);
             setPoints();
             setSmoothedPoints();
         }
         else {
             teleportArc.enabled = false;
+            groundLocation.gameObject.SetActive(false);
         }
 	}
 
@@ -113,9 +118,12 @@ public class Teleport : MonoBehaviour {
         teleporting = true;
         fadeOut();
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
+
         yield return new WaitForSeconds(FADE_DURATION);
+
         avatar.SetActive(true);
-        player.transform.position = groundLocation.position;
+        Vector3 newPosition = new Vector3(groundLocation.position.x, player.transform.position.y, groundLocation.position.z);
+        player.transform.position = newPosition; // TODO robust for hills
         player.transform.forward = groundLocation.forward;
         fadeIn();
         teleporting = false;
@@ -133,6 +141,8 @@ public class Teleport : MonoBehaviour {
     }
 
     public void setRotation(Vector2 vector) {
+        float angle = Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
+        groundLocation.RotateAround(groundLocation.position, Vector3.up, angle);
         active = true;
     }
 
@@ -141,10 +151,10 @@ public class Teleport : MonoBehaviour {
     }
 
     private void fadeOut() {
-
+        fader.SetActive(false);
     }
 
     private void fadeIn() {
-
+        fader.SetActive(true);
     }
 }
