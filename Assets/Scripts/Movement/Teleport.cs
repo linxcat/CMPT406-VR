@@ -18,6 +18,7 @@ public class Teleport : MonoBehaviour {
     Transform apex;
     Transform groundLocation;
     SphereCollider groundSphereCollider;
+    static float bumpBack;
     int teleportMask;
     int secondArcMask;
 
@@ -32,6 +33,7 @@ public class Teleport : MonoBehaviour {
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
+        bumpBack = groundSphereCollider.radius;
         teleportMask = LayerMask.GetMask(new string[3] { "Ground", "EnemyRange", "TeleportCollider" });
         secondArcMask = LayerMask.GetMask(new string[2] { "Ground", "EnemyRange" });
 
@@ -135,11 +137,11 @@ public class Teleport : MonoBehaviour {
         teleporting = false;
     }
 
-    public Vector3 findOffsetPoint(Collider collider, Vector3 hitLocation) {
+    public static Vector3 findOffsetPoint(Collider collider, Vector3 hitLocation) {
         Vector3 direction = hitLocation - collider.transform.position;
         Vector3.ProjectOnPlane(direction, Vector3.up);
         direction.Normalize();
-        direction = direction * (groundSphereCollider.radius);
+        direction = direction * (bumpBack);
         hitLocation = hitLocation + direction;
         RaycastHit hitInfo = new RaycastHit();
         Physics.Raycast(hitLocation, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
