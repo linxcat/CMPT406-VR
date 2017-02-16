@@ -21,7 +21,7 @@ public class InputHandler : MonoBehaviour {
         bool debugSwitch = OVRInput.GetDown(OVRInput.Button.Three);
         bool locking = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
         Vector2 thumbstickAxis = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick); // TODO hand switching
-        bool thumbstickClick = OVRInput.GetDown(OVRInput.Button.SecondaryThumbstick);
+        bool thumbstickClick = OVRInput.GetDown(OVRInput.Button.Four);
 
         if (thumbstickPassedDeadzone(thumbstickAxis)) {
             teleport.setRotation(thumbstickAxis);
