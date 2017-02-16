@@ -88,11 +88,11 @@ public class Teleport : MonoBehaviour {
             int layerOfSecondHit = secondHit.collider.gameObject.layer;
 
             apex.transform.position = hitInfo.point;
-            if (layerOfSecondHit == LayerMask.NameToLayer("Ground")) groundLocation.position = secondHit.point;
+            if (layerOfSecondHit == LayerMask.NameToLayer("Ground")) placeOnGround(secondHit.point);
             else if (layerOfSecondHit == LayerMask.NameToLayer("EnemyRange")) groundLocation.position = findOffsetPoint(secondHit.collider, secondHit.point);
         }
         else if (layerOfHit == LayerMask.NameToLayer("Ground")) {
-            groundLocation.position = hitInfo.point;
+            placeOnGround(hitInfo.point);
             placeStraightApex();
         }
         else if (layerOfHit == LayerMask.NameToLayer("EnemyRange")) {
@@ -139,19 +139,41 @@ public class Teleport : MonoBehaviour {
 
     public static Vector3 findOffsetPoint(Collider collider, Vector3 hitLocation) {
         Vector3 direction = hitLocation - collider.transform.position;
-        Vector3.ProjectOnPlane(direction, Vector3.up);
+        direction = Vector3.ProjectOnPlane(direction, Vector3.up);
         direction.Normalize();
-        direction = direction * (bumpBack);
-        hitLocation = hitLocation + direction;
+        float bumpTotal = bumpBack + ((CapsuleCollider)collider).radius;
+        direction = direction * (bumpTotal);
+        Vector3 newPosition = collider.transform.position + direction;
         RaycastHit hitInfo = new RaycastHit();
-        Physics.Raycast(hitLocation, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
+        Physics.Raycast(newPosition, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
         return hitInfo.point;
     }
 
+    private void placeOnGround(Vector3 spot) {
+        Collider[] possibleEnemies = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[1] { "EnemyRange" }));
+
+        if (possibleEnemies.Length == 0) groundLocation.position = spot;
+        else {
+            Vector3[] safePoints = new Vector3[possibleEnemies.Length];
+            for (int i = 0; i < possibleEnemies.Length; i ++) {
+                safePoints[i] = findOffsetPoint(possibleEnemies[i], possibleEnemies[i].ClosestPointOnBounds(spot));
+            }
+
+            // PLACEHOLDER (TODO)
+            if (safePoints.Length == 1) {
+                groundLocation.position = safePoints[0];
+            }
+            else {
+                Debug.LogError(" HARD FLOOR PLACEMENT CASE!!");
+            }
+        }
+
+    }
+
     public void setRotation(Vector2 vector) {
-        groundLocation.forward = Vector3.ProjectOnPlane(teleLineSpawn.forward, Vector3.up); // TODO robust for hills (use normal)
+        groundLocation.forward = Vector3.ProjectOnPlane(teleLineSpawn.forward, groundLocation.up); // TODO robust for hills (use normal)
         float angle = Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
-        groundLocation.RotateAround(groundLocation.position, Vector3.up, angle);
+        groundLocation.RotateAround(groundLocation.position, groundLocation.up, angle);
         active = true;
     }
 
