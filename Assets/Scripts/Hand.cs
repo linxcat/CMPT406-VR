@@ -98,7 +98,6 @@ public class Hand : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if (IS_PRIMARY) return;
 
-        Debug.Log("Gauntlet check with average speed: " + getGauntletSpeed());
         if (getGauntletSpeed() > gauntletSpeedThreshold) {
             other.SendMessageUpwards("counter");
         }

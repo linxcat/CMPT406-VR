@@ -23,8 +23,6 @@ public class Teleport : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        
-
         player = GameObject.Find("Player");
         avatar = GameObject.Find("LocalAvatar");
         fader = GameObject.Find("Fader");
@@ -57,12 +55,17 @@ public class Teleport : MonoBehaviour {
 	}
 
     void setPoints() {
-        RaycastHit hitInfo = new RaycastHit();
-        RaycastHit secondHit = new RaycastHit();
+        RaycastHit hitInfo;
+        RaycastHit secondHit;
 
-        if (!Physics.Raycast(teleLineSpawn.position, teleLineSpawn.forward, out hitInfo, float.MaxValue, teleportMask)) Debug.Log("HOLE IN TELEPORT BOUNDARIES!!");
+        Physics.Raycast(teleLineSpawn.position, teleLineSpawn.forward, out hitInfo, float.MaxValue, teleportMask);
+        if (hitInfo.collider == null) {
+            Debug.LogError("HOLE IN TELEPORT BOUNDARIES!!");
+            return;
+        }
         int layerOfHit = hitInfo.collider.gameObject.layer;
         
+
         if (layerOfHit == LayerMask.NameToLayer("TeleportCollider")) { 
             Vector3 secondDirection;
             if (hitInfo.collider.tag == "coneCap") {
@@ -75,20 +78,23 @@ public class Teleport : MonoBehaviour {
                 Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(teleLineSpawn.right, Vector3.up);
                 secondDirection = Quaternion.AngleAxis(45, flattenedHandAxis) * downwardAngle;
             }
-            Debug.DrawRay(hitInfo.point, secondDirection, Color.red, 1F);
-            if (!Physics.Raycast(hitInfo.point, secondDirection, out secondHit, float.MaxValue, secondArcMask)) Debug.Log("MISSED THEGROUND!!");
+            Physics.Raycast(hitInfo.point, secondDirection, out secondHit, float.MaxValue, secondArcMask);
+            if (secondHit.collider == null) {
+                Debug.LogError("MISSED THEGROUND!!");
+                return;
+            }
             int layerOfSecondHit = secondHit.collider.gameObject.layer;
 
             apex.transform.position = hitInfo.point;
             if (layerOfSecondHit == LayerMask.NameToLayer("Ground")) groundLocation.position = secondHit.point;
-            else if (layerOfSecondHit == LayerMask.NameToLayer("EnemyRange")) groundLocation.position = findOffsetPoint(secondHit.collider, secondHit.transform.position);
+            else if (layerOfSecondHit == LayerMask.NameToLayer("EnemyRange")) groundLocation.position = findOffsetPoint(secondHit.collider, secondHit.point);
         }
         else if (layerOfHit == LayerMask.NameToLayer("Ground")) {
             groundLocation.position = hitInfo.point;
             placeStraightApex();
         }
         else if (layerOfHit == LayerMask.NameToLayer("EnemyRange")) {
-            groundLocation.position = findOffsetPoint(hitInfo.collider, hitInfo.transform.position);
+            groundLocation.position = findOffsetPoint(hitInfo.collider, hitInfo.point);
             placeStraightApex();
         }   
     }
@@ -133,8 +139,8 @@ public class Teleport : MonoBehaviour {
         Vector3 direction = hitLocation - collider.transform.position;
         Vector3.ProjectOnPlane(direction, Vector3.up);
         direction.Normalize();
-        direction *= (groundSphereCollider.radius);
-        hitLocation += direction;
+        direction = direction * (groundSphereCollider.radius);
+        hitLocation = hitLocation + direction;
         RaycastHit hitInfo = new RaycastHit();
         Physics.Raycast(hitLocation, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
         return hitInfo.point;

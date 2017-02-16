@@ -88,7 +88,7 @@ public class Sword : MonoBehaviour {
 
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
         foreach (GameObject enemy in enemyContacts) {
-            enemy.SendMessage("swingHit", hit);
+            enemy.SendMessageUpwards("swingHit", hit);
         }
         enemyContacts.Clear();
 
