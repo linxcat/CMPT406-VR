@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour {
     GameObject weapon;
     Transform pivot;
 
+    private float maxHealth;
+    private float currentHealth;
+
     Vector3 weaponStartPosition;
 
     float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
@@ -88,5 +91,9 @@ public class Enemy : MonoBehaviour {
         swingDown = true;
         StopCoroutine("swingWeapon");
         StartCoroutine("swingWeapon", parryTime);
+    }
+
+    public void takeDamage() {
+
     }
 }
