@@ -26,10 +26,14 @@ public class Sword : MonoBehaviour {
 
     LinkedList<GameObject> enemyContacts = new LinkedList<GameObject>();
 
+    public AudioClip vibeAudioClip;
+    OVRHapticsClip vibeClip;
+
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
         hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
+        vibeClip = new OVRHapticsClip(vibeAudioClip);
 	}
 	
 	// Update is called once per frame
@@ -39,10 +43,13 @@ public class Sword : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         // if (other.gameObject.layer != LayerMask.NameToLayer("EnemyHit")) return; // sword layer only collides with enemy layer
-        if (isSwinging) enemyContacts.AddFirst(other.gameObject);
+        if (isSwinging) enemyContacts.AddFirst(other.gameObject); InitiateHapticFeedback(vibeClip, 1);
     }
 
     public void startSlash() {
+        InitiateHapticFeedback(vibeClip, 1);
+        Debug.Log("vibrate here pls");
+
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
             directionDeviations[i] = 0F;
@@ -70,6 +77,7 @@ public class Sword : MonoBehaviour {
 
     public void stopSlash() {
         isSwinging = false;
+        InitiateHapticFeedback(vibeClip, 1);
         stopPoint = swordAnchor.transform.position;
 
         float bestDirectionDeviation = float.MaxValue;
@@ -189,5 +197,15 @@ public class Sword : MonoBehaviour {
             GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
         }
         debugMode = !debugMode;
+    }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
+    }
+
+    public void InitiateHapticFeedback(AudioClip hapticsAudioClip, int channel) {
+        OVRHapticsClip hapticsClip = new OVRHapticsClip(hapticsAudioClip);
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 }
