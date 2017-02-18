@@ -267,6 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SWINGTIME: 0
+  vibeAudioClip: {fileID: 8300000, guid: 6a730cc2f5882b7419484f26a7f66a15, type: 3}
 --- !u!1 &243246125
 GameObject:
   m_ObjectHideFlags: 0
