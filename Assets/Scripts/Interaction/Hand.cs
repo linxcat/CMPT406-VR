@@ -18,9 +18,11 @@ public class Hand : MonoBehaviour {
     private float[] pastSpeeds = new float[10];
 
     GameObject sigilAnchor;
+    LineRenderer magicLines;
     GameObject hitArray;
     Sword sword;
     Transform teleLineSpawn;
+    MagicDraw magicDraw;
     GameObject centerEyeAnchor;
     Teleport teleportScript;
 
@@ -30,9 +32,11 @@ public class Hand : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
+        magicLines = sigilAnchor.GetComponent<LineRenderer>();
         hitArray = GameObject.Find("HitArray");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
+        magicDraw = transform.Find("DrawTouch").gameObject.GetComponent<MagicDraw>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         teleportScript = GameObject.Find("Player").GetComponent<Teleport>();
         initialize();
@@ -43,6 +47,8 @@ public class Hand : MonoBehaviour {
 	void Update () {
         if (IS_PRIMARY) {
             if (!swordIsOn && !locking) updateSigilAnchor();
+            if (!swordIsOn && locking) magicDraw.gameObject.SetActive(true);
+            if (!swordIsOn && !locking && locked) doMagic();
             if (swordIsOn && !locking) updateHitArray();
             if (swordIsOn && locking && !locked) sword.startSlash();
             if (swordIsOn && !locking && locked) sword.stopSlash();
@@ -62,7 +68,10 @@ public class Hand : MonoBehaviour {
             teleportScript.setTeleLineSpawn(teleLineSpawn);
             switchMode();
         }
-        else sword.gameObject.SetActive(false);
+        else {
+            sword.gameObject.SetActive(false);
+            magicDraw.gameObject.SetActive(false);
+        }
     }
 
     // switches the hand, if it's the dominant one, between sword and magic
@@ -123,6 +132,15 @@ public class Hand : MonoBehaviour {
         if (getSpeed() > speedThreshold) {
             other.SendMessageUpwards("counter");
         }
+    }
+
+    void doMagic() {
+        magicLines.numPositions = 0;
+        magicDraw.getSpell();
+    }
+
+    public void setFingerOut(bool value) {
+        magicDraw.setDrawing(value);
     }
 
     public void switchDebug() {

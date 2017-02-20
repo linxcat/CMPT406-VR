@@ -47,7 +47,7 @@ public class InputHandler : MonoBehaviour {
         leftHand.setLock(OVRInput.Get(OVRInput.Button.PrimaryHandTrigger));
         rightHand.setLock(OVRInput.Get(OVRInput.Button.SecondaryHandTrigger));
 
-        bool fingerOut = !OVRInput.Get(fingerTouch);
+        setFingerOut(!OVRInput.Get(fingerTouch));
     }
 
     void switchHandedness() {
@@ -78,6 +78,11 @@ public class InputHandler : MonoBehaviour {
         teleButton = OVRInput.Button.Two;
         fingerTouch = OVRInput.Touch.PrimaryIndexTrigger;
         teleThumbstick = OVRInput.Axis2D.PrimaryThumbstick;
+    }
+
+    void setFingerOut(bool value) {
+        if (truePrimary) leftHand.setFingerOut(value);
+        else rightHand.setFingerOut(value);
     }
 
     void switchHandMode()
