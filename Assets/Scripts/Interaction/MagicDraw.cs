@@ -27,6 +27,10 @@ public class MagicDraw : MonoBehaviour {
     }
 
     public void getSpell() {
+        string spell = "";
+        foreach (string edge in verticies) {
+            spell = spell + edge + ".";
+        }
         verticies.Clear();
     }
 }
