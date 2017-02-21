@@ -1,18 +1,42 @@
 fileFormatVersion: 2
-guid: de1a66181f23bc8418f4c539f5292fdd
-timeCreated: 1487479333
+guid: 5a5898188dd313d4b9f00182be0ff1ef
+timeCreated: 1487703196
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: bat
+    100000: Armature
     100002: //RootNode
-    400000: bat
+    100004: bat
+    100006: Bone
+    100008: Bone.002
+    100010: Bone.002_end
+    100012: Bone.003
+    100014: Bone.003_end
+    100016: Bone.004
+    100018: Bone.004_end
+    100020: Camera
+    100022: Cube
+    100024: Lamp
+    400000: Armature
     400002: //RootNode
-    2300000: bat
-    3300000: bat
+    400004: bat
+    400006: Bone
+    400008: Bone.002
+    400010: Bone.002_end
+    400012: Bone.003
+    400014: Bone.003_end
+    400016: Bone.004
+    400018: Bone.004_end
+    400020: Camera
+    400022: Cube
+    400024: Lamp
+    2300000: Cube
+    3300000: Cube
     4300000: bat
-    11100000: //RootNode
+    4300002: Cube
+    9500000: //RootNode
+    13700000: bat
   materials:
     importMaterials: 1
     materialName: 0
@@ -75,7 +99,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
