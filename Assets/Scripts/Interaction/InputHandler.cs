@@ -6,6 +6,7 @@ public class InputHandler : MonoBehaviour {
 
     Hand[] hands = new Hand[2];
     Teleport teleport;
+    Sword sword;
     float thumbstickDeadzone = 0.1F;
 
     // Use this for initialization
@@ -13,6 +14,7 @@ public class InputHandler : MonoBehaviour {
         hands[0] = GameObject.Find("Hand-Dominant").GetComponent<Hand>();
         hands[1] = GameObject.Find("Hand-Secondary").GetComponent<Hand>();
         teleport = GameObject.Find("Player").GetComponent<Teleport>();
+        sword = GameObject.Find("Sword").GetComponent<Sword>();
     }
 	
 	// Update is called once per frame
@@ -33,6 +35,13 @@ public class InputHandler : MonoBehaviour {
         if (modeSwitch) switchHandMode();
         if (debugSwitch) switchDebug();
         lockHand(locking);
+
+        if (OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)) {
+            sword.StartCoroutine("swordCharge", 2.0f);
+        }
+        else {
+            sword.StopCoroutine("swordCharge");
+        }
 
     }
 
