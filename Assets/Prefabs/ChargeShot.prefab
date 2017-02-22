@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23412003515572848}
   - component: {fileID: 54487487643719444}
   - component: {fileID: 114526431932427382}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ChargeShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

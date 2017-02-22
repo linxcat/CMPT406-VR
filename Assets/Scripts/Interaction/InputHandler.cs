@@ -36,10 +36,10 @@ public class InputHandler : MonoBehaviour {
         if (debugSwitch) switchDebug();
         lockHand(locking);
 
-        if (OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)) {
-            sword.StartCoroutine("swordCharge", 2.0f);
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger)) {
+            sword.StartCoroutine("swordCharge");
         }
-        else {
+        if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger)) {
             sword.StopCoroutine("swordCharge");
         }
 
