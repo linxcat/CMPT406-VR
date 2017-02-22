@@ -29,7 +29,7 @@ public class Sword : MonoBehaviour {
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
-        hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
+        hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
 	}
 	
 	// Update is called once per frame

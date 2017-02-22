@@ -29,7 +29,6 @@ public class Teleport : MonoBehaviour {
         fader = GameObject.Find("Fader");
         fader.SetActive(false);
         teleportArc = GetComponent<LineRenderer>();
-        teleLineSpawn = GameObject.Find("teleLineSpawn").transform;
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
@@ -37,14 +36,14 @@ public class Teleport : MonoBehaviour {
         teleportMask = LayerMask.GetMask(new string[3] { "Ground", "EnemyRange", "TeleportCollider" });
         secondArcMask = LayerMask.GetMask(new string[2] { "Ground", "EnemyRange" });
 
-        linePoints[0] = teleLineSpawn;
+        linePoints[0] = null; // not dynamic pointer, need updating
         linePoints[1] = apex;
         linePoints[2] = groundLocation;
     }
 	
 	// Update is called once per frame
-	void Update () {
-		if (active && !teleporting) {
+    void Update () {
+        if (active && !teleporting) {
             teleportArc.enabled = true;
             groundLocation.gameObject.SetActive(true);
             setPoints();
@@ -54,7 +53,7 @@ public class Teleport : MonoBehaviour {
             teleportArc.enabled = false;
             groundLocation.gameObject.SetActive(false);
         }
-	}
+    }
 
     void setPoints() {
         RaycastHit hitInfo;
@@ -107,6 +106,7 @@ public class Teleport : MonoBehaviour {
     }
 
     void setSmoothedPoints() {
+        linePoints[0] = teleLineSpawn;
         Vector3[] linePositions = new Vector3[3];
         for (int i = 0; i < 3; i ++) {
             linePositions[i] = linePoints[i].position;
@@ -187,5 +187,9 @@ public class Teleport : MonoBehaviour {
 
     private void fadeIn() {
         fader.SetActive(false);
+    }
+
+    public void setTeleLineSpawn(Transform value) {
+        teleLineSpawn = value;
     }
 }
