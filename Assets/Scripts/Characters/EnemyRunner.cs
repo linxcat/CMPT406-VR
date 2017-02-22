@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRunner : GUIPubSub.GUIPublisher {
+public class EnemyRunner : MonoBehaviour{
 
     Material colourMaterial;
     GameObject weapon;
     Transform pivot;
     public int hp = 100;
-	public float detectRange = 1000;
-	public float atkRange = 5;
-    private int speed = 3;
+	private float detectRange = 100;
+	private float atkRange = 1.5F;
+    private int speed = 1;
+    private int turnSpeed = 3;
     private int attackDmg = 30;
+    private int searchAngle = 80;
 	private bool isAttack;
     GameObject player;
 
@@ -20,7 +22,7 @@ public class EnemyRunner : GUIPubSub.GUIPublisher {
     float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
     bool swingDown = true;
 
-    float parryTime = 2F;
+    float parryTime = 5F;
 
 	enum runnerState{
 		idle,
@@ -94,7 +96,6 @@ public class EnemyRunner : GUIPubSub.GUIPublisher {
     IEnumerator swingWeapon(float delay)
     {
         yield return new WaitForSeconds(delay);
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
 		int count = 1;
 
 		while (count>0)
@@ -111,7 +112,7 @@ public class EnemyRunner : GUIPubSub.GUIPublisher {
 				swingDown = false;
 			else if (!swingDown && (Vector3.Angle (weapon.transform.up, pivot.up) < 1F)) {
 				swingDown = true;
-				count++;
+				count--;
 			}
 
             yield return null;
@@ -128,35 +129,52 @@ public class EnemyRunner : GUIPubSub.GUIPublisher {
         weapon.transform.localPosition = weaponStartPosition;
         swingDown = true;
         StopCoroutine("swingWeapon");
-        //StartCoroutine("swingWeapon", parryTime);
+        StartCoroutine("parried");
     }
 
-	private void searchPlayer(){
+    IEnumerator parried()
+    {
+        yield return new WaitForSeconds(parryTime);
+        currentState = runnerState.idle;
+        isAttack = false;
+        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+    }
+
+
+    private void searchPlayer(){
 		float angle = Vector3.Angle (player.transform.position - this.transform.position, this.transform.forward);
 		float distance = Vector3.Distance (this.transform.position, player.transform.position);
-		if (angle < 90 && distance < detectRange) {
+        //Debug.Log("Angle: " + angle + "Distance: " + distance);
+		if (angle < searchAngle && distance < detectRange) {
 			currentState = runnerState.follow;
 		}
 	}
 
     private void moveTowardsPlayer() {
         float step = speed * Time.deltaTime;
-
-        // this if statement will stop enemies moving withing 5 units of the player
-        //if (Vector3.Distance(this.transform.position, player.transform.position) > 5){
-		facePlayer();
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, step);
-        //}
-
-		if (Vector3.Distance (this.transform.position, player.transform.position) < atkRange) {
-			currentState = runnerState.attack;
-		}
+        //Horizontal angle between this and player
+        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z)- this.transform.position, this.transform.forward);
+        //Debug.Log("Angle: "+ angle);
+        if (angle > 5)
+        {
+            Vector3 lookPos = player.transform.position - transform.position;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+        }
+        else {
+            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+            transform.position = Vector3.MoveTowards(transform.position, newPos, step);
+            //lock on player
+            facePlayer(newPos);
+            if (Vector3.Distance(this.transform.position, player.transform.position) < atkRange) {
+                currentState = runnerState.attack;
+            }
+        }
     }
 
-    private void facePlayer() {
-        //if (Vector3.Distance(this.transform.position, player.transform.position) > 5) {
-		transform.LookAt(player.transform);
-        //}
+    private void facePlayer(Vector3 other) {
+		transform.LookAt(other);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -165,7 +183,7 @@ public class EnemyRunner : GUIPubSub.GUIPublisher {
         int playerHp = 100; //we do not have a player yet
         if (other.gameObject == GameObject.Find("Sword").gameObject) {
             takeDamage(20);
-            this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
+            //this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
         }
     }
 

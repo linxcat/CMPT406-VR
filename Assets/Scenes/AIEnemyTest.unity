@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1103,7 +1103,7 @@ GameObject:
   - component: {fileID: 553682459}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2049,10 +2049,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IS_PRIMARY: 1
-  SIGIL_DISTANCE: 0.05
-  HIT_ARRAY_DISTANCE: 0.6
-  HIT_ARRAY_VERT_BIAS: 0.2
-  gauntletSpeedThreshold: 0.025
 --- !u!54 &1345114992
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2764,6 +2760,10 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 45
       objectReference: {fileID: 0}
+    - target: {fileID: 1382641412542518, guid: dd0a0bd286b5ec745b1c80b8437728e9, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114020846942538114, guid: dd0a0bd286b5ec745b1c80b8437728e9, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: dd0a0bd286b5ec745b1c80b8437728e9, type: 2}
@@ -3430,10 +3430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IS_PRIMARY: 0
-  SIGIL_DISTANCE: 0.05
-  HIT_ARRAY_DISTANCE: 0.6
-  HIT_ARRAY_VERT_BIAS: 0.2
-  gauntletSpeedThreshold: 0.025
 --- !u!135 &2130128972
 SphereCollider:
   m_ObjectHideFlags: 0

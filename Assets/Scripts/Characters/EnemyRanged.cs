@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRanged : GUIPubSub.GUIPublisher {
+public class EnemyRanged : MonoBehaviour{
 
-
-	GameObject projectile;
+    Material colourMaterial;
+    GameObject projectile;
 	public int hp = 100;
-	public float detectRange = 1000; //tunning required
-	public float backupRange = 100;
-	public float atkRange = 500;
-	public float atkDelay = 5;
+	private float detectRange = 100; //tunning required
+	private float backupRange = 20;
+	private float atkRange = 20;
+	private float atkDelay = 5;
 	private int speed = 3;
-	private int attackDmg = 30;
-	private bool isAttack;
+    private int turnSpeed = 3;
+    private int attackDmg = 30;
+    private int searchAngle = 80;
+    private bool isAttack;
 	GameObject player;
 
 	enum rangedState{
@@ -28,10 +30,13 @@ public class EnemyRanged : GUIPubSub.GUIPublisher {
 
 	// Use this for initialization
 	void Start () {
-		//TODO
-		//find projectile object
-
-		isAttack = false;
+        //TODO
+        //find projectile object
+        foreach (Transform child in transform)
+        {
+            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
+        }
+        isAttack = false;
 		currentState = rangedState.idle;
 		player = GameObject.FindGameObjectWithTag ("Player");
 	}
@@ -51,7 +56,7 @@ public class EnemyRanged : GUIPubSub.GUIPublisher {
 		case rangedState.attack:
 			if (!isAttack) {
 				isAttack = true;
-				StartCoroutine ("fireProjectile");
+                StartCoroutine("fireProjectile");
 			}
 			break;
 		case rangedState.dead:
@@ -61,65 +66,95 @@ public class EnemyRanged : GUIPubSub.GUIPublisher {
 
 	IEnumerator fireProjectile()
 	{
-		//TODO
-		//Intensiate new projectile object
-		yield return new WaitForSeconds(atkDelay);
+        //TODO
+        //Instantiate new projectile object
+        colourMaterial.SetColor("_Color", Color.red);
+        yield return new WaitForSeconds(atkDelay);
 
-		isAttack = false;
-		if (Vector3.Distance (this.transform.position, player.transform.position) < backupRange)
+        isAttack = false;
+		if (Vector3.Distance (this.transform.position, player.transform.position) <= backupRange)
 			currentState = rangedState.backup;
 		else
 			currentState = rangedState.follow;
 	}
 
-	private void searchPlayer(){
-		float angle = Vector3.Angle (player.transform.position - this.transform.position, this.transform.forward);
-		float distance = Vector3.Distance (this.transform.position, player.transform.position);
-		if (angle < 90 && distance < detectRange) {
-			currentState = rangedState.follow;
-		}
-	}
+    private void searchPlayer()
+    {
 
-	private void moveTowardsPlayer() {
-		float step = speed * Time.deltaTime;
+        colourMaterial.SetColor("_Color", Color.white);
+        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
+        float distance = Vector3.Distance(this.transform.position, player.transform.position);
+        Debug.Log("Angle: " + angle + "Distance: " + distance);
+        if (angle < searchAngle && distance < detectRange)
+        {
+            currentState = rangedState.follow;
+        }
+    }
 
-		// this if statement will stop enemies moving withing 5 units of the player
-		//if (Vector3.Distance(this.transform.position, player.transform.position) > 5){
-		facePlayer();
-		Vector3 newPos = new Vector3 (player.transform.position.x, transform.position.y, player.transform.position.z);
-		transform.position = Vector3.MoveTowards(transform.position, newPos, step);
-		//}
-
-		if (Vector3.Distance (this.transform.position, player.transform.position) < atkRange) {
-			currentState = rangedState.attack;
-		}
-	}
+    private void moveTowardsPlayer() {
+        colourMaterial.SetColor("_Color", Color.blue);
+        float step = speed * Time.deltaTime;
+        //Horizontal angle between this and player
+        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
+        Debug.Log("Angle: " + angle);
+        if (angle > 5)
+        {
+            Vector3 lookPos = player.transform.position - transform.position;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+        }
+        else
+        {
+            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+            transform.position = Vector3.MoveTowards(transform.position, newPos, step);
+            //lock on player
+            facePlayer(newPos);
+            if (Vector3.Distance(this.transform.position, player.transform.position) < atkRange)
+            {
+                currentState = rangedState.attack;
+            }
+        }
+    }
 
 	private void backup(){
-		float step = -speed * Time.deltaTime;
-		facePlayer();
-		Vector3 newPos = new Vector3 (player.transform.position.x, transform.position.y, player.transform.position.z);
-		transform.position = Vector3.MoveTowards(transform.position, newPos, step);
-		//}
+        colourMaterial.SetColor("_Color", Color.green);
+        float step = speed * Time.deltaTime;
+        //Horizontal angle between this and player
+        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
+        Debug.Log("Angle: " + angle);
+        if (angle < 175)
+        {
+            Vector3 lookPos = transform.position - player.transform.position;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+        }
+        else
+        {
+            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+            transform.position = Vector3.MoveTowards(transform.position, newPos, -step);
+            //lock on player
+            //facePlayer(newPos);
+            if (Vector3.Distance(this.transform.position, player.transform.position) > backupRange)
+            {
+                currentState = rangedState.follow;
+            }
+        }
+    }
 
-		if (Vector3.Distance (this.transform.position, player.transform.position) > backupRange) {
-			currentState = rangedState.attack;
-		}
-	}
+    private void facePlayer(Vector3 other)
+    {
+        transform.LookAt(other);
+    }
 
-	private void facePlayer() {
-		//if (Vector3.Distance(this.transform.position, player.transform.position) > 5) {
-		transform.LookAt(player.transform);
-		//}
-	}
-
-	private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other) {
 		//replace player with blade collider
 		//need to get player hp
 		int playerHp = 100; //we do not have a player yet
 		if (other.gameObject == GameObject.Find("Sword").gameObject) {
 			takeDamage(20);
-			this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
+			//this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
 		}
 	}
 
