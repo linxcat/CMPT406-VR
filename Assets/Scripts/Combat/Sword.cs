@@ -7,7 +7,10 @@ public class Sword : MonoBehaviour {
     public float SWINGTIME = 0.12F; // TODO this
 
     GameObject swordAnchor;
+    GameObject rightHandAnchor;
     HitArray hitArray;
+
+    Rigidbody swordRigidbody;
 
     bool isSwinging = false;
     int timeStep = 0;
@@ -24,16 +27,25 @@ public class Sword : MonoBehaviour {
     float[] directionDeviations = new float[8];
     float[] alignmentDeviations = new float[8];
 
+    List<Vector3> swordStepPositions = new List<Vector3>();
+    List<Vector3> swordStepForwardDirections = new List<Vector3>();
     LinkedList<GameObject> enemyContacts = new LinkedList<GameObject>();
 
     bool swordCharged = false;
+    Vector3 chargeShotPosition;
+    Vector3 chargeShotForwardDirection;
+    public GameObject ChargeShot;
 
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
 
+    Vector3 chargeShotRotation;
+
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
+        rightHandAnchor = GameObject.Find("RightHandAnchor");
+        swordRigidbody = this.GetComponent<Rigidbody>();
         hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
         vibeClip = new OVRHapticsClip(vibeAudioClip);
     }
@@ -58,6 +70,8 @@ public class Sword : MonoBehaviour {
         lastPoint = swordAnchor.transform.position;
         startPoint = swordAnchor.transform.position;
         isSwinging = true;
+        swordStepPositions.Clear();
+        swordStepForwardDirections.Clear();
     }
 
     void slashStep() {
@@ -69,6 +83,8 @@ public class Sword : MonoBehaviour {
             accumulateDeviations(stepDirection, stepRotation);
 
             lastPoint = swordAnchor.transform.position;
+            swordStepPositions.Add(lastPoint);
+            swordStepForwardDirections.Add(rightHandAnchor.transform.forward);
         }
         // accumuluate deviation from sterotype direction and attentuate by decreasing function of timesteps
         // accumulate crossproduct of anchor x axis and stereotypical vector and attenutate by decreasing function of timesteps
@@ -78,7 +94,6 @@ public class Sword : MonoBehaviour {
     public void stopSlash() {
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
-        swordCharged = false;
         StopCoroutine("swordCharge");
         stopPoint = swordAnchor.transform.position;
 
@@ -102,6 +117,17 @@ public class Sword : MonoBehaviour {
         }
         enemyContacts.Clear();
 
+        if (IsCharged()) {
+            chargeShotPosition = swordStepPositions[swordStepPositions.Count / 2];
+            chargeShotForwardDirection = swordStepForwardDirections[swordStepForwardDirections.Count / 2];
+            chargeShotRotation = DetermineShotRotation(correctedDirection);
+            Debug.Log(chargeShotRotation);
+            GameObject chargeShot = Instantiate(ChargeShot, chargeShotPosition, Quaternion.Euler(chargeShotRotation));
+            chargeShot.GetComponent<Rigidbody>().velocity = GetChargeShotDirection() * 10f;
+            Destroy(chargeShot, 5f);
+            swordCharged = false;
+        }
+        
         if (debugMode) {
             directionDeviationSaves.AddFirst(bestDirectionDeviation);
             alignmentDeviationSaves.AddFirst(bestAlignmentDeviation);
@@ -149,10 +175,71 @@ public class Sword : MonoBehaviour {
         return actualDirection;
     }
 
+    Vector3 DetermineShotRotation(Hit.DIRECTION direction)
+    {
+        Vector3 result = new Vector3(0f, 0f, 0f);
+        switch (direction)
+        {
+            case Hit.DIRECTION.D:
+                result = new Vector3(0f, 0f, 0f);
+                break;
+            case Hit.DIRECTION.DL:
+                result = new Vector3(0f, 0f, -45f);
+                break;
+            case Hit.DIRECTION.L:
+                result = new Vector3(0f, 0f, 90f);
+                break;
+            case Hit.DIRECTION.UL:
+                result = new Vector3(0f, 0f, 45f);
+                break;
+            case Hit.DIRECTION.U:
+                result = new Vector3(0f, 0f, 0f);
+                break;
+            case Hit.DIRECTION.UR:
+                result = new Vector3(0f, 0f, -45f);
+                break;
+            case Hit.DIRECTION.R:
+                result = new Vector3(0f, 0f, 90f);
+                break;
+            case Hit.DIRECTION.DR:
+                result = new Vector3(0f, 0f, 45f);
+                break;
+        }
+        return result;
+    }
+
     IEnumerator swordCharge(float duration) {
         yield return new WaitForSeconds(duration);
         swordCharged = true;
-        Debug.Log("charged!");
+    }
+
+    // IsCharged 
+    // Check no see if the sword is charged
+    public bool IsCharged() {
+        return swordCharged;
+    }
+
+    public Vector3 GetChargeShotPosition() {
+        return chargeShotPosition;
+    }
+
+    public Vector3 GetChargeShotDirection() {
+        return chargeShotForwardDirection;
+    }
+
+    // SwordShot 
+    // Check is charged
+    // If sword is charged shoot
+        // Shoot would check the start and end point
+        // Take the median of the start and end point
+        // Take the direction from actualDirection
+        // Fire shot 
+    public void FireChargedShot() {
+        if (!IsCharged()) {
+            return;
+        }
+
+
     }
 
     public void switchDebug() {
