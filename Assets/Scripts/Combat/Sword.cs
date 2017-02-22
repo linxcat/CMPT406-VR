@@ -7,7 +7,7 @@ public class Sword : MonoBehaviour {
     public float SWINGTIME = 0.12F; // TODO this
 
     GameObject swordAnchor;
-    GameObject rightHandAnchor;
+    GameObject handAnchor;
     HitArray hitArray;
 
     Rigidbody swordRigidbody;
@@ -44,8 +44,8 @@ public class Sword : MonoBehaviour {
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
-        rightHandAnchor = GameObject.Find("RightHandAnchor");
-        swordRigidbody = this.GetComponent<Rigidbody>();
+        handAnchor = swordAnchor.transform.parent.gameObject;
+        swordRigidbody = GetComponent<Rigidbody>();
         hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
         vibeClip = new OVRHapticsClip(vibeAudioClip);
     }
@@ -84,7 +84,7 @@ public class Sword : MonoBehaviour {
 
             lastPoint = swordAnchor.transform.position;
             swordStepPositions.Add(lastPoint);
-            swordStepForwardDirections.Add(rightHandAnchor.transform.forward);
+            swordStepForwardDirections.Add(handAnchor.transform.forward);
         }
         // accumuluate deviation from sterotype direction and attentuate by decreasing function of timesteps
         // accumulate crossproduct of anchor x axis and stereotypical vector and attenutate by decreasing function of timesteps
@@ -238,8 +238,6 @@ public class Sword : MonoBehaviour {
         if (!IsCharged()) {
             return;
         }
-
-
     }
 
     public void switchDebug() {
