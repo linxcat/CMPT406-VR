@@ -55,20 +55,29 @@ public class EnemyRunner : MonoBehaviour{
 	// Update is called once per frame
 	void Update () {
 		switch (currentState) {
-		case runnerState.idle:
+            case runnerState.idle:
+                if (this.GetComponent<Animator>().GetInteger("state") != 4) {
+                    this.GetComponent<Animator>().SetInteger("state", 4);
+                }
 			searchPlayer ();
 			break;
-		case runnerState.follow:
-			moveTowardsPlayer ();
+            case runnerState.follow:
+                if (this.GetComponent<Animator>().GetInteger("state") != 3) {
+                    this.GetComponent<Animator>().SetInteger("state", 3);
+                }
+                moveTowardsPlayer ();
 			break;
 		case runnerState.attack:
 			if (!isAttack) {
-				isAttack = true;
+                    this.GetComponent<Animator>().SetInteger("state", 1);
+                    isAttack = true;
 				StartCoroutine ("swingWeapon", 0F);
 			}
 			break;
 		case runnerState.dead:
-			break;
+                
+                this.GetComponent<Animator>().SetInteger("state", 2);
+                break;
 		}
 	}
 
@@ -102,18 +111,18 @@ public class EnemyRunner : MonoBehaviour{
         {
             if (swingDown)
             {
-                weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
+                //weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
             }
             else
             {
-                weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
+                //weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
             }
-			if (swingDown && (Vector3.Angle (weapon.transform.up, pivot.forward) < 1F))
-				swingDown = false;
-			else if (!swingDown && (Vector3.Angle (weapon.transform.up, pivot.up) < 1F)) {
-				swingDown = true;
-				count--;
-			}
+			//if (swingDown && (Vector3.Angle (weapon.transform.up, pivot.forward) < 1F))
+			//	swingDown = false;
+			//else if (!swingDown && (Vector3.Angle (weapon.transform.up, pivot.up) < 1F)) {
+			//	swingDown = true;
+			//	count--;
+			//}
 
             yield return null;
         }
