@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 135997769343116820}
   - component: {fileID: 23243128890002600}
   - component: {fileID: 54291645785189322}
+  - component: {fileID: 114245675969409122}
   m_Layer: 0
   m_Name: TestProjectile
   m_TagString: Untagged
@@ -38,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 1438467653274888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.2, y: -2.2999997, z: -18.894022}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -56,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3586cd6d24aeadb4685060c6758985c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,6 +97,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114245675969409122
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1438467653274888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee05fc873ca4d9f4880002d58f2e9f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135997769343116820
 SphereCollider:
   m_ObjectHideFlags: 1

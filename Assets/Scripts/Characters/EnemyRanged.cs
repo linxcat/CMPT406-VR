@@ -75,15 +75,25 @@ public class EnemyRanged : MonoBehaviour{
         //TODO
         //Instantiate new projectile object
         //colourMaterial.SetColor("_Color", Color.red);
-        GameObject.Instantiate(Resources.Load("Prefabs/TestProjectile"), this.transform);
+        Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
         isAttack = false;
-		if (Vector3.Distance (this.transform.position, player.transform.position) <= backupRange)
-			currentState = rangedState.backup;
-		else
-			currentState = rangedState.follow;
-	}
+        if (Vector3.Distance(this.transform.position, player.transform.position) <= backupRange) {
+            currentState = rangedState.backup;
+        }
+        else {
+            currentState = rangedState.follow;
+        }
+
+       
+
+    }
+
+    private void spawnProjectile() {
+        GameObject x = (GameObject)Instantiate(Resources.Load("Prefabs/TestProjectile"));
+        x.transform.position = this.transform.position + new Vector3(0, 1f, 0);
+    }
 
     private void searchPlayer()
     {
