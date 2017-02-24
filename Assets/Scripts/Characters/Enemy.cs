@@ -18,8 +18,14 @@ public class Enemy : MonoBehaviour {
 
     float parryTime = 2F;
 
+    public AudioSource audioSource;
+    public AudioClip badHitClip;
+    public AudioClip goodHitClip;
+    public AudioClip perfectHitClip;
+
 	// Use this for initialization
 	void Start () {
+        audioSource = GetComponent<AudioSource>();
         foreach (Transform child in transform)
         {
             if (child.name == "weapon") {
@@ -47,12 +53,15 @@ public class Enemy : MonoBehaviour {
     IEnumerator colourFlash(Hit.ACCURACY accuracy) {
         switch (accuracy) {
             case Hit.ACCURACY.Perfect:
+                audioSource.PlayOneShot(perfectHitClip, 0.2f);
                 colourMaterial.SetColor("_Color", Color.blue);
                 break;
             case Hit.ACCURACY.Good:
+                audioSource.PlayOneShot(goodHitClip, 0.2f);
                 colourMaterial.SetColor("_Color", Color.green);
                 break;
             case Hit.ACCURACY.Bad:
+                audioSource.PlayOneShot(badHitClip, 0.2f);
                 colourMaterial.SetColor("_Color", Color.red);
                 break;
         }

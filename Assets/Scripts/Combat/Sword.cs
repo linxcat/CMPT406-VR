@@ -34,12 +34,17 @@ public class Sword : MonoBehaviour {
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
 
+    public AudioSource audioSource;
+    public AudioClip swordDrawClip;
+    public AudioClip swordUndrawClip;
+
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
         hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
+        audioSource = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
@@ -85,6 +90,7 @@ public class Sword : MonoBehaviour {
     }
 
     public void stopSlash() {
+        audioSource.PlayOneShot(swordUndrawClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
         StopCoroutine("swordCharge");
@@ -167,6 +173,7 @@ public class Sword : MonoBehaviour {
 
     IEnumerator swordCharge() {
         yield return new WaitForSeconds(CHARGE_DURATION);
+        InitiateHapticFeedback(vibeClip, 1);
         swordCharged = true;
         GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
     }
