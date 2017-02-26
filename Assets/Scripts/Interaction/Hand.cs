@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -150,6 +151,11 @@ public class Hand : MonoBehaviour {
     public void setLock(bool value)
     {
         locking = value;
+    }
+
+    public void chargeSword(bool charge) {
+        if (charge) sword.StartCoroutine("swordCharge");
+        else sword.StopCoroutine("swordCharge");
     }
 
     public void switchPrimaryHand()

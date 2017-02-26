@@ -1357,6 +1357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50463a9d55064ccd8657686e44a2caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectile: {fileID: 1438467653274888, guid: 391df0fa2df394842b1552d77d534b83, type: 2}
   hp: 100
 --- !u!137 &137393822790081086
 SkinnedMeshRenderer:

@@ -41,7 +41,7 @@ public class Sword : MonoBehaviour {
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
-        hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
+        hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         audioSource = GetComponent<AudioSource>();
@@ -175,7 +175,7 @@ public class Sword : MonoBehaviour {
         yield return new WaitForSeconds(CHARGE_DURATION);
         InitiateHapticFeedback(vibeClip, 1);
         swordCharged = true;
-        GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+        GetComponent<Renderer>().material.SetColor("_Color", Color.blue); // TODO remove colouring
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {

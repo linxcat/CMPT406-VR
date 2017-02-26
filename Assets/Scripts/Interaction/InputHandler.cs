@@ -11,7 +11,7 @@ public class InputHandler : MonoBehaviour {
     float thumbstickDeadzone = 0.1F;
 
     bool truePrimary = false; // is the primary (left) hand dominant?
-    OVRInput.Button modeSwitch, debugSwitch, teleButton;
+    OVRInput.Button modeSwitch, debugSwitch, teleButton, chargeButton;
     OVRInput.Touch fingerTouch;
     OVRInput.Axis2D teleThumbstick;
 
@@ -36,8 +36,8 @@ public class InputHandler : MonoBehaviour {
         if (OVRInput.GetDown(modeSwitch)) switchHandMode();
         if (OVRInput.GetDown(debugSwitch)) switchDebug();
         
-        if (OVRInput.GetDown(swordCharge)) startCharge(true);
-        if (OVRInput.GetUp(swordCharge)) startCharge(false);
+        if (OVRInput.GetDown(chargeButton)) swordCharge(true);
+        if (OVRInput.GetUp(chargeButton)) swordCharge(false);
 
         Vector2 thumbstickAxis = OVRInput.Get(teleThumbstick);
         bool teleGo = OVRInput.GetDown(teleButton);
@@ -71,7 +71,7 @@ public class InputHandler : MonoBehaviour {
         modeSwitch = OVRInput.Button.One;
         debugSwitch = OVRInput.Button.PrimaryThumbstick;
         teleButton = OVRInput.Button.Four;
-        swordCharge = OVRInput.Button.SecondaryIndexTrigger;
+        chargeButton = OVRInput.Button.SecondaryIndexTrigger;
         fingerTouch = OVRInput.Touch.SecondaryIndexTrigger;
         teleThumbstick = OVRInput.Axis2D.SecondaryThumbstick;
     }
@@ -80,7 +80,7 @@ public class InputHandler : MonoBehaviour {
         modeSwitch = OVRInput.Button.Three;
         debugSwitch = OVRInput.Button.SecondaryThumbstick;
         teleButton = OVRInput.Button.Two;
-        swordCharge = OVRInput.Button.PrimaryIndexTrigger;
+        chargeButton = OVRInput.Button.PrimaryIndexTrigger;
         fingerTouch = OVRInput.Touch.PrimaryIndexTrigger;
         teleThumbstick = OVRInput.Axis2D.PrimaryThumbstick;
     }
