@@ -8,14 +8,16 @@ public class Gauntlet : MonoBehaviour {
 	private float[] pastSpeed = new float[10];
 	private int counter;
 	private float totalSpeed, avgSpeed;
+    Rigidbody gauntletRigidbody;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+        gauntletRigidbody = this.GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		pastSpeed [counter++] = this.GetComponent<Rigidbody> ().velocity.magnitude;
+		pastSpeed [counter++] = gauntletRigidbody.velocity.magnitude;
 		if (counter == pastSpeed.Length)
 			counter = 0;
 		totalSpeed = 0;

@@ -8,6 +8,7 @@ public class Sword : MonoBehaviour {
 
     GameObject swordAnchor;
     HitArray hitArray;
+    Transform centerEyeAnchor;
 
     bool isSwinging = false;
     int timeStep = 0;
@@ -26,23 +27,43 @@ public class Sword : MonoBehaviour {
 
     LinkedList<GameObject> enemyContacts = new LinkedList<GameObject>();
 
+    bool swordCharged = false;
+    float CHARGE_DURATION = 2F;
+    public GameObject ChargeShot;
+
+    public AudioClip vibeAudioClip;
+    OVRHapticsClip vibeClip;
+
+    public AudioSource audioSource;
+    public AudioClip swordDrawClip;
+    public AudioClip swordUndrawClip;
+
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
-        hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
-	}
+        hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
+        centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
+        vibeClip = new OVRHapticsClip(vibeAudioClip);
+        audioSource = GetComponent<AudioSource>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (isSwinging) timeStep++; slashStep();
+        if (isSwinging) {
+            timeStep++;
+            slashStep();
+        }
 	}
 
     void OnTriggerEnter(Collider other) {
-        // if (other.gameObject.layer != LayerMask.NameToLayer("EnemyHit")) return; // sword layer only collides with enemy layer
-        if (isSwinging) enemyContacts.AddFirst(other.gameObject);
+        if (isSwinging) {
+            enemyContacts.AddFirst(other.gameObject);
+            InitiateHapticFeedback(vibeClip, 1);
+        }
     }
 
     public void startSlash() {
+        InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
             directionDeviations[i] = 0F;
@@ -65,11 +86,14 @@ public class Sword : MonoBehaviour {
         }
         // accumuluate deviation from sterotype direction and attentuate by decreasing function of timesteps
         // accumulate crossproduct of anchor x axis and stereotypical vector and attenutate by decreasing function of timesteps
-        // update speed for thrusts
+        // TODO update speed for thrusts
     }
 
     public void stopSlash() {
+        audioSource.PlayOneShot(swordUndrawClip, 0.2f);
+        InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
+        StopCoroutine("swordCharge");
         stopPoint = swordAnchor.transform.position;
 
         float bestDirectionDeviation = float.MaxValue;
@@ -92,11 +116,19 @@ public class Sword : MonoBehaviour {
         }
         enemyContacts.Clear();
 
+        if (swordCharged) {
+            Vector3 spawnOffset = (stopPoint - startPoint) / 2;
+            Vector3 spawn = startPoint + spawnOffset;
+            Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
+            FireChargedShot(spawn, shotDirection);
+            swordCharged = false;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        }
+        
         if (debugMode) {
             directionDeviationSaves.AddFirst(bestDirectionDeviation);
             alignmentDeviationSaves.AddFirst(bestAlignmentDeviation);
         }
-        //Debug.Log("Swing in " + correctedDirection + " direction with deviation of " + bestDirectionDeviation + " direction and " + bestAlignmentDeviation + " alignment.");
     }
 
     void accumulateDeviations(Vector3 direction, Vector3 alignment) {
@@ -137,6 +169,27 @@ public class Sword : MonoBehaviour {
                 break;
         }
         return actualDirection;
+    }
+
+    IEnumerator swordCharge() {
+        yield return new WaitForSeconds(CHARGE_DURATION);
+        InitiateHapticFeedback(vibeClip, 1);
+        swordCharged = true;
+        GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+    }
+
+    void FireChargedShot(Vector3 startlocation, Quaternion facing) {
+        GameObject shot = Instantiate(ChargeShot, startlocation, facing);
+    }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
+    }
+
+    public void InitiateHapticFeedback(AudioClip hapticsAudioClip, int channel) {
+        OVRHapticsClip hapticsClip = new OVRHapticsClip(hapticsAudioClip);
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 
     public void switchDebug() {

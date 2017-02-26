@@ -7,6 +7,7 @@ public class InputHandler : MonoBehaviour {
     Hand leftHand;
     Hand rightHand;
     Teleport teleport;
+    Sword sword;
     float thumbstickDeadzone = 0.1F;
 
     bool truePrimary = false; // is the primary (left) hand dominant?
@@ -34,6 +35,9 @@ public class InputHandler : MonoBehaviour {
 
         if (OVRInput.GetDown(modeSwitch)) switchHandMode();
         if (OVRInput.GetDown(debugSwitch)) switchDebug();
+        
+        if (OVRInput.GetDown(swordCharge)) startCharge(true);
+        if (OVRInput.GetUp(swordCharge)) startCharge(false);
 
         Vector2 thumbstickAxis = OVRInput.Get(teleThumbstick);
         bool teleGo = OVRInput.GetDown(teleButton);
@@ -46,7 +50,6 @@ public class InputHandler : MonoBehaviour {
 
         leftHand.setLock(OVRInput.Get(OVRInput.Button.PrimaryHandTrigger));
         rightHand.setLock(OVRInput.Get(OVRInput.Button.SecondaryHandTrigger));
-
         setFingerOut(!OVRInput.Get(fingerTouch));
     }
 
@@ -68,6 +71,7 @@ public class InputHandler : MonoBehaviour {
         modeSwitch = OVRInput.Button.One;
         debugSwitch = OVRInput.Button.PrimaryThumbstick;
         teleButton = OVRInput.Button.Four;
+        swordCharge = OVRInput.Button.SecondaryIndexTrigger;
         fingerTouch = OVRInput.Touch.SecondaryIndexTrigger;
         teleThumbstick = OVRInput.Axis2D.SecondaryThumbstick;
     }
@@ -76,6 +80,7 @@ public class InputHandler : MonoBehaviour {
         modeSwitch = OVRInput.Button.Three;
         debugSwitch = OVRInput.Button.SecondaryThumbstick;
         teleButton = OVRInput.Button.Two;
+        swordCharge = OVRInput.Button.PrimaryIndexTrigger;
         fingerTouch = OVRInput.Touch.PrimaryIndexTrigger;
         teleThumbstick = OVRInput.Axis2D.PrimaryThumbstick;
     }
@@ -94,6 +99,11 @@ public class InputHandler : MonoBehaviour {
     void switchDebug() {
         if (truePrimary) leftHand.switchDebug();
         else rightHand.switchDebug();
+    }
+    
+    void swordCharge(bool charge) {
+        if (truePrimary) leftHand.chargeSword(charge);
+        else rightHand.chargeSword(charge);
     }
 
     bool thumbstickPassedDeadzone(Vector2 thumbstickAxis) {

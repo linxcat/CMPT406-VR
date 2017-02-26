@@ -22,6 +22,10 @@ public class Teleport : MonoBehaviour {
     int teleportMask;
     int secondArcMask;
 
+    AudioSource audioSource;
+    public AudioClip teleportStartClip;
+    public AudioClip teleportExecuteClip;
+
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
@@ -39,6 +43,8 @@ public class Teleport : MonoBehaviour {
         linePoints[0] = null; // not dynamic pointer, need updating
         linePoints[1] = apex;
         linePoints[2] = groundLocation;
+
+        audioSource = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
@@ -123,6 +129,7 @@ public class Teleport : MonoBehaviour {
     }
 
     IEnumerator TeleportPosition() {
+        audioSource.PlayOneShot(teleportExecuteClip, 0.2f);
         teleporting = true;
         fadeOut();
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
