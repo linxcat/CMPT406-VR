@@ -46,21 +46,27 @@ public class EnemyRanged : MonoBehaviour{
 		switch (currentState) {
 		case rangedState.idle:
 			searchPlayer ();
+                this.GetComponent<Animation>().Play("stand_vigilance");
 			break;
 		case rangedState.follow:
 			moveTowardsPlayer ();
-			break;
+                this.GetComponent<Animation>().Play("walk");
+                break;
 		case rangedState.backup:
 			backup ();
-			break;
+                this.GetComponent<Animation>().Play("walk");
+                break;
 		case rangedState.attack:
-			if (!isAttack) {
-				isAttack = true;
-                StartCoroutine("fireProjectile");
-			}
+                if (!isAttack) {
+                    isAttack = true;
+                    StartCoroutine("fireProjectile");
+                    this.GetComponent<Animation>().Play("attack01");
+                }
 			break;
 		case rangedState.dead:
-			break;
+                this.GetComponent<Animation>().Play("dead");
+                break;
+        
 		}
 	}
 
@@ -68,20 +74,31 @@ public class EnemyRanged : MonoBehaviour{
 	{
         //TODO
         //Instantiate new projectile object
-        colourMaterial.SetColor("_Color", Color.red);
+        //colourMaterial.SetColor("_Color", Color.red);
+        Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
         isAttack = false;
-		if (Vector3.Distance (this.transform.position, player.transform.position) <= backupRange)
-			currentState = rangedState.backup;
-		else
-			currentState = rangedState.follow;
-	}
+        if (Vector3.Distance(this.transform.position, player.transform.position) <= backupRange) {
+            currentState = rangedState.backup;
+        }
+        else {
+            currentState = rangedState.follow;
+        }
+
+       
+
+    }
+
+    private void spawnProjectile() {
+        GameObject x = (GameObject)Instantiate(Resources.Load("Prefabs/TestProjectile"));
+        x.transform.position = this.transform.position + new Vector3(0, 1f, 0);
+    }
 
     private void searchPlayer()
     {
 
-        colourMaterial.SetColor("_Color", Color.white);
+        //colourMaterial.SetColor("_Color", Color.white);
         float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
         float distance = Vector3.Distance(this.transform.position, player.transform.position);
         Debug.Log("Angle: " + angle + "Distance: " + distance);
@@ -92,7 +109,7 @@ public class EnemyRanged : MonoBehaviour{
     }
 
     private void moveTowardsPlayer() {
-        colourMaterial.SetColor("_Color", Color.blue);
+        //colourMaterial.SetColor("_Color", Color.blue);
         float step = speed * Time.deltaTime;
         //Horizontal angle between this and player
         float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
@@ -118,7 +135,7 @@ public class EnemyRanged : MonoBehaviour{
     }
 
 	private void backup(){
-        colourMaterial.SetColor("_Color", Color.green);
+        //colourMaterial.SetColor("_Color", Color.green);
         float step = speed * Time.deltaTime;
         //Horizontal angle between this and player
         float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
