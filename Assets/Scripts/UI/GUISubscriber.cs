@@ -12,7 +12,8 @@ namespace GUIPubSub {
     }
     public class GUIHealthSubscriber : GUISubscriber {
         private Slider HEALTH_SLIDER;
-        
+        private int TO_SLIDER_VALUE = 100;
+
         public GUIHealthSubscriber(Slider healthSlider) {
             HEALTH_SLIDER = healthSlider;
         }
@@ -20,14 +21,14 @@ namespace GUIPubSub {
 
         public void getPublication(GUIEvent e) {
             if (e.getType().Equals("heatlh")) {
-                HEALTH_SLIDER.value = e.getValue();
+                HEALTH_SLIDER.value = e.getValue() / TO_SLIDER_VALUE;
             }
         }
     }
 
     public class GUIStaminaSubscriber : GUISubscriber {
         private Slider STAMINA_SLIDER;
-
+        private int TO_SLIDER_VALUE = 100;
         public GUIStaminaSubscriber(Slider staminaSlider) {
             STAMINA_SLIDER = staminaSlider;
         }
@@ -35,13 +36,14 @@ namespace GUIPubSub {
 
         public void getPublication(GUIEvent e) {
             if (e.getType().Equals("stamina")) {
-                STAMINA_SLIDER.value = e.getValue();
+                STAMINA_SLIDER.value = e.getValue() / TO_SLIDER_VALUE;
             }
         }
     }
 
     public class GUIManaSubscriber : GUISubscriber {
         private Slider MANA_SLIDER;
+        private int TO_SLIDER_VALUE = 100;
 
         public GUIManaSubscriber(Slider manaSlider) {
             MANA_SLIDER = manaSlider;
@@ -50,7 +52,7 @@ namespace GUIPubSub {
 
         public void getPublication(GUIEvent e) {
             if (e.getType().Equals("mana")) {
-                MANA_SLIDER.value = e.getValue();
+                MANA_SLIDER.value = e.getValue() / TO_SLIDER_VALUE;
             }
         }
     }
