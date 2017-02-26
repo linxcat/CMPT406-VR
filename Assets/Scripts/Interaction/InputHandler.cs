@@ -4,67 +4,106 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour {
 
-    Hand[] hands = new Hand[2];
+    Hand leftHand;
+    Hand rightHand;
     Teleport teleport;
     Sword sword;
     float thumbstickDeadzone = 0.1F;
 
+    bool truePrimary = false; // is the primary (left) hand dominant?
+    OVRInput.Button modeSwitch, debugSwitch, teleButton;
+    OVRInput.Touch fingerTouch;
+    OVRInput.Axis2D teleThumbstick;
+
+
     // Use this for initialization
     void Start () {
-        hands[0] = GameObject.Find("Hand-Dominant").GetComponent<Hand>();
-        hands[1] = GameObject.Find("Hand-Secondary").GetComponent<Hand>();
+        leftHand = GameObject.Find("LeftHand").GetComponent<Hand>();
+        rightHand = GameObject.Find("RightHand").GetComponent<Hand>();
         teleport = GameObject.Find("Player").GetComponent<Teleport>();
-        sword = GameObject.Find("Sword").GetComponent<Sword>();
+        rightButtons(); //initialize buttons
     }
 	
 	// Update is called once per frame
 	void Update () {
-        bool modeSwitch = OVRInput.GetDown(OVRInput.Button.One);
-        bool debugSwitch = OVRInput.GetDown(OVRInput.Button.Three);
-        bool locking = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
-        Vector2 thumbstickAxis = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick); // TODO hand switching
-        bool thumbstickClick = OVRInput.GetDown(OVRInput.Button.Four);
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) &&
+            OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger) &&
+            OVRInput.GetDown(debugSwitch)) {
+            switchHandedness();
+            return;
+        }
 
+        if (OVRInput.GetDown(modeSwitch)) switchHandMode();
+        if (OVRInput.GetDown(debugSwitch)) switchDebug();
+        
+        if (OVRInput.GetDown(swordCharge)) startCharge(true);
+        if (OVRInput.GetUp(swordCharge)) startCharge(false);
+
+        Vector2 thumbstickAxis = OVRInput.Get(teleThumbstick);
+        bool teleGo = OVRInput.GetDown(teleButton);
         if (thumbstickPassedDeadzone(thumbstickAxis)) {
             teleport.setRotation(thumbstickAxis);
-            if (thumbstickClick) teleport.go();
+            if (teleGo) teleport.go();
         }
         else
             teleport.disable();
 
-        if (modeSwitch) switchHandMode();
-        if (debugSwitch) switchDebug();
-        lockHand(locking);
+        leftHand.setLock(OVRInput.Get(OVRInput.Button.PrimaryHandTrigger));
+        rightHand.setLock(OVRInput.Get(OVRInput.Button.SecondaryHandTrigger));
+        setFingerOut(!OVRInput.Get(fingerTouch));
+    }
 
-        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger)) {
-            sword.StartCoroutine("swordCharge");
+    void switchHandedness() {
+        if (truePrimary) {
+            truePrimary = false; // switch to right hand
+            rightButtons();
+            leftHand.switchPrimaryHand();
+            rightHand.switchPrimaryHand();
         }
-        if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger)) {
-            sword.StopCoroutine("swordCharge");
+        else {
+            truePrimary = true; // switch to left hand
+            leftButtons();
+            rightHand.switchPrimaryHand();
+            leftHand.switchPrimaryHand();
         }
+    }
+    void rightButtons() {
+        modeSwitch = OVRInput.Button.One;
+        debugSwitch = OVRInput.Button.PrimaryThumbstick;
+        teleButton = OVRInput.Button.Four;
+        swordCharge = OVRInput.Button.SecondaryIndexTrigger;
+        fingerTouch = OVRInput.Touch.SecondaryIndexTrigger;
+        teleThumbstick = OVRInput.Axis2D.SecondaryThumbstick;
+    }
 
+    void leftButtons() {
+        modeSwitch = OVRInput.Button.Three;
+        debugSwitch = OVRInput.Button.SecondaryThumbstick;
+        teleButton = OVRInput.Button.Two;
+        swordCharge = OVRInput.Button.PrimaryIndexTrigger;
+        fingerTouch = OVRInput.Touch.PrimaryIndexTrigger;
+        teleThumbstick = OVRInput.Axis2D.PrimaryThumbstick;
+    }
+
+    void setFingerOut(bool value) {
+        if (truePrimary) leftHand.setFingerOut(value);
+        else rightHand.setFingerOut(value);
     }
 
     void switchHandMode()
     {
-        foreach (Hand hand in hands)
-        {
-            hand.switchMode();
-        }
+        if (truePrimary) leftHand.switchMode();
+        else rightHand.switchMode();
     }
 
     void switchDebug() {
-        foreach (Hand hand in hands) {
-            hand.switchDebug();
-        }
+        if (truePrimary) leftHand.switchDebug();
+        else rightHand.switchDebug();
     }
-
-    void lockHand(bool locking)
-    {
-        foreach (Hand hand in hands)
-        {
-            hand.setLock(locking);
-        }
+    
+    void swordCharge(bool charge) {
+        if (truePrimary) leftHand.chargeSword(charge);
+        else rightHand.chargeSword(charge);
     }
 
     bool thumbstickPassedDeadzone(Vector2 thumbstickAxis) {
