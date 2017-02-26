@@ -5,9 +5,9 @@ using UnityEngine;
 public class EnemyRanged : MonoBehaviour{
 
     Material colourMaterial;
-    GameObject projectile;
+    public GameObject projectile;
 	public int hp = 100;
-	private float detectRange = 100; //tunning required
+	private float detectRange = 100; //tuning required
 	private float backupRange = 20;
 	private float atkRange = 20;
 	private float atkDelay = 5;
@@ -72,9 +72,6 @@ public class EnemyRanged : MonoBehaviour{
 
 	IEnumerator fireProjectile()
 	{
-        //TODO
-        //Instantiate new projectile object
-        //colourMaterial.SetColor("_Color", Color.red);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
@@ -91,7 +88,7 @@ public class EnemyRanged : MonoBehaviour{
     }
 
     private void spawnProjectile() {
-        GameObject x = (GameObject)Instantiate(Resources.Load("Prefabs/TestProjectile"));
+        GameObject x = (GameObject)Instantiate(projectile);
         x.transform.position = this.transform.position + new Vector3(0, 1f, 0);
     }
 
