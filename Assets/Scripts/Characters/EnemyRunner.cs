@@ -8,7 +8,8 @@ public class EnemyRunner : Enemy{
     //Transform pivot;
 	private float detectRange = 100;
 	private float atkRange = 1.5F;
-    private float atkDelay = 1;
+    private float atkDuration = 1;
+    private float atkCD = 0.5F;
     private float speed = 1.5F;
     private int turnSpeed = 3;
     private int attackDmg = 30;
@@ -83,13 +84,15 @@ public class EnemyRunner : Enemy{
     IEnumerator swingWeapon()
     {
         //tune atkDelay to match animation
-        yield return new WaitForSeconds(atkDelay);
-		isAttack = false;
+        yield return new WaitForSeconds(atkDuration);
+        this.GetComponent<Animator>().SetInteger("state", 4);
+        yield return new WaitForSeconds(atkCD);
+        isAttack = false;
 		currentState = runnerState.follow;
     }
 
     public void counter() {
-        if (currentState != runnerState.attack) return;
+        if (!isAttack) return;
 
         //weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         //weapon.transform.up = pivot.up;
