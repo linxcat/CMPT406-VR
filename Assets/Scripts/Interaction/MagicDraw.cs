@@ -26,11 +26,16 @@ public class MagicDraw : MonoBehaviour {
         isDrawing = value;
     }
 
-    public void getSpell() {
+    public void clear() {
+        magicLines.numPositions = 0;
+        verticies.Clear();
+    }
+
+    public string getSpell() {
         string spell = "";
         foreach (string edge in verticies) {
             spell = spell + edge + ".";
         }
-        verticies.Clear();
+        return spell;
     }
 }

@@ -19,11 +19,11 @@ public class Hand : MonoBehaviour {
     private float[] pastSpeeds = new float[10];
 
     GameObject sigilAnchor;
-    LineRenderer magicLines;
     GameObject hitArray;
     Sword sword;
     Transform teleLineSpawn;
     MagicDraw magicDraw;
+    Spells spells;
     GameObject centerEyeAnchor;
     Teleport teleportScript;
 
@@ -33,11 +33,11 @@ public class Hand : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-        magicLines = sigilAnchor.GetComponent<LineRenderer>();
         hitArray = GameObject.Find("HitArray");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
         magicDraw = transform.Find("DrawTouch").gameObject.GetComponent<MagicDraw>();
+        spells = GameObject.Find("Player").GetComponent<Spells>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         teleportScript = GameObject.Find("Player").GetComponent<Teleport>();
         initialize();
@@ -136,8 +136,9 @@ public class Hand : MonoBehaviour {
     }
 
     void doMagic() {
-        magicLines.numPositions = 0;
-        magicDraw.getSpell();
+        string spell = magicDraw.getSpell();
+        magicDraw.clear();
+        spells.cast(spell);
     }
 
     public void setFingerOut(bool value) {
