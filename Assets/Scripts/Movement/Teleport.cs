@@ -142,8 +142,7 @@ public class Teleport : MonoBehaviour {
         yield return new WaitForSeconds(FADE_DURATION);
 
         avatar.SetActive(true);
-        Vector3 newPosition = new Vector3(groundLocation.position.x, player.transform.position.y, groundLocation.position.z);
-        player.transform.position = newPosition;
+        player.transform.position = groundLocation.position;
         player.transform.forward = groundLocation.forward;
         fadeIn();
         teleporting = false;
