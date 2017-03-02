@@ -57,6 +57,24 @@ public class Enemy : MonoBehaviour {
     protected void facePlayer(Vector3 other)
     {
         transform.LookAt(other);
+//        yield return new WaitForSeconds(delay);
+//        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+//
+//        while (true)
+//        {
+//            if (swingDown)
+//            {
+//                weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
+//            }
+//            else
+//            {
+//               weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
+//            }
+//            if (swingDown && (Vector3.Angle(weapon.transform.up, pivot.forward) < 1F)) swingDown = false;
+//            else if (!swingDown && (Vector3.Angle(weapon.transform.up, pivot.up) < 1F)) swingDown = true;
+//
+//            yield return null;
+//        }
     }
 
     virtual protected void takeDamage(int damage)

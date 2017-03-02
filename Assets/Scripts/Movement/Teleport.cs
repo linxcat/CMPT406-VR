@@ -37,8 +37,8 @@ public class Teleport : MonoBehaviour {
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
         bumpBack = groundSphereCollider.radius;
-        teleportMask = LayerMask.GetMask(new string[3] { "Ground", "EnemyRange", "TeleportCollider" });
-        secondArcMask = LayerMask.GetMask(new string[2] { "Ground", "EnemyRange" });
+        teleportMask = LayerMask.GetMask(new string[4] { "Ground", "EnemyRange", "TeleportCollider", "Walls" });
+        secondArcMask = LayerMask.GetMask(new string[3] { "Ground", "EnemyRange", "Walls" });
 
         linePoints[0] = null; // not dynamic pointer, need updating
         linePoints[1] = apex;
@@ -71,9 +71,9 @@ public class Teleport : MonoBehaviour {
             return;
         }
         int layerOfHit = hitInfo.collider.gameObject.layer;
-        
 
-        if (layerOfHit == LayerMask.NameToLayer("TeleportCollider")) { 
+
+        if (layerOfHit == LayerMask.NameToLayer("TeleportCollider")) {
             Vector3 secondDirection;
             if (hitInfo.collider.tag == "coneCap") {
                 Vector3 incomingVec = hitInfo.point - teleLineSpawn.position;
@@ -95,6 +95,7 @@ public class Teleport : MonoBehaviour {
             apex.transform.position = hitInfo.point;
             if (layerOfSecondHit == LayerMask.NameToLayer("Ground")) placeOnGround(secondHit.point);
             else if (layerOfSecondHit == LayerMask.NameToLayer("EnemyRange")) groundLocation.position = findOffsetPoint(secondHit.collider, secondHit.point);
+            else if (layerOfSecondHit == LayerMask.NameToLayer("Walls")) groundLocation.position = wallBounce(secondHit.normal, secondHit.point);
         }
         else if (layerOfHit == LayerMask.NameToLayer("Ground")) {
             placeOnGround(hitInfo.point);
@@ -103,7 +104,11 @@ public class Teleport : MonoBehaviour {
         else if (layerOfHit == LayerMask.NameToLayer("EnemyRange")) {
             groundLocation.position = findOffsetPoint(hitInfo.collider, hitInfo.point);
             placeStraightApex();
-        }   
+        }
+        else if (layerOfHit == LayerMask.NameToLayer("Walls")) {
+            groundLocation.position = wallBounce(hitInfo.normal, hitInfo.point);
+            placeStraightApex();
+        }
     }
 
     void placeStraightApex() {
@@ -137,33 +142,52 @@ public class Teleport : MonoBehaviour {
         yield return new WaitForSeconds(FADE_DURATION);
 
         avatar.SetActive(true);
-        Vector3 newPosition = new Vector3(groundLocation.position.x, player.transform.position.y, groundLocation.position.z);
-        player.transform.position = newPosition;
+        player.transform.position = groundLocation.position;
         player.transform.forward = groundLocation.forward;
         fadeIn();
         teleporting = false;
     }
 
-    public static Vector3 findOffsetPoint(Collider collider, Vector3 hitLocation) {
+    Vector3 findOffsetPoint(Collider collider, Vector3 hitLocation) {
         Vector3 direction = hitLocation - collider.transform.position;
         direction = Vector3.ProjectOnPlane(direction, Vector3.up);
         direction.Normalize();
         float bumpTotal = bumpBack + ((CapsuleCollider)collider).radius;
         direction = direction * (bumpTotal);
         Vector3 newPosition = collider.transform.position + direction;
+        return groundCast(newPosition);
+    }
+
+    Vector3 wallBounce(Vector3 normal, Vector3 contact) {
+        Vector3 direction = normal.normalized * bumpBack;
+        Vector3 spot = contact + direction;
+        return groundCast(spot);
+    }
+
+    Vector3 groundCast(Vector3 startPoint) {
         RaycastHit hitInfo = new RaycastHit();
-        Physics.Raycast(newPosition, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
+        Physics.Raycast(startPoint, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
         return hitInfo.point;
     }
 
     private void placeOnGround(Vector3 spot) {
-        Collider[] possibleEnemies = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[1] { "EnemyRange" }));
+        Collider[] possibleObstacles = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[2] { "EnemyRange", "Walls" }));
 
-        if (possibleEnemies.Length == 0) groundLocation.position = spot;
+        if (possibleObstacles.Length == 0) groundLocation.position = spot;
         else {
-            Vector3[] safePoints = new Vector3[possibleEnemies.Length];
-            for (int i = 0; i < possibleEnemies.Length; i ++) {
-                safePoints[i] = findOffsetPoint(possibleEnemies[i], possibleEnemies[i].ClosestPointOnBounds(spot));
+            Vector3[] safePoints = new Vector3[possibleObstacles.Length];
+            for (int i = 0; i < possibleObstacles.Length; i ++) {
+                Vector3 closestPoint = possibleObstacles[i].ClosestPointOnBounds(spot);
+                if (possibleObstacles[i].gameObject.layer == LayerMask.NameToLayer("EnemyRange")) {
+                    safePoints[i] = findOffsetPoint(possibleObstacles[i], closestPoint);
+                }
+                else if (possibleObstacles[i].gameObject.layer == LayerMask.NameToLayer("Walls")) {
+                    closestPoint.y += 0.1F; // otherwise cast happens at ground level and shoots through the floor
+                    Ray ray = new Ray(spot, closestPoint);
+                    RaycastHit hitInfo;
+                    possibleObstacles[i].Raycast(ray, out hitInfo, float.MaxValue);
+                    safePoints[i] = wallBounce(hitInfo.normal, closestPoint);
+                }
             }
 
             // PLACEHOLDER (TODO)

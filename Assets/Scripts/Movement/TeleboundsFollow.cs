@@ -13,6 +13,8 @@ public class TeleboundsFollow : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.position = centerEyeAnchor.transform.position;
+        Vector3 a = centerEyeAnchor.transform.position;
+        Vector3 newPosition = new Vector3(a.x, transform.position.y, a.z);
+        transform.position = newPosition;
     }
 }
