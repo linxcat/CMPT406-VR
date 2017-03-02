@@ -7,12 +7,11 @@ public class EnemyRunner : Enemy{
 
 	private float detectRange = 100;
 	private float atkRange = 1.2F;
-    private float atkDuration = 2F;
-    private float atkCD = 3;
-    private float speed = 1.5F;
-    public float HEIGHT_BIAS = 0.3F;
+    private float atkDuration = 1.5F;
+    private float atkCD = 1.5F;
+    private float speed = 2F;
     private int attackDmg = 30;
-    private int searchAngle = 80;
+    private int searchAngle = 180;
     float parryTime = 5F;
 
     bool attacking = false;
@@ -40,6 +39,8 @@ public class EnemyRunner : Enemy{
 	void Update () {
 
         switch (currentState) {
+            case runnerState.dead:
+                break;
             case runnerState.idle:
 			    searchPlayer ();
 			    break;
@@ -49,8 +50,6 @@ public class EnemyRunner : Enemy{
 			    break;
             case runnerState.attack:
                 if (!attacking) StartCoroutine("attack");
-                break;
-              case runnerState.dead:
                 break;
 		}
 	}
@@ -79,10 +78,10 @@ public class EnemyRunner : Enemy{
         anim.SetBool("moving", false);
         float angle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
         float distance = Vector3.Distance(transform.position, player.transform.position);
-        //Debug.Log("Angle: " + angle + "Distance: " + distance);
         if (angle < searchAngle && distance < detectRange) {
             currentState = runnerState.follow;
         }
+        fall();
     }
 
     private void moveTowardsPlayer() {
@@ -103,23 +102,25 @@ public class EnemyRunner : Enemy{
     void move() {
         float step = speed * Time.deltaTime;
         Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-        transform.position += Vector3.MoveTowards(transform.position, targetPos, step);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
     }
     
     void fall() {
         RaycastHit hitPoint = new RaycastHit();
-        Physics.Raycast(transform.position, Vector3.down, out hitPoint, float.MaxValue, LayerMask.GetMask(new string[] {"Ground"}));
-        Vector3 groundPlacement = hitPoint.point;
-        groundPlacement.y += HEIGHT_BIAS;
-        transform.position = groundPlacement;
+        Vector3 aboveGround = transform.position;
+        aboveGround.y += 1F;
+        Physics.Raycast(aboveGround, Vector3.down, out hitPoint, float.MaxValue, LayerMask.GetMask(new string[] {"Ground"}));
+        transform.position = hitPoint.point;
     }
 
     IEnumerator attack() {
+        anim.SetBool("moving", false);
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
         parryable = false;
+        currentState = runnerState.idle;
         yield return new WaitForSeconds(atkCD);
         attacking = false;
     }
@@ -146,12 +147,9 @@ public class EnemyRunner : Enemy{
         }
     }
 
-    protected void takeDamage(int damage)    {
-        base.takeDamage(damage);
-    }
-
     public override void die() {
         GetComponent<Animator>().SetTrigger("kill");
+        StopAllCoroutines();
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
     }
