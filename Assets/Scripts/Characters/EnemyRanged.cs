@@ -32,7 +32,7 @@ public class EnemyRanged : Enemy{
         //find projectile object
         foreach (Transform child in transform)
         {
-            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
+            //if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
         }
         isAttack = false;
 		currentState = rangedState.idle;
@@ -108,7 +108,7 @@ public class EnemyRanged : Enemy{
         float step = speed * Time.deltaTime;
         //Horizontal angle between this and player
         float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
-        Debug.Log("Angle: " + angle);
+        //Debug.Log("Angle: " + angle);
         if (angle > 5)
         {
             Vector3 lookPos = player.transform.position - transform.position;

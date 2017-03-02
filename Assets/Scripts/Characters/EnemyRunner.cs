@@ -7,14 +7,15 @@ public class EnemyRunner : Enemy{
     //GameObject weapon;
     //Transform pivot;
 	private float detectRange = 100;
-	private float atkRange = 1.5F;
-    private float atkDuration = 1;
-    private float atkCD = 0.5F;
+	private float atkRange = 1.2F;
+    private float atkDuration = 2F;
+    private float atkCD = 3;
     private float speed = 1.5F;
     private int turnSpeed = 3;
     private int attackDmg = 30;
     private int searchAngle = 80;
 	private bool isAttack;
+    private bool canCounter;
     float parryTime = 5F;
 
     //Vector3 weaponStartPosition;
@@ -46,37 +47,35 @@ public class EnemyRunner : Enemy{
         //    if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
         //}
 		isAttack = false;
+        canCounter = false;
 		currentState = runnerState.idle;
 		player = GameObject.FindGameObjectWithTag ("Player");
+        atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (!isAlive())
-            currentState = runnerState.dead;
+
         switch (currentState) {
             case runnerState.idle:
-                if (this.GetComponent<Animator>().GetInteger("state") != 4) {
-                    this.GetComponent<Animator>().SetInteger("state", 4);
+                if (GetComponent<Animator>().GetInteger("state") != 4) {
+                    GetComponent<Animator>().SetInteger("state", 4);
                 }
 			searchPlayer ();
 			break;
             case runnerState.follow:
-                if (this.GetComponent<Animator>().GetInteger("state") != 3) {
-                    this.GetComponent<Animator>().SetInteger("state", 3);
+                if (GetComponent<Animator>().GetInteger("state") != 3) {
+                    GetComponent<Animator>().SetInteger("state", 3);
                 }
                 moveTowardsPlayer ();
 			break;
 		case runnerState.attack:
 			if (!isAttack) {
-                    this.GetComponent<Animator>().SetInteger("state", 1);
                     isAttack = true;
 				StartCoroutine ("swingWeapon");
 			}
 			break;
 		case runnerState.dead:
-                
-                this.GetComponent<Animator>().SetInteger("state", 2);
                 break;
 		}
 	}
@@ -84,15 +83,22 @@ public class EnemyRunner : Enemy{
     IEnumerator swingWeapon()
     {
         //tune atkDelay to match animation
+        canCounter = true;
+        if (GetComponent<Animator>().GetInteger("state") != 1)
+            GetComponent<Animator>().SetInteger("state", 1);
         yield return new WaitForSeconds(atkDuration);
-        this.GetComponent<Animator>().SetInteger("state", 4);
+        canCounter = false;
+        GetComponent<Animator>().SetInteger("state", 4);
         yield return new WaitForSeconds(atkCD);
+        if (Vector3.Distance(this.transform.position, player.transform.position) > atkRange)
+        {
+            currentState = runnerState.follow;
+        }
         isAttack = false;
-		currentState = runnerState.follow;
     }
 
-    public void counter() {
-        if (!isAttack) return;
+    public void countered() {
+        if (!canCounter) return;
 
         //weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         //weapon.transform.up = pivot.up;
@@ -104,7 +110,7 @@ public class EnemyRunner : Enemy{
 
     IEnumerator parried()
     {
-        this.GetComponent<Animator>().SetInteger("state", 4);
+        GetComponent<Animator>().SetTrigger("counter");
         yield return new WaitForSeconds(parryTime);
         currentState = runnerState.idle;
         isAttack = false;
@@ -155,5 +161,13 @@ public class EnemyRunner : Enemy{
         }
     }
 
-
+    override protected void takeDamage(int damage)    {
+        base.takeDamage(damage);
+        if (!isAlive())
+        {
+            currentState = runnerState.dead;
+            GetComponent<Collider>().enabled = false;
+            GetComponent<Animator>().SetTrigger("kill");
+        }
+    }
 }

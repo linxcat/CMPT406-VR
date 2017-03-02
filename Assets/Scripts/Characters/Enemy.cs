@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-    protected Material colourMaterial;
+    //protected Material colourMaterial;
     protected GameObject player;
     public int hp = 100;
     public int maxDamage = 50;
@@ -33,22 +33,25 @@ public class Enemy : MonoBehaviour {
         switch (accuracy) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
-                colourMaterial.SetColor("_Color", Color.blue);
+                //colourMaterial.SetColor("_Color", Color.blue);
                 takeDamage(maxDamage);
+                Debug.Log("Enemy hit! Damage: " + maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip, 0.2f);
-                colourMaterial.SetColor("_Color", Color.green);
+                //colourMaterial.SetColor("_Color", Color.green);
                 takeDamage(maxDamage/2);
+                Debug.Log("Enemy hit! Damage: " + maxDamage/2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip, 0.2f);
-                colourMaterial.SetColor("_Color", Color.red);
+                //colourMaterial.SetColor("_Color", Color.red);
                 takeDamage(maxDamage/4);
+                Debug.Log("Enemy hit! Damage: " + maxDamage/4);
                 break;
         }
         yield return new WaitForSeconds(0.75F);
-        colourMaterial.SetColor("_Color", Color.white);
+        //colourMaterial.SetColor("_Color", Color.white);
     }
 
     protected void facePlayer(Vector3 other)
@@ -56,7 +59,7 @@ public class Enemy : MonoBehaviour {
         transform.LookAt(other);
     }
 
-    protected void takeDamage(int damage)
+    virtual protected void takeDamage(int damage)
     {
         this.hp = this.hp - damage;
     }
