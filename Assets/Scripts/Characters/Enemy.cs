@@ -5,13 +5,13 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 
     Material colourMaterial;
-    GameObject weapon;
-    Transform pivot;
+    protected GameObject weapon;
+    protected Transform pivot;
 
     Vector3 weaponStartPosition;
 
     float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
-    bool swingDown = true;
+    protected bool swingDown = true;
 
     float parryTime = 2F;
 
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour {
         StartCoroutine("colourFlash", hit.getAccuracy());
     }
 
-    IEnumerator colourFlash(Hit.ACCURACY accuracy) {
+    protected virtual IEnumerator colourFlash(Hit.ACCURACY accuracy) {
         switch (accuracy) {
             case Hit.ACCURACY.Perfect:
                 colourMaterial.SetColor("_Color", Color.blue);
@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour {
         colourMaterial.SetColor("_Color", Color.white);
     }
 
-    IEnumerator swingWeapon(float delay)
+    virtual protected IEnumerator swingWeapon(float delay)
     {
         yield return new WaitForSeconds(delay);
         weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
