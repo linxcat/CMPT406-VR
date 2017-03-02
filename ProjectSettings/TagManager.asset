@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Sigil
+  - coneCap
   layers:
   - Default
   - TransparentFX
@@ -17,6 +18,11 @@ TagManager:
   - Player
   - Sword
   - Gauntlet
+  - Sigils
+  - 
+  - GroundMark
+  - 
+  - 
   - Enemy
   - EnemyWeapon
   - 
@@ -24,18 +30,13 @@ TagManager:
   - 
   - 
   - 
+  - EnemyRange
+  - Walls
+  - Ground
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - TeleportCollider
   - 
   - nothing
   m_SortingLayers:
