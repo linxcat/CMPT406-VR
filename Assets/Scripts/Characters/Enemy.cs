@@ -4,40 +4,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-    Material colourMaterial;
-    GameObject weapon;
-    Transform pivot;
-
-    private float maxHealth;
-    private float currentHealth;
-
-    Vector3 weaponStartPosition;
-
-    float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
-    bool swingDown = true;
-
-    float parryTime = 2F;
-
+    //protected Material colourMaterial;
+    protected GameObject player;
+    public int hp = 100;
+    public int maxDamage = 50;
+ 
     public AudioSource audioSource;
     public AudioClip badHitClip;
     public AudioClip goodHitClip;
     public AudioClip perfectHitClip;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    public void Start () {
         audioSource = GetComponent<AudioSource>();
-        foreach (Transform child in transform)
-        {
-            if (child.name == "weapon") {
-                weapon = child.gameObject;
-                weaponStartPosition = child.localPosition;
-            }
-            if (child.name == "pivot") {
-                pivot = child.transform;
-            }
-            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
-        }
-        StartCoroutine("swingWeapon", 0F);
 	}
 	
 	// Update is called once per frame
@@ -54,55 +33,69 @@ public class Enemy : MonoBehaviour {
         switch (accuracy) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
-                colourMaterial.SetColor("_Color", Color.blue);
+                //colourMaterial.SetColor("_Color", Color.blue);
+                takeDamage(maxDamage);
+                Debug.Log("Enemy hit! Damage: " + maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip, 0.2f);
-                colourMaterial.SetColor("_Color", Color.green);
+                //colourMaterial.SetColor("_Color", Color.green);
+                takeDamage(maxDamage/2);
+                Debug.Log("Enemy hit! Damage: " + maxDamage/2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip, 0.2f);
-                colourMaterial.SetColor("_Color", Color.red);
+                //colourMaterial.SetColor("_Color", Color.red);
+                takeDamage(maxDamage/4);
+                Debug.Log("Enemy hit! Damage: " + maxDamage/4);
                 break;
         }
         yield return new WaitForSeconds(0.75F);
-        colourMaterial.SetColor("_Color", Color.white);
+        //colourMaterial.SetColor("_Color", Color.white);
     }
 
-    IEnumerator swingWeapon(float delay)
+    protected void facePlayer(Vector3 other)
     {
-        yield return new WaitForSeconds(delay);
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        transform.LookAt(other);
+//        yield return new WaitForSeconds(delay);
+//        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+//
+//        while (true)
+//        {
+//            if (swingDown)
+//            {
+//                weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
+//            }
+//            else
+//            {
+//               weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
+//            }
+//            if (swingDown && (Vector3.Angle(weapon.transform.up, pivot.forward) < 1F)) swingDown = false;
+//            else if (!swingDown && (Vector3.Angle(weapon.transform.up, pivot.up) < 1F)) swingDown = true;
+//
+//            yield return null;
+//        }
+    }
 
-        while (true)
+    virtual protected void takeDamage(int damage)
+    {
+        this.hp = this.hp - damage;
+    }
+
+    public bool isAlive()
+    {
+        if (hp <= 0)
         {
-            if (swingDown)
-            {
-                weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
-            }
-            else
-            {
-               weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
-            }
-            if (swingDown && (Vector3.Angle(weapon.transform.up, pivot.forward) < 1F)) swingDown = false;
-            else if (!swingDown && (Vector3.Angle(weapon.transform.up, pivot.up) < 1F)) swingDown = true;
-
-            yield return null;
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
-    public void counter() {
-        if (!swingDown) return;
-
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        weapon.transform.up = pivot.up;
-        weapon.transform.localPosition = weaponStartPosition;
-        swingDown = true;
-        StopCoroutine("swingWeapon");
-        StartCoroutine("swingWeapon", parryTime);
-    }
-
-    public void takeDamage() {
-
+    public int getHp()
+    {
+        return this.hp;
     }
 }

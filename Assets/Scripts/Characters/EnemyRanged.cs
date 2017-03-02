@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRanged : MonoBehaviour{
+public class EnemyRanged : Enemy{
 
-    Material colourMaterial;
     public GameObject projectile;
-	public int hp = 100;
 	private float detectRange = 100; //tuning required
-	private float backupRange = 20;
+	private float backupRange = 15;
 	private float atkRange = 20;
 	private float atkDelay = 5;
-	private int speed = 3;
-    private int turnSpeed = 3;
+	private float speed = 2.5F;
+    private int turnSpeed = 4;
     private int attackDmg = 30;
     private int searchAngle = 80;
     private bool isAttack;
-	GameObject player;
 
 	enum rangedState{
 		idle,
@@ -30,11 +27,12 @@ public class EnemyRanged : MonoBehaviour{
 
 	// Use this for initialization
 	void Start () {
+        base.Start();
         //TODO
         //find projectile object
         foreach (Transform child in transform)
         {
-            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
+            //if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
         }
         isAttack = false;
 		currentState = rangedState.idle;
@@ -43,6 +41,8 @@ public class EnemyRanged : MonoBehaviour{
 
 	// Update is called once per frame
 	void Update () {
+        if (!isAlive())
+            currentState = rangedState.dead;
 		switch (currentState) {
 		case rangedState.idle:
 			searchPlayer ();
@@ -76,14 +76,12 @@ public class EnemyRanged : MonoBehaviour{
         yield return new WaitForSeconds(atkDelay);
 
         isAttack = false;
-        if (Vector3.Distance(this.transform.position, player.transform.position) <= backupRange) {
+        if (Vector3.Distance(this.transform.position, player.transform.position) < backupRange) {
             currentState = rangedState.backup;
         }
         else {
             currentState = rangedState.follow;
         }
-
-       
 
     }
 
@@ -110,7 +108,7 @@ public class EnemyRanged : MonoBehaviour{
         float step = speed * Time.deltaTime;
         //Horizontal angle between this and player
         float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
-        Debug.Log("Angle: " + angle);
+        //Debug.Log("Angle: " + angle);
         if (angle > 5)
         {
             Vector3 lookPos = player.transform.position - transform.position;
@@ -157,35 +155,14 @@ public class EnemyRanged : MonoBehaviour{
         }
     }
 
-    private void facePlayer(Vector3 other)
-    {
-        transform.LookAt(other);
-    }
-
     private void OnTriggerEnter(Collider other) {
 		//replace player with blade collider
 		//need to get player hp
 		int playerHp = 100; //we do not have a player yet
 		if (other.gameObject == GameObject.Find("Sword").gameObject) {
-			takeDamage(20);
+			//takeDamage(20);
 			//this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
 		}
 	}
 
-	private void takeDamage(int damage) {
-		this.hp = this.hp - damage;
-	}
-
-	private bool isAlive() {
-		if (hp <= 0) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-
-	public int getHp() {
-		return this.hp;
-	}
 }

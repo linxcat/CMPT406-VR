@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRunner : MonoBehaviour{
+public class EnemyRunner : Enemy{
 
-    Material colourMaterial;
-    GameObject weapon;
-    Transform pivot;
-    public int hp = 100;
+    //GameObject weapon;
+    //Transform pivot;
 	private float detectRange = 100;
-	private float atkRange = 1.5F;
-    private int speed = 1;
+	private float atkRange = 1.2F;
+    private float atkDuration = 2F;
+    private float atkCD = 3;
+    private float speed = 1.5F;
     private int turnSpeed = 3;
     private int attackDmg = 30;
     private int searchAngle = 80;
 	private bool isAttack;
-    GameObject player;
-
-    Vector3 weaponStartPosition;
-
-    float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
-    bool swingDown = true;
-
+    private bool canCounter;
     float parryTime = 5F;
+
+    //Vector3 weaponStartPosition;
+
+    //float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
+    //bool swingDown = true;
 
 	enum runnerState{
 		idle,
@@ -34,119 +33,88 @@ public class EnemyRunner : MonoBehaviour{
 	private runnerState currentState;
 
 	// Use this for initialization
-	void Start () {
-        foreach (Transform child in transform)
-        {
-            if (child.name == "weapon") {
-                weapon = child.gameObject;
-                weaponStartPosition = child.localPosition;
-            }
-            if (child.name == "pivot") {
-                pivot = child.transform;
-            }
-            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
-        }
+	new void Start () {
+        base.Start();
+        //foreach (Transform child in transform)
+        //{
+        //    if (child.name == "weapon") {
+        //        weapon = child.gameObject;
+        //        weaponStartPosition = child.localPosition;
+        //    }
+        //    if (child.name == "pivot") {
+        //        pivot = child.transform;
+        //    }
+        //    if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
+        //}
 		isAttack = false;
+        canCounter = false;
 		currentState = runnerState.idle;
 		player = GameObject.FindGameObjectWithTag ("Player");
-        //StartCoroutine("swingWeapon", 0F);
+        atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		switch (currentState) {
+
+        switch (currentState) {
             case runnerState.idle:
-                if (this.GetComponent<Animator>().GetInteger("state") != 4) {
-                    this.GetComponent<Animator>().SetInteger("state", 4);
+                if (GetComponent<Animator>().GetInteger("state") != 4) {
+                    GetComponent<Animator>().SetInteger("state", 4);
                 }
 			searchPlayer ();
 			break;
             case runnerState.follow:
-                if (this.GetComponent<Animator>().GetInteger("state") != 3) {
-                    this.GetComponent<Animator>().SetInteger("state", 3);
+                if (GetComponent<Animator>().GetInteger("state") != 3) {
+                    GetComponent<Animator>().SetInteger("state", 3);
                 }
                 moveTowardsPlayer ();
 			break;
 		case runnerState.attack:
 			if (!isAttack) {
-                    this.GetComponent<Animator>().SetInteger("state", 1);
                     isAttack = true;
-				StartCoroutine ("swingWeapon", 0F);
+				StartCoroutine ("swingWeapon");
 			}
 			break;
 		case runnerState.dead:
-                
-                this.GetComponent<Animator>().SetInteger("state", 2);
                 break;
 		}
 	}
 
-    public void swingHit(Hit hit) {
-        StopCoroutine("colourFlash");
-        StartCoroutine("colourFlash", hit.getAccuracy());
-    }
-
-    IEnumerator colourFlash(Hit.ACCURACY accuracy) {
-        switch (accuracy) {
-            case Hit.ACCURACY.Perfect:
-                colourMaterial.SetColor("_Color", Color.blue);
-                break;
-            case Hit.ACCURACY.Good:
-                colourMaterial.SetColor("_Color", Color.green);
-                break;
-            case Hit.ACCURACY.Bad:
-                colourMaterial.SetColor("_Color", Color.red);
-                break;
-        }
-        yield return new WaitForSeconds(0.75F);
-        colourMaterial.SetColor("_Color", Color.white);
-    }
-
-    IEnumerator swingWeapon(float delay)
+    IEnumerator swingWeapon()
     {
-        yield return new WaitForSeconds(delay);
-		int count = 1;
-
-		while (count>0)
+        //tune atkDelay to match animation
+        canCounter = true;
+        if (GetComponent<Animator>().GetInteger("state") != 1)
+            GetComponent<Animator>().SetInteger("state", 1);
+        yield return new WaitForSeconds(atkDuration);
+        canCounter = false;
+        GetComponent<Animator>().SetInteger("state", 4);
+        yield return new WaitForSeconds(atkCD);
+        if (Vector3.Distance(this.transform.position, player.transform.position) > atkRange)
         {
-            if (swingDown)
-            {
-                //weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
-            }
-            else
-            {
-                //weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
-            }
-			//if (swingDown && (Vector3.Angle (weapon.transform.up, pivot.forward) < 1F))
-			//	swingDown = false;
-			//else if (!swingDown && (Vector3.Angle (weapon.transform.up, pivot.up) < 1F)) {
-			//	swingDown = true;
-			//	count--;
-			//}
-
-            yield return null;
+            currentState = runnerState.follow;
         }
-		isAttack = false;
-		currentState = runnerState.follow;
+        isAttack = false;
     }
 
-    public void counter() {
-        if (!swingDown) return;
+    public void countered() {
+        if (!canCounter) return;
 
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        weapon.transform.up = pivot.up;
-        weapon.transform.localPosition = weaponStartPosition;
-        swingDown = true;
+        //weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        //weapon.transform.up = pivot.up;
+        //weapon.transform.localPosition = weaponStartPosition;
+        //swingDown = true;
         StopCoroutine("swingWeapon");
         StartCoroutine("parried");
     }
 
     IEnumerator parried()
     {
+        GetComponent<Animator>().SetTrigger("counter");
         yield return new WaitForSeconds(parryTime);
         currentState = runnerState.idle;
         isAttack = false;
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        //weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
     }
 
 
@@ -182,34 +150,24 @@ public class EnemyRunner : MonoBehaviour{
         }
     }
 
-    private void facePlayer(Vector3 other) {
-		transform.LookAt(other);
-    }
-
     private void OnTriggerEnter(Collider other) {
         //replace player with blade collider
         //need to get player hp
         int playerHp = 100; //we do not have a player yet
         if (other.gameObject == GameObject.Find("Sword").gameObject) {
-            takeDamage(20);
+            //Damage is now determined in hit accuracy
+            //takeDamage(20);
             //this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
         }
     }
 
-    private void takeDamage(int damage) {
-        this.hp = this.hp - damage;
-    }
-
-    private bool isAlive() {
-        if (hp <= 0) {
-            return false;
+    override protected void takeDamage(int damage)    {
+        base.takeDamage(damage);
+        if (!isAlive())
+        {
+            currentState = runnerState.dead;
+            GetComponent<Collider>().enabled = false;
+            GetComponent<Animator>().SetTrigger("kill");
         }
-        else {
-            return true;
-        }
-    }
-
-    public int getHp() {
-        return this.hp;
     }
 }
