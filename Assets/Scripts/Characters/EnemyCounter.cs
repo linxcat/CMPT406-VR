@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class EnemyCounter : MonoBehaviour {
 
-    public EnemyRunner myParent;
+    private EnemyRunner myParent;
 
 	// Use this for initialization
 	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+        myParent = transform.parent.parent.parent.parent.parent.parent.parent.parent.gameObject.GetComponent<EnemyRunner>();
 	}
 
     public void counter() {
-        myParent.countered();
+        myParent.counter();
     }
 }
