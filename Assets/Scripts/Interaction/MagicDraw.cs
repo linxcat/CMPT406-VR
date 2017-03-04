@@ -6,8 +6,15 @@ public class MagicDraw : MonoBehaviour {
 
     LineRenderer magicLines;
     LinkedList<string> verticies = new LinkedList<string>();
+	public AudioSource audioSource;
+	public AudioClip magicTouchClip;
 
     bool isDrawing = false;
+
+	void Start() {
+		audioSource = GetComponent<AudioSource>();
+	}
+
 
 	void Awake () {
         magicLines = GameObject.Find("SigilAnchor").GetComponent<LineRenderer>();
@@ -20,6 +27,7 @@ public class MagicDraw : MonoBehaviour {
         magicLines.numPositions++;
         magicLines.SetPosition(nextPosition, other.transform.position);
         verticies.AddLast(other.name);
+		audioSource.PlayOneShot (magicTouchClip, 0.2f);
     }
 
     public void setDrawing(bool value) {

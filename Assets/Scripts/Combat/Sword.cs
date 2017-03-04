@@ -36,6 +36,8 @@ public class Sword : MonoBehaviour {
 
     public AudioSource audioSource;
     public AudioClip swordDrawClip;
+	public AudioClip swordChargingClip;
+	public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
     // Use this for initialization
@@ -172,11 +174,18 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
+		audioSource.PlayOneShot(swordChargingClip, 0.2f);
         yield return new WaitForSeconds(CHARGE_DURATION);
+		stopSound();
+		audioSource.PlayOneShot(swordChargedClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         swordCharged = true;
         GetComponent<Renderer>().material.SetColor("_Color", Color.blue); // TODO remove colouring
     }
+
+	public void stopSound() {
+		audioSource.Stop();
+	}
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {
         GameObject shot = Instantiate(ChargeShot, startlocation, facing);

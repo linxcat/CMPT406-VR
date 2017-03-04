@@ -37,7 +37,7 @@ public class InputHandler : MonoBehaviour {
         if (OVRInput.GetDown(debugSwitch)) switchDebug();
         
         if (OVRInput.GetDown(chargeButton)) swordCharge(true);
-        if (OVRInput.GetUp(chargeButton)) swordCharge(false);
+		if (OVRInput.GetUp(chargeButton)) swordCharge(false);
 
         Vector2 thumbstickAxis = OVRInput.Get(teleThumbstick);
         bool teleGo = OVRInput.GetDown(teleButton);
@@ -102,8 +102,12 @@ public class InputHandler : MonoBehaviour {
     }
     
     void swordCharge(bool charge) {
-        if (truePrimary) leftHand.chargeSword(charge);
-        else rightHand.chargeSword(charge);
+		if (truePrimary) {
+			leftHand.chargeSword (charge);
+		} 
+		else {
+			rightHand.chargeSword (charge);
+		}
     }
 
     bool thumbstickPassedDeadzone(Vector2 thumbstickAxis) {
