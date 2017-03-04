@@ -39,8 +39,6 @@ public class EnemyRunner : Enemy{
 	void Update () {
 
         switch (currentState) {
-            case runnerState.dead:
-                break;
             case runnerState.idle:
 			    searchPlayer ();
 			    break;
@@ -59,17 +57,14 @@ public class EnemyRunner : Enemy{
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
                 takeDamage(maxDamage);
-                Debug.Log("Enemy hit! Damage: " + maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip, 0.2f);
                 takeDamage(maxDamage / 2);
-                Debug.Log("Enemy hit! Damage: " + maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip, 0.2f);
                 takeDamage(maxDamage / 4);
-                Debug.Log("Enemy hit! Damage: " + maxDamage / 4);
                 break;
         }
     }

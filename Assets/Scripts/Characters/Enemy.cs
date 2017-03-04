@@ -9,7 +9,7 @@ public abstract class Enemy : MonoBehaviour {
     public int hp = 100;
     public int maxDamage = 50;
 
-    private float turnSpeed = 3F;
+    protected float turnSpeed = 3F;
 
     public AudioSource audioSource;
     public AudioClip badHitClip;
