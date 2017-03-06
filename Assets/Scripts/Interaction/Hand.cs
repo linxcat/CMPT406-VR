@@ -11,6 +11,8 @@ public class Hand : MonoBehaviour {
     float HIT_ARRAY_DISTANCE = 0.6F;
     float HIT_ARRAY_VERT_BIAS = 0.2F;
 
+    float timeSlowed;
+
     bool swordIsOn = true;
     bool locked = false;
     bool locking = false;
@@ -56,6 +58,7 @@ public class Hand : MonoBehaviour {
         }
        else {
             // gauntlet
+            updateCounterSlowTime();
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
@@ -163,5 +166,25 @@ public class Hand : MonoBehaviour {
     {
         IS_PRIMARY = !IS_PRIMARY;
         initialize();
+    }
+
+    public void counterProjectile() {
+        timeSlowed = 1f;
+        Time.timeScale = 0.333333f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        if (GameObject.FindGameObjectWithTag("slow") == null) {
+            GameObject x = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+            x.transform.position = GameObject.FindGameObjectWithTag("Hand").transform.position;
+        }
+    }
+
+    void updateCounterSlowTime() {
+        //code to add duration to time slow
+        timeSlowed -= Time.deltaTime;
+        if (timeSlowed < 0) {
+            Time.timeScale = 1f;
+            Destroy(GameObject.FindGameObjectWithTag("slow"));
+           
+        }
     }
 }

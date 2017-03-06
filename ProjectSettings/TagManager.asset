@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Sigil
   - coneCap
+  - Hand
+  - Enemy
+  - slow
   layers:
   - Default
   - TransparentFX
