@@ -153,4 +153,8 @@ public class EnemyRunner : Enemy{
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
     }
+
+	public int getAtkDmg(){
+		return attackDmg;
+	}
 }

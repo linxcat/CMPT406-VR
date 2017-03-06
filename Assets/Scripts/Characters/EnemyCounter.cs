@@ -14,4 +14,10 @@ public class EnemyCounter : MonoBehaviour {
     public void counter() {
         myParent.counter();
     }
+
+	private void OnTriggerEnter(Collider other) {
+		if (other.tag == "MainCamera") {
+			other.GetComponent<CharacterStats> ().takeDamage (myParent.getAtkDmg());
+		}
+	}
 }
