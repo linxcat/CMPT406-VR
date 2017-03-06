@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectFollow : MonoBehaviour {
+public class ObjectFollowXZ : MonoBehaviour {
 
     GameObject centerEyeAnchor;
 

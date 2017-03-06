@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyCounter : MonoBehaviour {
+public class EnemyWeapon : MonoBehaviour {
 
-    private EnemyRunner myParent;
+    public EnemyRunner myParent;
 
 	// Use this for initialization
 	void Start () {
@@ -15,9 +15,12 @@ public class EnemyCounter : MonoBehaviour {
         myParent.counter();
     }
 
-	private void OnTriggerEnter(Collider other) {
-		if (other.tag == "MainCamera") {
-			other.GetComponent<CharacterStats> ().takeDamage (myParent.getAtkDmg());
+	void OnTriggerEnter(Collider other) {
+        Debug.Log("Hit: " + other.tag);
+        if (other.tag == "PlayerHitBox" && myParent.isParriable())
+        {
+            Debug.Log("Player hit");
+			other.SendMessage("getHit", myParent.getAtkDmg());
 		}
 	}
 }
