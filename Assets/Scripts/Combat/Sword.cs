@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour {
 
-    public float SWINGTIME = 0.12F; // TODO this
+    float SWINGTIME = 0.4F;
+    public bool swingTimeExceeded;
 
     GameObject swordAnchor;
     HitArray hitArray;
@@ -41,7 +42,7 @@ public class Sword : MonoBehaviour {
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
-        hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
+        hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         audioSource = GetComponent<AudioSource>();
@@ -72,6 +73,7 @@ public class Sword : MonoBehaviour {
         lastPoint = swordAnchor.transform.position;
         startPoint = swordAnchor.transform.position;
         isSwinging = true;
+        StartCoroutine("swingTimeMax");
     }
 
     void slashStep() {
@@ -90,10 +92,11 @@ public class Sword : MonoBehaviour {
     }
 
     public void stopSlash() {
+        StopCoroutine("swordCharge");
+        StopCoroutine("swingTimeMax");
         audioSource.PlayOneShot(swordUndrawClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
-        StopCoroutine("swordCharge");
         stopPoint = swordAnchor.transform.position;
 
         float bestDirectionDeviation = float.MaxValue;
@@ -175,7 +178,14 @@ public class Sword : MonoBehaviour {
         yield return new WaitForSeconds(CHARGE_DURATION);
         InitiateHapticFeedback(vibeClip, 1);
         swordCharged = true;
-        GetComponent<Renderer>().material.SetColor("_Color", Color.blue); // TODO remove colouring
+        GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+    }
+
+    IEnumerator swingTimeMax() {
+        swingTimeExceeded = false;
+        yield return new WaitForSeconds(SWINGTIME);
+        swingTimeExceeded = true;
+        stopSlash(); //force stop
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {

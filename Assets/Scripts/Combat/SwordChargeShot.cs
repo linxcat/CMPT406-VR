@@ -14,6 +14,7 @@ public class SwordChargeShot : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
+        other.gameObject.SendMessage("takeDamage", 50);
         // call damage on any enemy we hit, they will destroy us if necessary
     }
 }
