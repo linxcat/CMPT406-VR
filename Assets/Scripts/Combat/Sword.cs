@@ -32,6 +32,8 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
+	public GameObject SlashEffect;
+
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
 
@@ -42,7 +44,7 @@ public class Sword : MonoBehaviour {
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
-        hitArray = GameObject.Find("Hit Array").GetComponent<HitArray>();
+        hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         audioSource = GetComponent<AudioSource>();
@@ -111,23 +113,25 @@ public class Sword : MonoBehaviour {
             }
         }
 
+		Vector3 spawnOffset = (stopPoint - startPoint) / 2;
+		Vector3 spawn = startPoint + spawnOffset;
+		Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
+
+		if (swordCharged) {
+			FireChargedShot(spawn, shotDirection);
+			swordCharged = false;
+			GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+		}
+
         Hit.DIRECTION correctedDirection = fixDirection(swingDirection);
 
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
         foreach (GameObject enemy in enemyContacts) {
+			CreateSlashEffect (startPoint, shotDirection); //incorrect so far
             enemy.SendMessageUpwards("swingHit", hit);
         }
         enemyContacts.Clear();
-
-        if (swordCharged) {
-            Vector3 spawnOffset = (stopPoint - startPoint) / 2;
-            Vector3 spawn = startPoint + spawnOffset;
-            Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
-            FireChargedShot(spawn, shotDirection);
-            swordCharged = false;
-            GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        }
-        
+		        
         if (debugMode) {
             directionDeviationSaves.AddFirst(bestDirectionDeviation);
             alignmentDeviationSaves.AddFirst(bestAlignmentDeviation);
@@ -191,6 +195,12 @@ public class Sword : MonoBehaviour {
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {
         GameObject shot = Instantiate(ChargeShot, startlocation, facing);
     }
+
+	void CreateSlashEffect(Vector3 startlocation, Quaternion facing) {
+		GameObject slash = Instantiate(SlashEffect, startlocation, facing);
+		slash.GetComponent<ParticleSystem>().Play();
+		GameObject.Destroy (slash, 0.5f);
+	}
 
     //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
     public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
