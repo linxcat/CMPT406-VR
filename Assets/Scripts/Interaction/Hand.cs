@@ -10,6 +10,7 @@ public class Hand : MonoBehaviour {
     float SIGIL_DISTANCE = 0.05F;
     float HIT_ARRAY_DISTANCE = 0.6F;
     float HIT_ARRAY_VERT_BIAS = 0.2F;
+    static GameObject currentProjectile = null;
 
     float timeSlowed;
 
@@ -132,8 +133,16 @@ public class Hand : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (IS_PRIMARY) return;
-
+        currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
+            if (!this.GetComponent<Hand>().IS_PRIMARY)
+            {
+                if (other.gameObject.tag == "Projectile")
+                {
+                    this.GetComponent<Hand>().counterProjectile();
+                    other.gameObject.GetComponent<Projectile>().reflect();
+                }
+            }
             other.SendMessageUpwards("counter");
         }
     }
@@ -174,7 +183,7 @@ public class Hand : MonoBehaviour {
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
         if (GameObject.FindGameObjectWithTag("slow") == null) {
             GameObject x = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
-            x.transform.position = GameObject.FindGameObjectWithTag("Hand").transform.position;
+            x.transform.position = GameObject.FindGameObjectWithTag("Player").transform.forward*1.1f;
         }
     }
 
@@ -187,4 +196,13 @@ public class Hand : MonoBehaviour {
            
         }
     }
+
+    public static void absorb()
+    {
+        if(currentProjectile != null)
+        {
+            Destroy(currentProjectile);
+        }
+    }
+
 }

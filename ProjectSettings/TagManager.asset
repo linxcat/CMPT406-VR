@@ -9,6 +9,9 @@ TagManager:
   - Hand
   - Enemy
   - slow
+  - Projectile
+  - reflect
+  - absorb
   layers:
   - Default
   - TransparentFX
@@ -24,7 +27,7 @@ TagManager:
   - Sigils
   - 
   - GroundMark
-  - 
+  - Projectile
   - 
   - Enemy
   - EnemyWeapon

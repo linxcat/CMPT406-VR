@@ -2011,8 +2011,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50463a9d55064ccd8657686e44a2caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 0}
   hp: 100
+  maxDamage: 50
+  audioSource: {fileID: 0}
+  badHitClip: {fileID: 0}
+  goodHitClip: {fileID: 0}
+  perfectHitClip: {fileID: 0}
+  projectile: {fileID: 0}
 --- !u!136 &812473275
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2207,6 +2212,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &906726471 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000010482306814, guid: 84c8b8609f9bb434eaf5248f17ff1293,
+    type: 2}
+  m_PrefabInternal: {fileID: 365275949}
+--- !u!135 &906726474
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 906726471}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &965706361
 GameObject:
   m_ObjectHideFlags: 0
@@ -3014,6 +3036,7 @@ GameObject:
   - component: {fileID: 1409952078}
   - component: {fileID: 1409952077}
   - component: {fileID: 1409952076}
+  - component: {fileID: 1409952079}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3150,6 +3173,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1409952079
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1409952075}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0.5}
 --- !u!1 &1414665536
 GameObject:
   m_ObjectHideFlags: 0
@@ -4185,6 +4221,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1870862279}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1872785255 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000011125779090, guid: 84c8b8609f9bb434eaf5248f17ff1293,
+    type: 2}
+  m_PrefabInternal: {fileID: 365275949}
+--- !u!135 &1872785258
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1872785255}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1887991119
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,4 +14,17 @@ public class SlowBox : MonoBehaviour {
         transform.LookAt((GameObject.FindGameObjectWithTag("Player").transform));
         //transform.Rotate(new Vector3(0, 0, 1), 180f);
 	}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(this.gameObject.tag == "absorb")
+        {
+            //if (other.gameObject.tag == "Hand")
+            {
+                Hand.absorb();
+                
+            }
+        }
+        Destroy(this.gameObject);
+    }
 }
