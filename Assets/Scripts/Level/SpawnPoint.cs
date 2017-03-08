@@ -12,6 +12,7 @@ public class SpawnPoint : MonoBehaviour {
     }
 
     public enemyType[] toSpawn;
+	public float[] spawnDelay;
     private int waveCount;
 
 	// Use this for initialization
@@ -25,21 +26,32 @@ public class SpawnPoint : MonoBehaviour {
 	}
 
     public void spawn() {
-        Debug.Log(gameObject.name + "spawn " + toSpawn[waveCount] + " on " + transform.position.x+" "+ transform.position.y+" "+ transform.position.z);
-        switch (toSpawn[waveCount])
-        {
-            case enemyType.nothing:
-                break;
-            case enemyType.runner:
-                Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
-                break;
-            case enemyType.ranged:
-                Instantiate(Resources.Load("ranged"), transform.position, transform.rotation);
-                break;
-            default:
-                break;
-        }
-
-        waveCount++;
+		if (waveCount >= toSpawn.Length)
+			return;
+		StartCoroutine ("spawnWithDelay");
     }
+
+	IEnumerator spawnWithDelay(){
+		GameObject temp;
+		if (waveCount < spawnDelay.Length)
+			yield return new WaitForSeconds (spawnDelay [waveCount]);
+		Debug.Log(gameObject.name + "spawn " + toSpawn[waveCount] + " on " + transform.position.x+" "+ transform.position.y+" "+ transform.position.z);
+		switch (toSpawn[waveCount])
+		{
+		case enemyType.nothing:
+			break;
+		case enemyType.runner:
+			temp = (GameObject) Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
+			temp.transform.position = transform.position;
+			break;
+		case enemyType.ranged:
+			temp = (GameObject) Instantiate (Resources.Load ("ranged"), transform.position, transform.rotation);
+			temp.transform.position = transform.position;
+			break;
+		default:
+			break;
+		}
+
+		waveCount++;
+	}
 }
