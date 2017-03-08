@@ -6,19 +6,19 @@ public class MagicDraw : MonoBehaviour {
 
     LineRenderer magicLines;
     LinkedList<string> verticies = new LinkedList<string>();
-  public AudioSource audioSource;
-  public AudioClip magicTouchClip;
+    public AudioSource audioSource;
+    public AudioClip magicTouchClip;
 
     bool isDrawing = false;
 
-  void Start() {
-      audioSource = GetComponent<AudioSource>();
-  }
+    void Start() {
+        audioSource = GetComponent<AudioSource>();
+    }
 
 
-  void Awake () {
-      magicLines = GameObject.Find("SigilAnchor").GetComponent<LineRenderer>();
-  }
+    void Awake () {
+        magicLines = GameObject.Find("SigilAnchor").GetComponent<LineRenderer>();
+    }
 
     void OnTriggerEnter(Collider other) {
         if (!isDrawing) return;
