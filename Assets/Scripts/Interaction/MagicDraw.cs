@@ -27,12 +27,15 @@ public class MagicDraw : MonoBehaviour {
         magicLines.numPositions++;
         magicLines.SetPosition(nextPosition, other.transform.position);
         verticies.AddLast(other.name);
+        // TODO: Sword projectile activates this.
+        audioSource.Stop();
 		audioSource.PlayOneShot (magicTouchClip, 0.2f);
     }
 
     public void setDrawing(bool value) {
         isDrawing = value;
     }
+
 
     public void clear() {
         magicLines.numPositions = 0;

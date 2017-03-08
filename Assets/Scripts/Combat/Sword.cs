@@ -65,6 +65,8 @@ public class Sword : MonoBehaviour {
     }
 
     public void startSlash() {
+        audioSource.Stop();
+        audioSource.PlayOneShot(swordDrawClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
@@ -92,6 +94,7 @@ public class Sword : MonoBehaviour {
     }
 
     public void stopSlash() {
+        audioSource.Stop();
         audioSource.PlayOneShot(swordUndrawClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
