@@ -6,9 +6,9 @@ using UnityEngine;
 public class EnemyRunner : Enemy{
 
 	private float detectRange = 100;
-	private float atkRange = 1.2F;
+	private float atkRange = 1.7F;
     private float atkDuration = 1.5F;
-    private float atkCD = 1.5F;
+    private float atkCD = 2F;
     private float speed = 2F;
     private int attackDmg = 30;
     private int searchAngle = 180;
@@ -115,7 +115,8 @@ public class EnemyRunner : Enemy{
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
         parryable = false;
-        currentState = runnerState.idle;
+        if(!attackCheck())
+            currentState = runnerState.idle;
         yield return new WaitForSeconds(atkCD);
         attacking = false;
     }
@@ -135,11 +136,13 @@ public class EnemyRunner : Enemy{
         currentState = runnerState.idle;
     }
 
-    void attackCheck() {
+    bool attackCheck() {
         if (Vector3.Distance(transform.position, player.transform.position) < atkRange) {
             currentState = runnerState.attack;
             facePlayer();
+            return true;
         }
+        return false;
     }
 
     public override void die() {
@@ -147,5 +150,13 @@ public class EnemyRunner : Enemy{
         StopAllCoroutines();
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
+    }
+
+	public int getAtkDmg(){
+		return attackDmg;
+	}
+
+    public bool isParriable(){
+        return parryable;
     }
 }
