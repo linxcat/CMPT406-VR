@@ -22,6 +22,11 @@ public class EnemyRunner : Enemy{
     bool attacking = false;
     bool parryable = false;
 
+    public AudioClip hitAttack;
+    public AudioClip beingHit;
+    public AudioClip deathSound;
+
+
     Animator anim;
 
     enum runnerState{
@@ -62,6 +67,7 @@ public class EnemyRunner : Enemy{
 	}
 
     public override void swingHit(Hit hit) {
+        audioSource.PlayOneShot(beingHit, 0.2f);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
@@ -128,6 +134,7 @@ public class EnemyRunner : Enemy{
     IEnumerator attack() {
         anim.SetBool("moving", false);
         anim.SetTrigger("attack");
+        audioSource.PlayOneShot(hitAttack, 0.2f);
         attacking = true;
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
@@ -163,6 +170,7 @@ public class EnemyRunner : Enemy{
     }
 
     public override void die() {
+        audioSource.PlayOneShot(deathSound, 0.2f);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = runnerState.dead;

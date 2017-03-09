@@ -32,7 +32,7 @@ public class Hand : MonoBehaviour {
     }
 
     // Use this for initialization
-	void Start () {
+    void Start () {
         hitArray = GameObject.Find("HitArray");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
@@ -43,9 +43,9 @@ public class Hand : MonoBehaviour {
         initialize();
         StartCoroutine("trackSpeed");
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (IS_PRIMARY) {
             if (!swordIsOn && !locking) updateSigilAnchor();
             if (!swordIsOn && locking) magicDraw.gameObject.SetActive(true);
@@ -61,7 +61,7 @@ public class Hand : MonoBehaviour {
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
             locked = !locked;
         }
-	}
+    }
 
     void initialize() {
         swordIsOn = false;
@@ -155,8 +155,13 @@ public class Hand : MonoBehaviour {
     }
 
     public void chargeSword(bool charge) {
-        if (charge) sword.StartCoroutine("swordCharge");
-        else sword.StopCoroutine("swordCharge");
+        if (charge) {
+            sword.StartCoroutine ("swordCharge");
+        }
+        else {
+            sword.stopSound();
+            sword.StopCoroutine ("swordCharge");
+        }
     }
 
     public void switchPrimaryHand()
