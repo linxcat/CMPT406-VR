@@ -755,7 +755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4880938307216098}
   - component: {fileID: 136628419146651306}
-  - component: {fileID: 114987173454650456}
+  - component: {fileID: 114283558580167250}
   m_Layer: 17
   m_Name: Weapon
   m_TagString: Untagged
@@ -866,7 +866,7 @@ GameObject:
   - component: {fileID: 136143616407159734}
   - component: {fileID: 114725274635853294}
   m_Layer: 16
-  m_Name: meleeEnemy
+  m_Name: runner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1272,7 +1272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4132786187704220}
   - component: {fileID: 136090027790409878}
-  - component: {fileID: 114780908043711596}
+  - component: {fileID: 114248096231776568}
   m_Layer: 17
   m_Name: Weapon
   m_TagString: Untagged
@@ -1525,13 +1525,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1840310870636726}
-  m_LocalRotation: {x: -0.386238, y: 0.094023995, z: -0.1833284, w: 0.8990942}
-  m_LocalPosition: {x: 0.196, y: -0.216, z: -0.099}
+  m_LocalRotation: {x: -0.35063484, y: -0.055837132, z: -0.24463113, w: 0.9022711}
+  m_LocalPosition: {x: 0.227, y: -0.18, z: 0.001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4028578959641148}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: -41.304, y: 24.43, z: -32.379}
+  m_LocalEulerAnglesHint: {x: -41.304, y: 5.407, z: -32.379}
 --- !u!4 &4140125278516990
 Transform:
   m_ObjectHideFlags: 1
@@ -2114,7 +2114,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539895977093018}
   m_LocalRotation: {x: -0, y: 0.9926119, z: -0, w: 0.121332906}
-  m_LocalPosition: {x: 19.75, y: 0.47, z: 9.78}
+  m_LocalPosition: {x: 0.0708727, y: 0, z: 7.032008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4958832772944554}
@@ -2521,7 +2521,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1435481977502172}
   m_LocalRotation: {x: 0.46892476, y: -0.024286443, z: 0.19334409, w: 0.8614742}
-  m_LocalPosition: {x: 0.073, y: 0.065, z: 0.077}
+  m_LocalPosition: {x: 0.000034340675, y: -0.00006799213, z: 0.000015631329}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4996252050869090}
@@ -2733,6 +2733,28 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114248096231776568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1840310870636726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b6a35d6ef002b499674c8fbb7b1ccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114283558580167250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1435481977502172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b6a35d6ef002b499674c8fbb7b1ccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114725274635853294
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2750,30 +2772,7 @@ MonoBehaviour:
   badHitClip: {fileID: 0}
   goodHitClip: {fileID: 0}
   perfectHitClip: {fileID: 0}
---- !u!114 &114780908043711596
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1840310870636726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b6a35d6ef002b499674c8fbb7b1ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myParent: {fileID: 0}
---- !u!114 &114987173454650456
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1435481977502172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b6a35d6ef002b499674c8fbb7b1ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myParent: {fileID: 0}
+  runnerRoarClip: {fileID: 8300000, guid: ba212728f5f374340883050a08608331, type: 3}
 --- !u!136 &136090027790409878
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -5,15 +5,20 @@ using UnityEngine;
 
 public class EnemyRunner : Enemy{
 
-	private float detectRange = 100;
-	private float atkRange = 1.2F;
+    private float detectRange = 100;
+    private float atkRange = 1.2F;
     private float atkDuration = 1.5F;
-    private float atkCD = 1.5F;
+    private float atkCD = 2F;
     private float speed = 2F;
     private int attackDmg = 30;
     private int searchAngle = 180;
+    private float spawnTimer = 3.5F;
+    private float spawnRoarDelay = 2F;
     float parryTime = 5F;
 
+    public AudioClip runnerRoarClip;
+
+    bool spawning = false;
     bool attacking = false;
     bool parryable = false;
 
@@ -24,14 +29,15 @@ public class EnemyRunner : Enemy{
 
     Animator anim;
 
-	enum runnerState{
-		idle,
-		follow,
-		attack,
-		dead
-	};
+    enum runnerState{
+        spawning,
+        idle,
+        follow,
+        attack,
+        dead
+    };
 
-	private runnerState currentState = runnerState.idle;
+    private runnerState currentState = runnerState.spawning;
 
 	// Use this for initialization
 	void Start () {
@@ -44,8 +50,9 @@ public class EnemyRunner : Enemy{
 	void Update () {
 
         switch (currentState) {
-            case runnerState.dead:
-                break;
+			case runnerState.spawning:
+				if (!spawning) StartCoroutine ("spawn");
+				break;
             case runnerState.idle:
 			    searchPlayer ();
 			    break;
@@ -65,17 +72,14 @@ public class EnemyRunner : Enemy{
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
                 takeDamage(maxDamage);
-                Debug.Log("Enemy hit! Damage: " + maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip, 0.2f);
                 takeDamage(maxDamage / 2);
-                Debug.Log("Enemy hit! Damage: " + maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip, 0.2f);
                 takeDamage(maxDamage / 4);
-                Debug.Log("Enemy hit! Damage: " + maxDamage / 4);
                 break;
         }
     }
@@ -119,6 +123,14 @@ public class EnemyRunner : Enemy{
         transform.position = hitPoint.point;
     }
 
+	IEnumerator spawn(){
+		spawning = true;
+		yield return new WaitForSeconds (spawnRoarDelay);
+		audioSource.PlayOneShot(runnerRoarClip);
+		yield return new WaitForSeconds (spawnTimer - spawnRoarDelay);
+		currentState = runnerState.idle;
+	}
+
     IEnumerator attack() {
         anim.SetBool("moving", false);
         anim.SetTrigger("attack");
@@ -127,7 +139,8 @@ public class EnemyRunner : Enemy{
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
         parryable = false;
-        currentState = runnerState.idle;
+        if(!attackCheck())
+            currentState = runnerState.idle;
         yield return new WaitForSeconds(atkCD);
         attacking = false;
     }
@@ -147,11 +160,13 @@ public class EnemyRunner : Enemy{
         currentState = runnerState.idle;
     }
 
-    void attackCheck() {
+    bool attackCheck() {
         if (Vector3.Distance(transform.position, player.transform.position) < atkRange) {
             currentState = runnerState.attack;
             facePlayer();
+            return true;
         }
+        return false;
     }
 
     public override void die() {
@@ -160,5 +175,13 @@ public class EnemyRunner : Enemy{
         StopAllCoroutines();
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
+    }
+
+	public int getAtkDmg(){
+		return attackDmg;
+	}
+
+    public bool isParriable(){
+        return parryable;
     }
 }

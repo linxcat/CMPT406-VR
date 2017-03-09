@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 95565629331077884}
   - component: {fileID: 114387535575634794}
   m_Layer: 0
-  m_Name: goblin
+  m_Name: ranged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1350,8 +1350,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50463a9d55064ccd8657686e44a2caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 1438467653274888, guid: 391df0fa2df394842b1552d77d534b83, type: 2}
   hp: 100
+  maxDamage: 50
+  audioSource: {fileID: 0}
+  badHitClip: {fileID: 0}
+  goodHitClip: {fileID: 0}
+  perfectHitClip: {fileID: 0}
+  projectile: {fileID: 1438467653274888, guid: 391df0fa2df394842b1552d77d534b83, type: 2}
 --- !u!137 &137393822790081086
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
