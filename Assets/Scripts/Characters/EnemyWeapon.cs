@@ -11,10 +11,6 @@ public class EnemyWeapon : MonoBehaviour {
         myParent = transform.parent.parent.parent.parent.parent.parent.parent.parent.gameObject.GetComponent<EnemyRunner>();
 	}
 
-    public void counter() {
-        myParent.counter();
-    }
-
 	void OnTriggerEnter(Collider other) {
         Debug.Log("Hit: " + other.tag);
         if (other.tag == "PlayerHitBox" && myParent.isParriable())

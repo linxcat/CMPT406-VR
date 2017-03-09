@@ -13,8 +13,6 @@ public class ObjectFollowXYZ : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Vector3 a = centerEyeAnchor.transform.position;
-        Vector3 newPosition = new Vector3(a.x, a.y, a.z);
-        transform.position = newPosition;
+        transform.position = centerEyeAnchor.transform.position;
     }
 }

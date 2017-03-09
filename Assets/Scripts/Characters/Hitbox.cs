@@ -10,7 +10,7 @@ public class Hitbox : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerStatManager = FindObjectOfType<CharacterStats>();
+        playerStatManager = FindObjectOfType<CharacterStats>();
         timeCount = 0;
 	}
 	
