@@ -5,41 +5,40 @@ using UnityEngine;
 
 public class EnemyRunner : Enemy{
 
-	private float detectRange = 100;
-	private float atkRange = 1.2F;
+    private float detectRange = 100;
+    private float atkRange = 1.2F;
     private float atkDuration = 1.5F;
     private float atkCD = 1.5F;
     private float speed = 2F;
     private int attackDmg = 30;
     private int searchAngle = 180;
-	private float spawnTimer = 3.5F;
-	private float spawnRoarDelay = 2F;
+    private float spawnTimer = 3.5F;
+    private float spawnRoarDelay = 2F;
     float parryTime = 5F;
 
-	public AudioClip runnerRoarClip;
+    public AudioClip runnerRoarClip;
 
-	bool spawning = false;
+    bool spawning = false;
     bool attacking = false;
     bool parryable = false;
 
     Animator anim;
 
-	enum runnerState{
-		spawning,
-		idle,
-		follow,
-		attack,
-		dead
-	};
+    enum runnerState{
+        spawning,
+        idle,
+        follow,
+        attack,
+        dead
+    };
 
-	private runnerState currentState;
+    private runnerState currentState = runnerState.spawning;
 
 	// Use this for initialization
 	void Start () {
         base.Start();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
-		currentState = runnerState.spawning;
     }
 	
 	// Update is called once per frame
