@@ -2772,6 +2772,7 @@ MonoBehaviour:
   badHitClip: {fileID: 0}
   goodHitClip: {fileID: 0}
   perfectHitClip: {fileID: 0}
+  runnerRoarClip: {fileID: 8300000, guid: ba212728f5f374340883050a08608331, type: 3}
 --- !u!136 &136090027790409878
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -42,11 +42,9 @@ public class SpawnPoint : MonoBehaviour {
 			break;
 		case enemyType.runner:
 			temp = (GameObject) Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
-			temp.transform.position = transform.position;
 			break;
 		case enemyType.ranged:
 			temp = (GameObject) Instantiate (Resources.Load ("ranged"), transform.position, transform.rotation);
-			temp.transform.position = transform.position;
 			break;
 		default:
 			break;
