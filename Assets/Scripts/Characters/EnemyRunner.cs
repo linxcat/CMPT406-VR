@@ -5,28 +5,34 @@ using UnityEngine;
 
 public class EnemyRunner : Enemy{
 
-	private float detectRange = 100;
-	private float atkRange = 1.7F;
+    private float detectRange = 100;
+    private float atkRange = 1.2F;
     private float atkDuration = 1.5F;
     private float atkCD = 2F;
     private float speed = 2F;
     private int attackDmg = 30;
     private int searchAngle = 180;
+    private float spawnTimer = 3.5F;
+    private float spawnRoarDelay = 2F;
     float parryTime = 5F;
 
+    public AudioClip runnerRoarClip;
+
+    bool spawning = false;
     bool attacking = false;
     bool parryable = false;
 
     Animator anim;
 
-	enum runnerState{
-		idle,
-		follow,
-		attack,
-		dead
-	};
+    enum runnerState{
+        spawning,
+        idle,
+        follow,
+        attack,
+        dead
+    };
 
-	private runnerState currentState = runnerState.idle;
+    private runnerState currentState = runnerState.spawning;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +45,9 @@ public class EnemyRunner : Enemy{
 	void Update () {
 
         switch (currentState) {
+			case runnerState.spawning:
+				if (!spawning) StartCoroutine ("spawn");
+				break;
             case runnerState.idle:
 			    searchPlayer ();
 			    break;
@@ -107,6 +116,14 @@ public class EnemyRunner : Enemy{
         Physics.Raycast(aboveGround, Vector3.down, out hitPoint, float.MaxValue, LayerMask.GetMask(new string[] {"Ground"}));
         transform.position = hitPoint.point;
     }
+
+	IEnumerator spawn(){
+		spawning = true;
+		yield return new WaitForSeconds (spawnRoarDelay);
+		audioSource.PlayOneShot(runnerRoarClip);
+		yield return new WaitForSeconds (spawnTimer - spawnRoarDelay);
+		currentState = runnerState.idle;
+	}
 
     IEnumerator attack() {
         anim.SetBool("moving", false);
