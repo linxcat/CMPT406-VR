@@ -102,12 +102,8 @@ public class InputHandler : MonoBehaviour {
     }
 
     void swordCharge(bool charge) {
-      if (truePrimary) {
-        leftHand.chargeSword (charge);
-      }
-      else {
-        rightHand.chargeSword (charge);
-      }
+      if (truePrimary) leftHand.chargeSword (charge);
+      else rightHand.chargeSword (charge);
     }
 
     bool thumbstickPassedDeadzone(Vector2 thumbstickAxis) {

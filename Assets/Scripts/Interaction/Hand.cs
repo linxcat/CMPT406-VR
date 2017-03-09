@@ -157,10 +157,10 @@ public class Hand : MonoBehaviour {
     public void chargeSword(bool charge) {
         if (charge) {
             sword.StartCoroutine ("swordCharge");
-        } else {
+        }
+        else {
             sword.stopSound();
             sword.StopCoroutine ("swordCharge");
-
         }
     }
 

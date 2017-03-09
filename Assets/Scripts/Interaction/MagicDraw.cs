@@ -11,13 +11,12 @@ public class MagicDraw : MonoBehaviour {
 
     bool isDrawing = false;
 
-    void Start() {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-
     void Awake () {
         magicLines = GameObject.Find("SigilAnchor").GetComponent<LineRenderer>();
+    }
+    
+    void Start() {
+        audioSource = GetComponent<AudioSource>();
     }
 
     void OnTriggerEnter(Collider other) {
