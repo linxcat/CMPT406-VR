@@ -80,11 +80,31 @@ public class Teleport : MonoBehaviour {
                 secondDirection = Vector3.Reflect(incomingVec, hitInfo.normal);
             }
             else {
-                Vector3 downwardAngle = teleLineSpawn.forward;
-                Vector3.ProjectOnPlane(downwardAngle, Vector3.up);
-                Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(teleLineSpawn.right, Vector3.up);
-                secondDirection = Quaternion.AngleAxis(45, flattenedHandAxis) * downwardAngle;
+                float angle = 45;
+                Vector3 appropriateAxis;
+
+                float handRoll = teleLineSpawn.rotation.eulerAngles.z;
+                Vector3 flatForward = Vector3.ProjectOnPlane(teleLineSpawn.forward, Vector3.up);
+
+                GameObject toy = Instantiate(teleLineSpawn.gameObject, teleLineSpawn.position, teleLineSpawn.localRotation, teleLineSpawn.parent);
+                toy.transform.rotation *= Quaternion.LookRotation(flatForward, teleLineSpawn.transform.up);
+                float upAmount = Vector3.Project(toy.transform.up, Vector3.up).magnitude;
+                float rightAmount = Vector3.Project(toy.transform.right, Vector3.up).magnitude;
+
+                if (rightAmount < upAmount) {
+                    appropriateAxis = toy.transform.right;
+                    if (handRoll >= 90 && handRoll <= 270) angle = -angle;
+                }
+                else {
+                    appropriateAxis = toy.transform.up;
+                    if (handRoll > 0 && handRoll < 180) angle = -angle;
+                }
+
+                Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(appropriateAxis, Vector3.up);
+                
+                secondDirection = Quaternion.AngleAxis(angle, flattenedHandAxis) * flatForward;
             }
+
             Physics.Raycast(hitInfo.point, secondDirection, out secondHit, float.MaxValue, secondArcMask);
             if (secondHit.collider == null) {
                 Debug.LogError("MISSED THEGROUND!!");

@@ -19,7 +19,7 @@ public abstract class Enemy : MonoBehaviour {
     // Use this for initialization
     public void Start () {
         audioSource = GetComponent<AudioSource>();
-        player = GameObject.Find("Player");
+        player = GameObject.Find("Hitbox");
 	}
 
     public abstract void swingHit(Hit hit);
