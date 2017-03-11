@@ -20,6 +20,8 @@ public class Hand : MonoBehaviour {
 
     GameObject sigilAnchor;
     GameObject hitArray;
+    GameObject GUIAnchor;
+    Transform wristAnchor;
     Sword sword;
     Transform teleLineSpawn;
     MagicDraw magicDraw;
@@ -34,6 +36,8 @@ public class Hand : MonoBehaviour {
     // Use this for initialization
     void Start () {
         hitArray = GameObject.Find("HitArray");
+        GUIAnchor = GameObject.Find("GUIAnchor");
+        wristAnchor = transform.FindChild("WristAnchor");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
         magicDraw = transform.Find("DrawTouch").gameObject.GetComponent<MagicDraw>();
@@ -55,7 +59,7 @@ public class Hand : MonoBehaviour {
             if (swordIsOn && !locking && locked) sword.stopSlash();
         }
        else {
-            // gauntlet
+            placeGUI();
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
@@ -106,6 +110,11 @@ public class Hand : MonoBehaviour {
 
         hitArray.transform.position = anchorTransform;
         hitArray.transform.forward = headFacing;
+    }
+
+    void placeGUI() {
+        GUIAnchor.transform.position = wristAnchor.position;
+        GUIAnchor.transform.forward = GUIAnchor.transform.position - centerEyeAnchor.transform.position;
     }
 
     IEnumerator trackSpeed() {
