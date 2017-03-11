@@ -577,6 +577,7 @@ GameObject:
   - component: {fileID: 4698750757772780}
   - component: {fileID: 95565629331077884}
   - component: {fileID: 114387535575634794}
+  - component: {fileID: 136527444234060024}
   m_Layer: 0
   m_Name: ranged
   m_TagString: Untagged
@@ -1131,8 +1132,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1960945019151832}
   m_LocalRotation: {x: -0.50000036, y: 0.49999964, z: 0.49999964, w: 0.50000036}
-  m_LocalPosition: {x: -0.0000014360454, y: 5.7095165, z: -0.24574995}
-  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
+  m_LocalPosition: {x: 0, y: 0.57, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4145316350370720}
   - {fileID: 4778122868377418}
@@ -1161,8 +1162,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1854487172030536}
   m_LocalRotation: {x: 0, y: -0.49394187, z: 0, w: 0.869495}
-  m_LocalPosition: {x: 26.582401, y: 0.16480541, z: 0.28888035}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0.70109844, y: 0.0366233, z: 4.2853928}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4606704192139180}
   - {fileID: 4408914108394068}
@@ -1357,6 +1358,19 @@ MonoBehaviour:
   goodHitClip: {fileID: 0}
   perfectHitClip: {fileID: 0}
   projectile: {fileID: 1438467653274888, guid: 391df0fa2df394842b1552d77d534b83, type: 2}
+--- !u!136 &136527444234060024
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1854487172030536}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 1.33
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.99, z: 0}
 --- !u!137 &137393822790081086
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

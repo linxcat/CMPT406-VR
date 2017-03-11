@@ -329,9 +329,9 @@ MonoBehaviour:
   hp: 100
   maxDamage: 50
   audioSource: {fileID: 0}
-  badHitClip: {fileID: 0}
-  goodHitClip: {fileID: 0}
-  perfectHitClip: {fileID: 0}
+  badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
+  goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
+  perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
 --- !u!136 &136009909463226780
 CapsuleCollider:
   m_ObjectHideFlags: 1

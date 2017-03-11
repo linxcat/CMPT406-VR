@@ -15,6 +15,7 @@ public class EnemyRunner : Enemy{
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
     float parryTime = 5F;
+    float HEIGHTBIAS = 0.2F;
 
     public AudioClip runnerRoarClip;
 
@@ -120,7 +121,9 @@ public class EnemyRunner : Enemy{
         Vector3 aboveGround = transform.position;
         aboveGround.y += 1F;
         Physics.Raycast(aboveGround, Vector3.down, out hitPoint, float.MaxValue, LayerMask.GetMask(new string[] {"Ground"}));
-        transform.position = hitPoint.point;
+        Vector3 groundPoint = hitPoint.point;
+        groundPoint.y -= HEIGHTBIAS;
+        transform.position = groundPoint;
     }
 
 	IEnumerator spawn(){
