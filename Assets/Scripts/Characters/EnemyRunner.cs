@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyRunner : Enemy{
 
     private float detectRange = 100;
-    private float atkRange = 1.2F;
+    private float atkRange;
     private float atkDuration = 1.5F;
     private float atkCD = 2F;
     private float speed = 2F;
@@ -42,7 +42,7 @@ public class EnemyRunner : Enemy{
 	// Use this for initialization
 	void Start () {
         base.Start();
-        atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius;
+        atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
         agent.SetDestination (transform.position);
         agent.Stop ();
@@ -60,7 +60,6 @@ public class EnemyRunner : Enemy{
 			    break;
             case runnerState.follow:
                 moveTowardsPlayer();
-                attackCheck();
 			    break;
             case runnerState.attack:
                 if (!attacking) StartCoroutine("attack");
@@ -100,18 +99,17 @@ public class EnemyRunner : Enemy{
         Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
         float angle = Vector3.Angle(axisRotate, transform.forward);
 
-        if (angle > 5) {
-            slowFacePlayer();
-        }
-        else {
+        //if (angle > 5) {
+        //    slowFacePlayer();
+        //}
+        //else {
             anim.SetBool("moving", true);
             //move();
             agent.Resume();
-            if (agent.destination != playerSpace.transform.position)
-                agent.destination = playerSpace.transform.position;
+            agent.destination = player.transform.position;
             fall();
             attackCheck();
-        }
+        //}
     }
 
     //void move() {
@@ -167,7 +165,9 @@ public class EnemyRunner : Enemy{
     }
 
     bool attackCheck() {
-        if (Vector3.Distance(transform.position, player.transform.position) <= atkRange) {
+        Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+        Debug.Log(Vector3.Distance(temp, player.transform.position));
+        if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             facePlayer();
             return true;
