@@ -44,6 +44,8 @@ public class EnemyRunner : Enemy{
         base.Start();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
+        agent.SetDestination (transform.position);
+        agent.Stop ();
     }
 	
 	// Update is called once per frame
@@ -103,17 +105,20 @@ public class EnemyRunner : Enemy{
         }
         else {
             anim.SetBool("moving", true);
-            move();
+            //move();
+            agent.Resume();
+            if (agent.destination != playerSpace.transform.position)
+                agent.destination = playerSpace.transform.position;
             fall();
             attackCheck();
         }
     }
 
-    void move() {
-        float step = speed * Time.deltaTime;
-        Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    }
+    //void move() {
+    //    float step = speed * Time.deltaTime;
+    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+    //}
     
     void fall() {
         RaycastHit hitPoint = new RaycastHit();
@@ -133,6 +138,7 @@ public class EnemyRunner : Enemy{
 
     IEnumerator attack() {
         anim.SetBool("moving", false);
+        agent.Stop();
         anim.SetTrigger("attack");
         audioSource.PlayOneShot(hitAttack, 0.2f);
         attacking = true;
@@ -161,7 +167,7 @@ public class EnemyRunner : Enemy{
     }
 
     bool attackCheck() {
-        if (Vector3.Distance(transform.position, player.transform.position) < atkRange) {
+        if (Vector3.Distance(transform.position, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             facePlayer();
             return true;
