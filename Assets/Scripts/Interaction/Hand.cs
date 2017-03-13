@@ -21,6 +21,7 @@ public class Hand : MonoBehaviour {
     float speedThreshold = 0.025F;
     private float[] pastSpeeds = new float[10];
 
+    GameObject slowUI;
     GameObject sigilAnchor;
     GameObject hitArray;
     Sword sword;
@@ -135,12 +136,12 @@ public class Hand : MonoBehaviour {
         if (IS_PRIMARY) return;
         currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
-            if (!this.GetComponent<Hand>().IS_PRIMARY)
+            if (!IS_PRIMARY)
             {
-                if (other.gameObject.tag == "Projectile")
+                if (other.tag == "Projectile")
                 {
-                    this.GetComponent<Hand>().counterProjectile();
-                    other.gameObject.GetComponent<Projectile>().reflect();
+                    counterProjectile();
+                    GetComponent<Projectile>().reflect();
                 }
             }
             other.SendMessageUpwards("counter");
@@ -181,9 +182,9 @@ public class Hand : MonoBehaviour {
         timeSlowed = 1f;
         Time.timeScale = 0.333333f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        if (GameObject.FindGameObjectWithTag("slow") == null) {
-            GameObject x = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
-            x.transform.position = GameObject.FindGameObjectWithTag("Player").transform.forward*1.1f;
+        if (slowUI == null) {
+            slowUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+            slowUI.transform.position = GameObject.FindGameObjectWithTag("Player").transform.forward*1.1f;
         }
     }
 
@@ -192,7 +193,9 @@ public class Hand : MonoBehaviour {
         timeSlowed -= Time.deltaTime;
         if (timeSlowed < 0) {
             Time.timeScale = 1f;
-            Destroy(GameObject.FindGameObjectWithTag("slow"));
+            if (slowUI != null) {
+                Destroy(slowUI);
+            }
            
         }
     }

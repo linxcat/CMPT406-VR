@@ -130,7 +130,7 @@ public class EnemyRanged : Enemy {
         GameObject x = (GameObject)Instantiate(projectile);
         x.transform.position = transform.position + new Vector3(0, 1f, 0);
         x.GetComponent<Projectile>().setTarget(player);
-        x.GetComponent<Projectile>().setOriginator(this.gameObject);
+        x.GetComponent<Projectile>().setOriginator(gameObject);
     }
 
     public override void swingHit(Hit hit) {

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SlowBox : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+    Transform playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        transform.LookAt((GameObject.FindGameObjectWithTag("Player").transform));
+        transform.LookAt(playerTransform);
         //transform.Rotate(new Vector3(0, 0, 1), 180f);
 	}
 
     private void OnTriggerEnter(Collider other)
     {
-        if(this.gameObject.tag == "absorb")
+        if(tag == "absorb")
         {
             //if (other.gameObject.tag == "Hand")
             {
@@ -25,6 +25,6 @@ public class SlowBox : MonoBehaviour {
                 
             }
         }
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }
