@@ -56,7 +56,7 @@ public class Hand : MonoBehaviour {
             if (!swordIsOn && !locking && locked) doMagic();
             if (swordIsOn && !locking) updateHitArray();
             if (swordIsOn && locking && !locked) sword.startSlash();
-            if (swordIsOn && !locking && locked) sword.stopSlash();
+            if (swordIsOn && !locking && locked && !sword.swingTimeExceeded) sword.stopSlash();
         }
        else {
             placeGUI();
