@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 136028653338560352}
   - component: {fileID: 54562531460198770}
   - component: {fileID: 114785190639382830}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hitbox
   m_TagString: PlayerHitBox
   m_Icon: {fileID: 0}
@@ -1749,7 +1749,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1142716713057216}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 20.83, y: 0, z: 1.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4710574800262870}

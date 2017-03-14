@@ -13,14 +13,16 @@ public class CharacterStats : MonoBehaviour {
     public Slider HEALTH_SLIDER;
     public Slider MANA_SLIDER;
     public Slider STAMINA_SLIDER;
-    private bool isDead;
+    private bool isDead, isInvincible;
     private float deathBufferTime = 0.2F;
+    private float invincibleTime = 2F;
     public GameObject gameOverCanvas;
 
 
     // Use this for initialization
     void Start() {
         isDead = false;
+        isInvincible = false;
     }
 
     // Update is called once per frame
@@ -32,6 +34,9 @@ public class CharacterStats : MonoBehaviour {
 
     /** Cause the player to loose health = damage */
     public void takeDamage(int damage) {
+        if (isInvincible == true)
+            return;
+        StartCoroutine ("startInvincible");
         if (PLAYER_HEALTH > damage) {
             PLAYER_HEALTH = PLAYER_HEALTH - damage;
         }
@@ -40,6 +45,12 @@ public class CharacterStats : MonoBehaviour {
             
         }
       HEALTH_SLIDER.value = PLAYER_HEALTH;
+    }
+
+    IEnumerator startInvincible() {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
     }
 
     /** Increment the amount of health the player has  by amount*/
