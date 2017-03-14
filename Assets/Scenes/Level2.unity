@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2519627, g: 0.15817311, b: 0.14874426, a: 1}
+  m_IndirectSpecularColor: {r: 0.25173524, g: 0.15816268, b: 0.1483669, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -827,7 +827,7 @@ GameObject:
   m_Component:
   - component: {fileID: 512928689}
   m_Layer: 0
-  m_Name: Obsticles
+  m_Name: Obstacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
