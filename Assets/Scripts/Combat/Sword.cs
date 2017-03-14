@@ -32,7 +32,7 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
-	public GameObject SlashEffect;
+	public GameObject slashEffect;
 
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
@@ -113,7 +113,8 @@ public class Sword : MonoBehaviour {
             }
         }
 
-		Vector3 spawnOffset = (stopPoint - startPoint) / 2;
+		//Vector3 spawnOffset = (stopPoint - startPoint) / 2;
+        Vector3 spawnOffset = (stopPoint - startPoint);
 		Vector3 spawn = startPoint + spawnOffset;
 		Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
 
@@ -127,7 +128,7 @@ public class Sword : MonoBehaviour {
 
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
         foreach (GameObject enemy in enemyContacts) {
-			CreateSlashEffect (startPoint, shotDirection); //incorrect so far
+			CreateSlashEffect (enemy, startPoint, spawnOffset); //incorrect so far
             enemy.SendMessageUpwards("swingHit", hit);
         }
         enemyContacts.Clear();
@@ -196,8 +197,11 @@ public class Sword : MonoBehaviour {
         GameObject shot = Instantiate(ChargeShot, startlocation, facing);
     }
 
-	void CreateSlashEffect(Vector3 startlocation, Quaternion facing) {
-		GameObject slash = Instantiate(SlashEffect, startlocation, facing);
+	void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
+		GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
+        slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
+        //Debug.Log("Slash forward: " + slash.transform.forward + " facing: " + facing);
+        //slash.transform.rotation = Quaternion.LookRotation(facing);
 		slash.GetComponent<ParticleSystem>().Play();
 		GameObject.Destroy (slash, 0.5f);
 	}

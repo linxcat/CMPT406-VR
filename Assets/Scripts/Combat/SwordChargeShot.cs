@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwordChargeShot : MonoBehaviour {
 
     float LIFETIME = 5F;
-    float FLIGHT_SPEED = 2F;
+    float FLIGHT_SPEED = 12F;
 
 	// Use this for initialization
 	void Start () {
