@@ -23,9 +23,9 @@ public class InputHandler : MonoBehaviour {
         teleport = GameObject.Find("Player").GetComponent<Teleport>();
         rightButtons(); //initialize buttons
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) &&
             OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger) &&
             OVRInput.GetDown(debugSwitch)) {
@@ -35,7 +35,7 @@ public class InputHandler : MonoBehaviour {
 
         if (OVRInput.GetDown(modeSwitch)) switchHandMode();
         if (OVRInput.GetDown(debugSwitch)) switchDebug();
-        
+
         if (OVRInput.GetDown(chargeButton)) swordCharge(true);
         if (OVRInput.GetUp(chargeButton)) swordCharge(false);
 
@@ -100,10 +100,10 @@ public class InputHandler : MonoBehaviour {
         if (truePrimary) leftHand.switchDebug();
         else rightHand.switchDebug();
     }
-    
+
     void swordCharge(bool charge) {
-        if (truePrimary) leftHand.chargeSword(charge);
-        else rightHand.chargeSword(charge);
+      if (truePrimary) leftHand.chargeSword (charge);
+      else rightHand.chargeSword (charge);
     }
 
     bool thumbstickPassedDeadzone(Vector2 thumbstickAxis) {

@@ -12,6 +12,7 @@ TagManager:
   - Projectile
   - reflect
   - absorb
+  - PlayerHitBox
   layers:
   - Default
   - TransparentFX

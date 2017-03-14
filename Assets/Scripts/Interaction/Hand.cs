@@ -27,6 +27,8 @@ public class Hand : MonoBehaviour {
     static GameObject counterUI;
     GameObject sigilAnchor;
     GameObject hitArray;
+    GameObject GUIAnchor;
+    Transform wristAnchor;
     Sword sword;
     Transform teleLineSpawn;
     MagicDraw magicDraw;
@@ -42,6 +44,8 @@ public class Hand : MonoBehaviour {
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
         hitArray = GameObject.Find("HitArray");
+        GUIAnchor = GameObject.Find("GUIAnchor");
+        wristAnchor = transform.FindChild("WristAnchor");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
         magicDraw = transform.Find("DrawTouch").gameObject.GetComponent<MagicDraw>();
@@ -51,31 +55,32 @@ public class Hand : MonoBehaviour {
         initialize();
         StartCoroutine("trackSpeed");
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (IS_PRIMARY) {
             if (!swordIsOn && !locking) updateSigilAnchor();
             if (!swordIsOn && locking) magicDraw.gameObject.SetActive(true);
             if (!swordIsOn && !locking && locked) doMagic();
             if (swordIsOn && !locking) updateHitArray();
             if (swordIsOn && locking && !locked) sword.startSlash();
-            if (swordIsOn && !locking && locked) sword.stopSlash();
+            if (swordIsOn && !locking && locked && !sword.swingTimeExceeded) sword.stopSlash();
         }
        else {
             // gauntlet
-            // I tried to make this a call routine but it breaks the code
             if(Time.time > timeSlowed)
             {
                 Time.timeScale = 1f;
                 Destroy(counterUI);
             }
+            placeGUI();
+
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
             locked = !locked;
         }
-	}
+    }
 
     void initialize() {
         swordIsOn = false;
@@ -120,6 +125,11 @@ public class Hand : MonoBehaviour {
 
         hitArray.transform.position = anchorTransform;
         hitArray.transform.forward = headFacing;
+    }
+
+    void placeGUI() {
+        GUIAnchor.transform.position = wristAnchor.position;
+        GUIAnchor.transform.forward = GUIAnchor.transform.position - centerEyeAnchor.transform.position;
     }
 
     IEnumerator trackSpeed() {
@@ -180,8 +190,13 @@ public class Hand : MonoBehaviour {
     }
 
     public void chargeSword(bool charge) {
-        if (charge) sword.StartCoroutine("swordCharge");
-        else sword.StopCoroutine("swordCharge");
+        if (charge) {
+            sword.StartCoroutine ("swordCharge");
+        }
+        else {
+            sword.stopSound();
+            sword.StopCoroutine ("swordCharge");
+        }
     }
 
     public void switchPrimaryHand()

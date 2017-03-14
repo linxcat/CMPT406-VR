@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwordChargeShot : MonoBehaviour {
 
     float LIFETIME = 5F;
-    float FLIGHT_SPEED = 2F;
+    float FLIGHT_SPEED = 12F;
 
 	// Use this for initialization
 	void Start () {
@@ -14,6 +14,7 @@ public class SwordChargeShot : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
+        other.gameObject.SendMessage("takeDamage", 50);
         // call damage on any enemy we hit, they will destroy us if necessary
     }
 }

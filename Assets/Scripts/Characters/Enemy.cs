@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour {
 
     //protected Material colourMaterial;
     protected GameObject player;
+    protected NavMeshAgent agent;
     public int hp = 100;
     public int maxDamage = 50;
 
@@ -18,8 +20,9 @@ public abstract class Enemy : MonoBehaviour {
 
     // Use this for initialization
     public void Start () {
+        agent = GetComponent<NavMeshAgent> ();
         audioSource = GetComponent<AudioSource>();
-        player = GameObject.Find("Player");
+        player = GameObject.Find("Hitbox");
 	}
 
     public abstract void swingHit(Hit hit);
