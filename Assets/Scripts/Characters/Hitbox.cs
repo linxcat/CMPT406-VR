@@ -5,13 +5,11 @@ using UnityEngine;
 public class Hitbox : MonoBehaviour {
 
     private CharacterStats playerStatManager;
-    float invincibleTime = 2F;
     float timeCount;
 
 	// Use this for initialization
 	void Start () {
         playerStatManager = FindObjectOfType<CharacterStats>();
-        timeCount = 0;
 	}
 	
 	// Update is called once per frame
@@ -20,9 +18,6 @@ public class Hitbox : MonoBehaviour {
 	}
 
     public void getHit(int dmg){
-        if (timeCount > invincibleTime){
-            timeCount = 0;
-            playerStatManager.takeDamage(dmg);
-        }
+        playerStatManager.takeDamage(dmg);
     }
 }

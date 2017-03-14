@@ -36,6 +36,7 @@ public class CharacterStats : MonoBehaviour {
     public void takeDamage(int damage) {
         if (isInvincible == true)
             return;
+        StartCoroutine ("startInvincible");
         if (PLAYER_HEALTH > damage) {
             PLAYER_HEALTH = PLAYER_HEALTH - damage;
         }
