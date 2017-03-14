@@ -6,11 +6,12 @@ public class Spells : MonoBehaviour {
 
     const float slowTimeDuration = 4F;
 
-    public enum SPELL_NAMES { SlowTime };
+    public enum SPELL_NAMES { SlowTime , Heal};
     static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
 
     void Awake() {
         spells.Add("UL.UR.DR.DL.", SPELL_NAMES.SlowTime);
+        spells.Add("U.D.L.R.", SPELL_NAMES.Heal);
     }
 
     public void cast(string spell) {
@@ -36,5 +37,13 @@ public class Spells : MonoBehaviour {
 
         Time.timeScale = 1F;
         Time.fixedDeltaTime = originalDelta;
+    }
+
+    void heal() {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().addHealth(50);
+    }
+
+    void shootProjectile() {
+        //GameObject.FindGameObjectWithTag("Player").transform.forward
     }
 }

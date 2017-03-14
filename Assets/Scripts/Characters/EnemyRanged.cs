@@ -45,12 +45,16 @@ public class EnemyRanged : Enemy {
         searchPlayer();
         switch (currentState) {
             case rangedState.follow:
+                facePlayer();
                 moveTowardsPlayer();
+                
                 break;
             case rangedState.backup:
+                facePlayer();
                 backUp();
                 break;
             case rangedState.attack:
+                facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
                 break;
         }
@@ -72,6 +76,7 @@ public class EnemyRanged : Enemy {
 
     private void moveTowardsPlayer() {
         Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
+        
         float angle = Vector3.Angle(axisRotate, transform.forward);
 
         if (angle > 5) {
@@ -130,6 +135,7 @@ public class EnemyRanged : Enemy {
         GameObject x = (GameObject)Instantiate(projectile);
         x.transform.position = transform.position + new Vector3(0, 1f, 0);
         x.GetComponent<Projectile>().setTarget(player);
+        x.GetComponent<Projectile>().setOriginator(gameObject);
     }
 
     public override void swingHit(Hit hit) {

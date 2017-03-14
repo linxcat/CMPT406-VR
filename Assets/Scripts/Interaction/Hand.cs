@@ -11,6 +11,12 @@ public class Hand : MonoBehaviour {
     float HIT_ARRAY_DISTANCE = 0.6F;
     float HIT_ARRAY_VERT_BIAS = 0.2F;
 
+    //this is the projectile that is affected by the slow ui, which there can be only one
+    static GameObject currentProjectile = null;
+    GameObject player;
+    //difference between this and the current time is the duration the time is still slowed
+    public static float timeSlowed;
+
     bool swordIsOn = true;
     bool locked = false;
     bool locking = false;
@@ -18,6 +24,7 @@ public class Hand : MonoBehaviour {
     float speedThreshold = 0.025F;
     private float[] pastSpeeds = new float[10];
 
+    static GameObject counterUI;
     GameObject sigilAnchor;
     GameObject hitArray;
     GameObject GUIAnchor;
@@ -34,7 +41,8 @@ public class Hand : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+	void Start () {
+        player = GameObject.FindGameObjectWithTag("Player");
         hitArray = GameObject.Find("HitArray");
         GUIAnchor = GameObject.Find("GUIAnchor");
         wristAnchor = transform.FindChild("WristAnchor");
@@ -59,7 +67,14 @@ public class Hand : MonoBehaviour {
             if (swordIsOn && !locking && locked && !sword.swingTimeExceeded) sword.stopSlash();
         }
        else {
+            // gauntlet
+            if(Time.time > timeSlowed)
+            {
+                Time.timeScale = 1f;
+                Destroy(counterUI);
+            }
             placeGUI();
+
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
@@ -138,9 +153,20 @@ public class Hand : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (IS_PRIMARY) return;
-
+        currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
-            other.SendMessageUpwards("counter");
+            if (!GetComponent<Hand>().IS_PRIMARY)
+            {
+                if (other.gameObject.tag == "Projectile")
+                {
+                    GetComponent<Hand>().counterProjectile();
+                    other.gameObject.GetComponent<Projectile>().reflect();
+                }
+            }
+            if (other.tag == "Hand")
+            {
+                other.SendMessageUpwards("counter");
+            }
         }
     }
 
@@ -178,4 +204,25 @@ public class Hand : MonoBehaviour {
         IS_PRIMARY = !IS_PRIMARY;
         initialize();
     }
+
+    public void counterProjectile() {
+        timeSlowed = Time.time + 1f;
+        Time.timeScale = 0.111111f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        //if (counterUI == null) {
+            GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+            counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
+            counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
+        //}
+    }
+
+
+    public static void absorb()
+    {
+        if(currentProjectile != null)
+        {
+            Destroy(currentProjectile);
+        }
+    }
+
 }
