@@ -39,6 +39,8 @@ public class Sword : MonoBehaviour {
 
     public AudioSource audioSource;
     public AudioClip swordDrawClip;
+    public AudioClip swordChargingClip;
+    public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
     // Use this for initialization
@@ -49,14 +51,14 @@ public class Sword : MonoBehaviour {
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         audioSource = GetComponent<AudioSource>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (isSwinging) {
             timeStep++;
             slashStep();
         }
-	}
+    }
 
     void OnTriggerEnter(Collider other) {
         if (isSwinging) {
@@ -66,6 +68,8 @@ public class Sword : MonoBehaviour {
     }
 
     public void startSlash() {
+        stopSound();
+        audioSource.PlayOneShot(swordDrawClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
@@ -132,7 +136,7 @@ public class Sword : MonoBehaviour {
             enemy.SendMessageUpwards("swingHit", hit);
         }
         enemyContacts.Clear();
-		        
+      
         if (debugMode) {
             directionDeviationSaves.AddFirst(bestDirectionDeviation);
             alignmentDeviationSaves.AddFirst(bestAlignmentDeviation);
@@ -180,7 +184,10 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
+        audioSource.PlayOneShot(swordChargingClip, 0.2f);
         yield return new WaitForSeconds(CHARGE_DURATION);
+        stopSound();
+        audioSource.PlayOneShot(swordChargedClip, 0.2f);
         InitiateHapticFeedback(vibeClip, 1);
         swordCharged = true;
         GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
@@ -191,6 +198,10 @@ public class Sword : MonoBehaviour {
         yield return new WaitForSeconds(SWINGTIME);
         swingTimeExceeded = true;
         stopSlash(); //force stop
+    }
+
+    public void stopSound() {
+        audioSource.Stop();
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {
@@ -250,7 +261,7 @@ public class Sword : MonoBehaviour {
             }
             averageAlignmentDeviation = averageAlignmentDeviation / alignmentDeviationSaves.Count;
             stdDevAlignment = System.Math.Sqrt(S / (k - 2));
-            
+
             Debug.Log("Average Direction Deviation = " + averageDirectionDeviation +
                 "\nStandard Deviation = " + stdDevDirection +
                 "\n------------------------" +
