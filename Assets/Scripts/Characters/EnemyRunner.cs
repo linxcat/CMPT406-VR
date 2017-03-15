@@ -139,18 +139,22 @@ public class EnemyRunner : Enemy{
 	}
 
     IEnumerator attack() {
+        attacking = true;
+        StartCoroutine("attackOnCD");
         anim.SetBool("moving", false);
         agent.Stop();
         anim.SetTrigger("attack");
         audioSource.PlayOneShot(hitAttack, 0.2f);
-        attacking = true;
-        
         yield return new WaitForSeconds(atkWindUp);
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
         parryable = false;
         if(!attackCheck())
             currentState = runnerState.idle;
+    }
+
+    IEnumerator attackOnCD()
+    {
         yield return new WaitForSeconds(atkCD);
         attacking = false;
     }
@@ -164,7 +168,6 @@ public class EnemyRunner : Enemy{
     {
         anim.SetTrigger("counter");
         StopCoroutine("attack");
-        attacking = false;
         parryable = false;
         yield return new WaitForSeconds(parryTime);
         if (!attackCheck())
