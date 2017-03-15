@@ -211,8 +211,6 @@ public class Sword : MonoBehaviour {
 	void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
 		GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
         slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
-        //Debug.Log("Slash forward: " + slash.transform.forward + " facing: " + facing);
-        //slash.transform.rotation = Quaternion.LookRotation(facing);
 		slash.GetComponent<ParticleSystem>().Play();
 		GameObject.Destroy (slash, 0.5f);
 	}
