@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1438467653274888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.3056464, y: 1.6728368, z: -0.90939724}
+  m_LocalPosition: {x: 2.265572, y: 1.9647812, z: -1.3160706}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4725632240386432}
@@ -580,7 +580,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 3
     randomizeRotationDirection: 0
-    maxNumParticles: 100
+    maxNumParticles: 85
     size3D: 0
     rotation3D: 0
     gravityModifier:
