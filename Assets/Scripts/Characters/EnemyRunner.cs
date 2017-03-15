@@ -189,6 +189,7 @@ public class EnemyRunner : Enemy{
         audioSource.PlayOneShot(deathSound, 0.2f);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
+        agent.SetDestination (transform.position);
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
     }

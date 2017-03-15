@@ -13,7 +13,10 @@ public class GameOverMenu : MonoBehaviour {
 	void Update () {
         if (OVRInput.Get(OVRInput.Button.One)){
             Time.timeScale = 1;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+            Scene nextScene = SceneManager.CreateScene (SceneManager.GetActiveScene().name);
+            SceneManager.SetActiveScene (nextScene);
+            //SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
+
         }
 
     }
