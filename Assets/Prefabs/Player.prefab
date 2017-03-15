@@ -4057,7 +4057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swingTimeExceeded: 0
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
-  slashEffect: {fileID: 1397091053566966, guid: 1ccbb6d0a3a2a054b92b684c0662ba12,
+  slashEffect: {fileID: 1320487892062564, guid: b4d946b1f5edf584c8694fabe48f2730,
     type: 2}
   vibeAudioClip: {fileID: 8300000, guid: 6a730cc2f5882b7419484f26a7f66a15, type: 3}
   audioSource: {fileID: 0}
