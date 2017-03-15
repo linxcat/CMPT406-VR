@@ -2115,8 +2115,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539895977093018}
-  m_LocalRotation: {x: -0, y: -0.9864771, z: -0, w: 0.16389923}
-  m_LocalPosition: {x: 21.677366, y: 0.476698, z: 4.5079923}
+  m_LocalRotation: {x: -0, y: -0.6361657, z: -0, w: 0.7715525}
+  m_LocalPosition: {x: 21.576487, y: 0.054935455, z: 9.536496}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 4958832772944554}
@@ -2128,7 +2128,7 @@ Transform:
   - {fileID: 4605997061639000}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 166.06201, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 280.987, z: 0}
 --- !u!4 &4679227214587278
 Transform:
   m_ObjectHideFlags: 1
@@ -2729,7 +2729,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.18
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3031,10 +3031,10 @@ NavMeshAgent:
   m_GameObject: {fileID: 1539895977093018}
   m_Enabled: 1
   m_Radius: 0.84
-  m_Speed: 2
+  m_Speed: 1.75
   m_Acceleration: 2
   avoidancePriority: 50
-  m_AngularSpeed: 90
+  m_AngularSpeed: 135
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1

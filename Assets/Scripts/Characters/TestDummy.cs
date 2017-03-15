@@ -97,7 +97,10 @@ public class TestDummy : Enemy {
                 weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
             }
             if (swingDown && (Vector3.Angle(weapon.transform.up, pivot.forward) < 1F)) swingDown = false;
-            else if (!swingDown && (Vector3.Angle(weapon.transform.up, pivot.up) < 1F)) swingDown = true;
+            else if (!swingDown && (Vector3.Angle(weapon.transform.up, pivot.up) < 1F)) {
+                swingDown = true;
+                weapon.transform.localPosition = weaponStartPosition;
+            }
 
             yield return null;
         }

@@ -7,15 +7,16 @@ public class EnemyRunner : Enemy{
 
     private float detectRange = 100;
     private float atkRange;
-    private float atkDuration = 1.5F;
-    private float atkCD = 2F;
+    private float atkWindUp = 0.5F;
+    private float atkDuration = 1F;
+    private float atkCD = 4F;
     private float speed = 2F;
-    private int attackDmg = 30;
+    private int attackDmg = 20;
     private int searchAngle = 180;
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
     float parryTime = 5F;
-    float HEIGHTBIAS = 0.2F;
+    float HEIGHTBIAS = 0F;
 
     public AudioClip runnerRoarClip;
 
@@ -143,6 +144,8 @@ public class EnemyRunner : Enemy{
         anim.SetTrigger("attack");
         audioSource.PlayOneShot(hitAttack, 0.2f);
         attacking = true;
+        
+        yield return new WaitForSeconds(atkWindUp);
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
         parryable = false;
@@ -164,12 +167,13 @@ public class EnemyRunner : Enemy{
         attacking = false;
         parryable = false;
         yield return new WaitForSeconds(parryTime);
-        currentState = runnerState.idle;
+        if (!attackCheck())
+            currentState = runnerState.idle;
     }
 
     bool attackCheck() {
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-        Debug.Log(Vector3.Distance(temp, player.transform.position));
+        //Debug.Log(Vector3.Distance(temp, player.transform.position));
         if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             facePlayer();

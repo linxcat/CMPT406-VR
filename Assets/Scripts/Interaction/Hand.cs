@@ -155,16 +155,12 @@ public class Hand : MonoBehaviour {
         if (IS_PRIMARY) return;
         currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
-            if (!GetComponent<Hand>().IS_PRIMARY)
-            {
-                if (other.gameObject.tag == "Projectile")
-                {
-                    GetComponent<Hand>().counterProjectile();
+
+            if (other.gameObject.tag == "Projectile"){
+                    counterProjectile();
                     other.gameObject.GetComponent<Projectile>().reflect();
-                }
             }
-            if (other.tag == "Hand")
-            {
+            else{
                 other.SendMessageUpwards("counter");
             }
         }
