@@ -18,7 +18,7 @@ namespace GUIPubSub {
 
 
             public void getPublication(GUIEvent e) {
-                if (e.getType().Equals("heatlh")) {
+                if (e.getType().Equals("health")) {
                     HEALTH_SLIDER.GetComponent<Image>().fillAmount = e.getValue() / TO_SLIDER_VALUE;
                 }
             }
