@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Teleport : MonoBehaviour {
 
@@ -191,9 +192,9 @@ public class Teleport : MonoBehaviour {
     }
 
     private void placeOnGround(Vector3 spot) {
-        Collider[] possibleObstacles = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[2] { "EnemyRange", "Walls" }));
+        Collider[] possibleObstacles = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[1] { "EnemyRange" }));
 
-        if (possibleObstacles.Length == 0) groundLocation.position = spot;
+        if (possibleObstacles.Length == 0) onNavMesh(spot);
         else {
             Vector3[] safePoints = new Vector3[possibleObstacles.Length];
             for (int i = 0; i < possibleObstacles.Length; i ++) {
@@ -212,13 +213,27 @@ public class Teleport : MonoBehaviour {
 
             // PLACEHOLDER (TODO)
             if (safePoints.Length == 1) {
-                groundLocation.position = safePoints[0];
+                onNavMesh(safePoints[0]);
             }
             else {
                 Debug.LogError(" HARD FLOOR PLACEMENT CASE!!");
+                disable();
             }
         }
 
+    }
+
+    void onNavMesh(Vector3 point) {
+        NavMeshHit hitPoint;
+
+        if (!NavMesh.Raycast(player.transform.position, point, out hitPoint, NavMesh.AllAreas)) {
+            groundLocation.position = point;
+        }
+        else {
+            NavMeshHit newLocation;
+            NavMesh.SamplePosition(hitPoint.position, out newLocation, 0.1F, NavMesh.AllAreas);
+        }
+        
     }
 
     public void setRotation(Vector2 vector) {
