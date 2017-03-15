@@ -10,7 +10,7 @@ namespace GUIPubSub {
 
         public class GUICircularHealthSubscriber : GUISubscriber {
             private Transform HEALTH_SLIDER;
-            private int TO_SLIDER_VALUE = 100;
+            private float TO_SLIDER_VALUE = 100f;
 
             public GUICircularHealthSubscriber(Transform healthSlider) {
                 HEALTH_SLIDER = healthSlider;
@@ -26,7 +26,7 @@ namespace GUIPubSub {
 
         public class GUICircularStaminaSubscriber : GUISubscriber {
             private Transform STAMINA_SLIDER;
-            private int TO_SLIDER_VALUE = 100;
+            private float TO_SLIDER_VALUE = 100f;
 
             public GUICircularStaminaSubscriber(Transform staminaSlider) {
                 STAMINA_SLIDER = staminaSlider;
@@ -58,7 +58,7 @@ namespace GUIPubSub {
 
         public class GUICircularEnemyLeftSubscriber : GUISubscriber {
             private Transform ENEMY_SLIDER;
-            private int TO_SLIDER_VALUE = 100;
+            private float TO_SLIDER_VALUE = 100f;
 
         public GUICircularEnemyLeftSubscriber(Transform enemyLeft) {
                 ENEMY_SLIDER = enemyLeft;
