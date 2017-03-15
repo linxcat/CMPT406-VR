@@ -14,21 +14,21 @@ public class CharacterStats : MonoBehaviour {
     public Slider MANA_SLIDER;
     public Slider STAMINA_SLIDER;
     private bool isDead, isInvincible;
-    private float deathBufferTime = 0.2F;
     private float invincibleTime = 2F;
-    public GameObject gameOverCanvas;
+    private LevelManager levelManager;
 
 
     // Use this for initialization
     void Start() {
         isDead = false;
         isInvincible = false;
+        levelManager = FindObjectOfType<LevelManager> ();
     }
 
     // Update is called once per frame
     void Update() {
         if (PLAYER_HEALTH == 0 && !isDead) {
-            StartCoroutine("death");
+            death ();
         }
     }
 
@@ -113,11 +113,9 @@ public class CharacterStats : MonoBehaviour {
 
     //TODO
     /** PLayer has died end game */
-    IEnumerator death() {
+    void death() {
         isDead = true;
-        gameOverCanvas.SetActive(true);
-        yield return new WaitForSeconds(deathBufferTime);
-        Time.timeScale = 0;
+        levelManager.gameOver ();
     }
 
 }
