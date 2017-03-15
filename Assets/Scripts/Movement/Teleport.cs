@@ -160,7 +160,7 @@ public class Teleport : MonoBehaviour {
         fadeOut();
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
 
-        yield return new WaitForSeconds(FADE_DURATION);
+        yield return new WaitForSecondsRealtime(FADE_DURATION);
 
         avatar.SetActive(true);
         player.transform.position = groundLocation.position;
