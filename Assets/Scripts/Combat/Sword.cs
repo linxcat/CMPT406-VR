@@ -184,13 +184,15 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
-        audioSource.PlayOneShot(swordChargingClip, 0.2f);
-        yield return new WaitForSeconds(CHARGE_DURATION);
-        stopSound();
-        audioSource.PlayOneShot(swordChargedClip, 0.2f);
-        InitiateHapticFeedback(vibeClip, 1);
-        swordCharged = true;
-        GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+        if (!swordCharged) {
+            audioSource.PlayOneShot(swordChargingClip, 0.2f);
+            yield return new WaitForSeconds(CHARGE_DURATION);
+            stopSound();
+            audioSource.PlayOneShot(swordChargedClip, 0.2f);
+            InitiateHapticFeedback(vibeClip, 1);
+            swordCharged = true;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+        }
     }
 
     IEnumerator swingTimeMax() {
