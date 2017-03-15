@@ -19,7 +19,7 @@ namespace GUIPubSub {
             subscribers.Insert(0, sub);
         }
 
-        private void publish(GUIEvent data) {
+        public void publish(GUIEvent data) {
             foreach (GUISubscriber sub in subscribers) {
                 sub.getPublication(data);
             }
