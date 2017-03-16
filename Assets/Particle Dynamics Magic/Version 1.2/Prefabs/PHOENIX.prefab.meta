@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 491eb033c90281c46b3be81a4f70b409
+labels:
+- Animated
+- Bezier
+- Dynamic
+- Emission
+- Mesh
+- Particles
+- Phoenix
+- Splines
+NativeFormatImporter:
+  userData: 

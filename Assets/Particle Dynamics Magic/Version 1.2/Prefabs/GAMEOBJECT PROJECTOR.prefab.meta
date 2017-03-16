@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 2022c9f078b9e464cb9e638f96ad59d0
+labels:
+- Dynamic
+- Particles
+- Projection
+- Base
+- Gameobject
+- Projector
+NativeFormatImporter:
+  userData: 

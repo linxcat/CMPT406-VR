@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 26dca608ce0523d4a863bb6547f23b4a
+labels:
+- Bezier
+- Dynamic
+- Effect
+- Emission
+- Mesh
+- Particles
+- Physics
+- Splines
+NativeFormatImporter:
+  userData: 

@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: ee60f03ee9d672944b6172ddd80115fe
+labels:
+- Dynamic
+- Emission
+- Gameobject
+- Mesh
+- Particles
+- Procedural
+NativeFormatImporter:
+  userData: 

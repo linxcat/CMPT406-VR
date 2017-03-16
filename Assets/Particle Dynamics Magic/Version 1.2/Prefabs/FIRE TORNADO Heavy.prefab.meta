@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: f3d9f6d724beff0428cb74d0b5c6310e
+labels:
+- Attractor
+- Dynamic
+- Effect
+- Fire
+- Gravity
+- Planar
+- Propagation
+NativeFormatImporter:
+  userData: 

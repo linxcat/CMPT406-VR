@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 2bc9191552e164d48b4a8e261fb84a31
+labels:
+- Bezier
+- Dynamic
+- Emission
+- Particles
+- Splines
+- Umbrella
+NativeFormatImporter:
+  userData: 

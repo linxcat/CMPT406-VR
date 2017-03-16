@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: ddac34bac8dc2044b9dfafcbe9871cd8
+labels:
+- Colored
+- Dynamic
+- Emission
+- Mesh
+- Particles
+- Skinned
+- Texture
+NativeFormatImporter:
+  userData: 

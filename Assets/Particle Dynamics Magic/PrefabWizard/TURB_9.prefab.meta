@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: cc5316e5e8a3c7840be40411cd26f153
+labels:
+- Attractor
+- Dynamic
+- Emission
+- Gravity
+- Particles
+- Planar
+- Rainbow
+NativeFormatImporter:
+  userData: 

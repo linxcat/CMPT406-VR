@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 2f39fbfe6c2039a4e90115b446c0f46e
+labels:
+- Field
+- Spell
+- Ground
+- Repel
+- Particles
+- Effect
+- Dynamic
+- Grass
+NativeFormatImporter:
+  userData: 
