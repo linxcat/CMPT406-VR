@@ -188,8 +188,10 @@ public class Teleport : MonoBehaviour {
     }
 
     Vector3 groundCast(Vector3 startPoint) {
+        Vector3 higherPoint = startPoint;
+        higherPoint.y += 1;
         RaycastHit hitInfo = new RaycastHit();
-        Physics.Raycast(startPoint, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
+        Physics.Raycast(higherPoint, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
         return hitInfo.point;
     }
 
