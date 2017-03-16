@@ -165,6 +165,8 @@ public class Teleport : MonoBehaviour {
         avatar.SetActive(true);
         player.transform.position = groundLocation.position;
         player.transform.forward = groundLocation.forward;
+        groundLocation.position = player.transform.position; //childed objects get shoved forward, avoid inside walls
+        apex.position = player.transform.position;
         fadeIn();
         teleporting = false;
     }

@@ -100,6 +100,7 @@ public class Hand : MonoBehaviour {
         sword.gameObject.SetActive(swordIsOn);
         hitArray.SetActive(swordIsOn);
         sigilAnchor.SetActive(!swordIsOn);
+        if (!swordIsOn) magicDraw.clear();
         // TODO handle active slashes and sigils on switch
     }
 
