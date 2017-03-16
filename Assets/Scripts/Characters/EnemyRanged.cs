@@ -5,54 +5,63 @@ using UnityEngine;
 
 public class EnemyRanged : Enemy {
 
+    private LevelManager levelManager;
     public GameObject projectile;
     private float detectRange = 100; //tuning required
     private float backupRange = 10;
-    private float atkRange = 20;
+    private float atkRange = 15;
     private float atkDelay = 5;
     private float speed = 2.5F;
     private int attackDmg = 30;
-    private int searchAngle = 80;
+    private int searchAngle = 180;
+    private float spawnTimer = 3.5F;
 
+    bool spawning = false;
     bool attacking = false;
     bool parryable = false;
 
     Animator anim;
+    RaycastHit hit;
+    LayerMask mask;
 
     enum rangedState {
+        spawn,
         idle,
         follow,
-        backup,
+        //backup,
         attack,
-        parried,
         dead
     };
 
-    private rangedState currentState = rangedState.idle;
+    private rangedState currentState = rangedState.spawn;
 
     // Use this for initialization
     void Start() {
         base.Start();
+        hp = 50;
+        levelManager = FindObjectOfType<LevelManager>();
         //TODO find projectile object
         turnSpeed = 4;
         anim = GetComponent<Animator>();
-        player = GameObject.Find("Player");
+        mask = LayerMask.GetMask(new string[2] { "Player", "Ground" });
     }
 
     // Update is called once per frame
     void Update() {
-        if (currentState == rangedState.parried) return;
-        searchPlayer();
         switch (currentState) {
-            case rangedState.follow:
-                facePlayer();
-                moveTowardsPlayer();
-                
+            case rangedState.idle:
+                searchPlayer();
                 break;
-            case rangedState.backup:
+            case rangedState.spawn:
+                if (!spawning) StartCoroutine("spawn");
+                break;
+            case rangedState.follow:
+                moveTowardsPlayer();
+                break;
+            /*case rangedState.backup:
                 facePlayer();
                 backUp();
-                break;
+                break;*/
             case rangedState.attack:
                 facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
@@ -66,11 +75,9 @@ public class EnemyRanged : Enemy {
 
         float angle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
         float distance = Vector3.Distance(transform.position, player.transform.position);
-        if (angle < searchAngle && distance < detectRange) {
-            if (distance > atkRange) currentState = rangedState.follow;
-            else if (distance < backupRange) currentState = rangedState.backup;
-            else currentState = rangedState.attack;
-        }
+        if (angle < searchAngle && distance < detectRange)
+            currentState = rangedState.follow;
+
         fall();
     }
 
@@ -79,22 +86,19 @@ public class EnemyRanged : Enemy {
         
         float angle = Vector3.Angle(axisRotate, transform.forward);
 
-        if (angle > 5) {
-            slowFacePlayer();
-        }
-        else {
-            anim.SetBool("moving", true);
-            move(true);
-            fall();
-        }
+        anim.SetBool("moving", true);
+        agent.Resume();
+        agent.destination = player.transform.position;
+        fall();
+        attackCheck();
     }
 
-    void move(bool forward) {
-        float step = speed * Time.deltaTime;
-        if (!forward) step = -step;
-        Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    }
+    //void move(bool forward) {
+    //    float step = speed * Time.deltaTime;
+    //    if (!forward) step = -step;
+    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+    //}
 
     void fall() {
         RaycastHit hitPoint = new RaycastHit();
@@ -104,6 +108,14 @@ public class EnemyRanged : Enemy {
         transform.position = hitPoint.point;
     }
 
+    IEnumerator spawn()
+    {
+        spawning = true;
+        yield return new WaitForSeconds(spawnTimer);
+        currentState = rangedState.idle;
+    }
+
+    /*
     private void backUp() {
         Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
         float angle = Vector3.Angle(axisRotate, transform.forward);
@@ -116,9 +128,27 @@ public class EnemyRanged : Enemy {
             move(false);
             fall();
         }
+    }*/
+
+    bool attackCheck()
+    {
+        Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+        //Debug.Log(Vector3.Distance(temp, player.transform.position));
+        if (Vector3.Distance(temp, player.transform.position) <= atkRange &&
+            Physics.Raycast(transform.position, transform.forward, out hit, float.MaxValue, mask))
+        {
+            if (hit.collider.name == "Hitbox") {
+                currentState = rangedState.attack;
+                facePlayer();
+                return true;
+            }
+        }
+        return false;
     }
 
     IEnumerator fireProjectile() {
+        agent.Stop();
+        anim.SetBool("moving", false);
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
@@ -127,7 +157,8 @@ public class EnemyRanged : Enemy {
 
         attacking = false;
         parryable = false;
-        currentState = rangedState.idle;
+        if(!attackCheck())
+            currentState = rangedState.idle;
 
     }
 
@@ -155,19 +186,17 @@ public class EnemyRanged : Enemy {
         }
     }
 
-    public override void counter() {
-        if (!parryable) return;
-        anim.SetTrigger("counter");
-        StopCoroutine("attack");
-        attacking = false;
-        parryable = false;
-        currentState = rangedState.parried;
+    public override void counter()
+    {
+        return;
     }
 
     public override void die() {
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
+        agent.SetDestination(transform.position);
+        levelManager.enemyKilled();
         GetComponent<Collider>().enabled = false;
     }
 }
