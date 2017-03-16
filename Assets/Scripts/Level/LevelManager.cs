@@ -8,13 +8,16 @@ public class LevelManager : MonoBehaviour {
     public int numberOfEnemies;
     public string nextScene;
 
+    public GameObject fader;
+    public Material red;
+    public Material white;
     private bool isGameOver;
     private bool menuShown;
     private bool goNextScene;
-    private float bufferTime = 0.2F;
+    private float bufferTime = 5F;
     private int killedEnemies;
-    private GameObject winningMenu;
-    private GameObject gameoverMenu;
+    public GameObject winningMenu;
+    public GameObject gameoverMenu;
 
 	// Use this for initialization
 	void Start () {
@@ -22,8 +25,7 @@ public class LevelManager : MonoBehaviour {
         menuShown = false;
         goNextScene = false;
         killedEnemies = 0;
-        winningMenu = GameObject.Find ("WinningMenu");
-        gameoverMenu = GameObject.Find ("gameoverMenu");
+        //fader = GameObject.Find("Fader");
 	}
 	
 	// Update is called once per frame
@@ -51,6 +53,8 @@ public class LevelManager : MonoBehaviour {
 
     IEnumerator showWinningMenu(){
         winningMenu.SetActive (true);
+        fader.GetComponent<Renderer>().material = white;
+        fader.SetActive(true);
         yield return new WaitForSeconds(bufferTime);
         Time.timeScale = 0;
         while (!goNextScene)
@@ -61,13 +65,20 @@ public class LevelManager : MonoBehaviour {
 
     IEnumerator showGameoverMenu(){
         gameoverMenu.SetActive(true);
+        fader.GetComponent<Renderer>().material = red;
+        fader.SetActive(true);
         yield return new WaitForSeconds(bufferTime);
         Time.timeScale = 0;
         while (!goNextScene)
             yield return null;
         Time.timeScale = 1;
-        Scene nextScene = SceneManager.CreateScene (SceneManager.GetActiveScene().name);
-        SceneManager.SetActiveScene (nextScene);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        //Scene nextScene = SceneManager.CreateScene (SceneManager.GetActiveScene().name);
+        //SceneManager.SetActiveScene (nextScene);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+    }
+
+    public bool IsGameOver()
+    {
+        return isGameOver;
     }
 }

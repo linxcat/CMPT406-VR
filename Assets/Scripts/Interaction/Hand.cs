@@ -35,6 +35,7 @@ public class Hand : MonoBehaviour {
     Spells spells;
     GameObject centerEyeAnchor;
     Teleport teleportScript;
+    LevelManager levelManager;
 
     void Awake() {
         sigilAnchor = GameObject.Find("SigilAnchor"); //need before the other hand sets it inactive
@@ -52,6 +53,7 @@ public class Hand : MonoBehaviour {
         spells = GameObject.Find("Player").GetComponent<Spells>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         teleportScript = GameObject.Find("Player").GetComponent<Teleport>();
+        levelManager = FindObjectOfType<LevelManager>();
         initialize();
         StartCoroutine("trackSpeed");
     }
@@ -68,7 +70,7 @@ public class Hand : MonoBehaviour {
         }
        else {
             // gauntlet
-            if(Time.time > timeSlowed)
+            if(!levelManager.IsGameOver() && Time.time > timeSlowed)
             {
                 Time.timeScale = 1f;
                 Destroy(counterUI);
