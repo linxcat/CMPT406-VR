@@ -21,12 +21,12 @@ public class MagicDraw : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (!isDrawing) return;
+        if (verticies.Count > 0 && other.name == verticies.Last.Value) return; //don't draw the same node twice
 
         int nextPosition = magicLines.numPositions;
         magicLines.numPositions++;
         magicLines.SetPosition(nextPosition, other.transform.position);
         verticies.AddLast(other.name);
-        // TODO: Sword projectile activates this.
         audioSource.Stop();
         audioSource.PlayOneShot (magicTouchClip, 0.2f);
     }
