@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198912613675929980}
   - component: {fileID: 199011864587339414}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: ICE EFFECT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,12 +55,12 @@ GameObject:
   - component: {fileID: 198426550048754350}
   - component: {fileID: 199203503003861712}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: ICE LIGHT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4473855476350762
 Transform:
   m_ObjectHideFlags: 1
@@ -243,7 +243,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 0
+  randomSeed: -868302145
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -2850,7 +2850,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 0
+  randomSeed: -1219990101
   InitialModule:
     serializedVersion: 3
     enabled: 1
