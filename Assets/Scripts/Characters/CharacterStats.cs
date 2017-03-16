@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using GUIPubSub;
 
 public class CharacterStats : MonoBehaviour {
 
@@ -10,25 +10,39 @@ public class CharacterStats : MonoBehaviour {
     public int PLAYER_HEALTH = 100;
     public int PLAYER_MANA = 100;
     public int PLAYER_STAMINA = 100;
-    public Slider HEALTH_SLIDER;
-    public Slider MANA_SLIDER;
-    public Slider STAMINA_SLIDER;
+    public Transform HEALTH_SLIDER;
+    public Transform MANA_SLIDER;
+    public Transform STAMINA_SLIDER;
     private bool isDead, isInvincible;
-    private float deathBufferTime = 0.2F;
     private float invincibleTime = 2F;
-    public GameObject gameOverCanvas;
-
+    private LevelManager levelManager;
+    private GUIEvent healthEvent;
+    private GUIEvent manaEvent;
+    private GUIEvent staminaEvent;
+    private GUIPublisher pub;
+    private GUICircularStaminaSubscriber staminaSub;
+    private GUICircularHealthSubscriber healthSub;
+    private GUICircularManaSubscriber manaSub;
 
     // Use this for initialization
     void Start() {
         isDead = false;
         isInvincible = false;
+        levelManager = FindObjectOfType<LevelManager> ();
+        pub = GUIPublisher.create();
+        staminaSub = new GUICircularStaminaSubscriber(STAMINA_SLIDER);
+        healthSub = new GUICircularHealthSubscriber(HEALTH_SLIDER);
+        manaSub = new GUICircularManaSubscriber(MANA_SLIDER);
+
+        pub.Subscribe(staminaSub);
+        pub.Subscribe(healthSub);
+        pub.Subscribe(manaSub);
     }
 
     // Update is called once per frame
     void Update() {
         if (PLAYER_HEALTH == 0 && !isDead) {
-            StartCoroutine("death");
+            death ();
         }
     }
 
@@ -44,7 +58,8 @@ public class CharacterStats : MonoBehaviour {
             PLAYER_HEALTH = 0;
             
         }
-      HEALTH_SLIDER.value = PLAYER_HEALTH;
+        healthEvent = new GUIEvent("health", PLAYER_HEALTH);
+        pub.publish(healthEvent);
     }
 
     IEnumerator startInvincible() {
@@ -56,7 +71,8 @@ public class CharacterStats : MonoBehaviour {
     /** Increment the amount of health the player has  by amount*/
     public void addHealth(int amount) {
         PLAYER_HEALTH = PLAYER_HEALTH + amount;
-        HEALTH_SLIDER.value = PLAYER_HEALTH;
+        healthEvent = new GUIEvent("health", PLAYER_HEALTH);
+        pub.publish(healthEvent);
     }
 
     /** get the amount of health the player has */
@@ -73,7 +89,8 @@ public class CharacterStats : MonoBehaviour {
     public bool removeMana(int amount) {
         if (PLAYER_MANA >= amount) {
             PLAYER_MANA = PLAYER_MANA - amount;
-            MANA_SLIDER.value = PLAYER_MANA;
+            manaEvent = new GUIEvent("mana", PLAYER_MANA);
+            pub.publish(manaEvent);
             return true;
         }
         else {
@@ -84,7 +101,8 @@ public class CharacterStats : MonoBehaviour {
     /** Add amount to the mana pool */
     public void addMana(int amount) {
         PLAYER_MANA = PLAYER_MANA + amount;
-        MANA_SLIDER.value = PLAYER_MANA;
+        manaEvent = new GUIEvent("mana", PLAYER_MANA);
+        pub.publish(manaEvent);
     }
 
 
@@ -96,7 +114,8 @@ public class CharacterStats : MonoBehaviour {
     public bool removeStamina(int amount) {
         if (PLAYER_STAMINA >= amount) {
             PLAYER_STAMINA = PLAYER_STAMINA - amount;
-            STAMINA_SLIDER.value = PLAYER_STAMINA;
+            staminaEvent = new GUIEvent("stamina", PLAYER_STAMINA);
+            pub.publish(staminaEvent);
             return true;
         }
         else {
@@ -107,17 +126,16 @@ public class CharacterStats : MonoBehaviour {
     /** Add amount to the stamina pool */
     public void addStamina(int amount) {
         PLAYER_STAMINA = PLAYER_STAMINA + amount;
-        STAMINA_SLIDER.value = PLAYER_STAMINA;
+        staminaEvent = new GUIEvent("stamina", PLAYER_STAMINA);
+        pub.publish(staminaEvent);
     }
 
 
     //TODO
     /** PLayer has died end game */
-    IEnumerator death() {
+    void death() {
         isDead = true;
-        gameOverCanvas.SetActive(true);
-        yield return new WaitForSeconds(deathBufferTime);
-        Time.timeScale = 0;
+        levelManager.gameOver ();
     }
 
 }
