@@ -195,6 +195,8 @@ public class EnemyRanged : Enemy {
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
+        agent.SetDestination(transform.position);
+        levelManager.enemyKilled();
         GetComponent<Collider>().enabled = false;
     }
 }
