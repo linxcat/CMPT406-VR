@@ -134,19 +134,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4656870865805364, guid: 4a5402db4ef2a5942a40a505db4e5f1e, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.11842546
+      value: 0.118425444
       objectReference: {fileID: 0}
     - target: {fileID: 4656870865805364, guid: 4a5402db4ef2a5942a40a505db4e5f1e, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.87388426
+      value: -0.87388414
       objectReference: {fileID: 0}
     - target: {fileID: 4656870865805364, guid: 4a5402db4ef2a5942a40a505db4e5f1e, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.32378328
+      value: 0.32378325
       objectReference: {fileID: 0}
     - target: {fileID: 4656870865805364, guid: 4a5402db4ef2a5942a40a505db4e5f1e, type: 2}
       propertyPath: m_LocalRotation.w
-      value: -0.3427335
+      value: -0.34273347
+      objectReference: {fileID: 0}
+    - target: {fileID: 1539895977093018, guid: 4a5402db4ef2a5942a40a505db4e5f1e, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4a5402db4ef2a5942a40a505db4e5f1e, type: 2}
@@ -424,7 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edeccc6e3612bd147baf6950bffa3c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toSpawn: 010000000100000001000000
+  toSpawn: 010000000100000002000000
   spawnDelay:
   - 0
   - 0
@@ -1391,6 +1395,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 20084331021693012, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: m_OcclusionCulling
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
   m_IsPrefabParent: 0
@@ -1439,7 +1448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edeccc6e3612bd147baf6950bffa3c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toSpawn: 000000000100000001000000
+  toSpawn: 000000000200000001000000
   spawnDelay:
   - 0
   - 5
