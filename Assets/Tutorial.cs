@@ -5,16 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Tutorial : MonoBehaviour {
 
-    float leaveCount;
-
-	// Use this for initialization
-	void Start () {
-        leaveCount = 0f;
-	}
+    float leaveCount = 0F;
 	
 	// Update is called once per frame
 	void Update () {
-		if(OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)) {
+		if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger)) {
             leaveCount += Time.deltaTime;
             if(leaveCount > 2.0f) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

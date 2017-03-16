@@ -100,7 +100,7 @@ public class Teleport : MonoBehaviour {
                     appropriateAxis = toy.transform.up;
                     if (handRoll > 0 && handRoll < 180) angle = -angle;
                 }
-
+                Destroy(toy);
                 Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(appropriateAxis, Vector3.up);
                 
                 secondDirection = Quaternion.AngleAxis(angle, flattenedHandAxis) * flatForward;
