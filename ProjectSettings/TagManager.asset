@@ -40,7 +40,7 @@ TagManager:
   - EnemyRange
   - Walls
   - Ground
-  - 
+  - GroundDetector
   - 
   - 
   - TeleportCollider
