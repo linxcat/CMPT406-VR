@@ -42,7 +42,7 @@ public class Hand : MonoBehaviour {
     }
 
     // Use this for initialization
-	void Start () {
+    void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
         hitArray = GameObject.Find("HitArray");
         GUIAnchor = GameObject.Find("GUIAnchor");
@@ -70,13 +70,11 @@ public class Hand : MonoBehaviour {
         }
        else {
             // gauntlet
-            if(!levelManager.IsGameOver() && Time.time > timeSlowed)
-            {
+            if(!levelManager.IsGameOver() && Time.time > timeSlowed) {
                 Time.timeScale = 1f;
                 Destroy(counterUI);
             }
             placeGUI();
-
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
@@ -106,8 +104,7 @@ public class Hand : MonoBehaviour {
         // TODO handle active slashes and sigils on switch
     }
 
-    void updateSigilAnchor()
-    {
+    void updateSigilAnchor() {
         Vector3 sigilDirection = transform.position - centerEyeAnchor.transform.position;
         sigilDirection.Normalize();
         Vector3 sigilTransform = sigilDirection * SIGIL_DISTANCE;
@@ -163,7 +160,7 @@ public class Hand : MonoBehaviour {
                     counterProjectile();
                     other.gameObject.GetComponent<Projectile>().reflect();
             }
-            else{
+            else {
                 other.SendMessageUpwards("counter");
             }
         }
@@ -183,8 +180,7 @@ public class Hand : MonoBehaviour {
         sword.switchDebug();
     }
 
-    public void setLock(bool value)
-    {
+    public void setLock(bool value) {
         locking = value;
     }
 
@@ -198,8 +194,7 @@ public class Hand : MonoBehaviour {
         }
     }
 
-    public void switchPrimaryHand()
-    {
+    public void switchPrimaryHand() {
         IS_PRIMARY = !IS_PRIMARY;
         initialize();
     }
@@ -216,12 +211,9 @@ public class Hand : MonoBehaviour {
     }
 
 
-    public static void absorb()
-    {
-        if(currentProjectile != null)
-        {
+    public static void absorb() {
+        if(currentProjectile != null) {
             Destroy(currentProjectile);
         }
     }
-
 }
