@@ -28,7 +28,7 @@ public class MagicDraw : MonoBehaviour {
         magicLines.SetPosition(nextPosition, other.transform.position);
         verticies.AddLast(other.name);
         audioSource.Stop();
-        audioSource.PlayOneShot (magicTouchClip, 0.2f);
+        audioSource.PlayOneShot (magicTouchClip);
     }
 
     public void setDrawing(bool value) {

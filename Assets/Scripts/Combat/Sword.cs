@@ -69,7 +69,7 @@ public class Sword : MonoBehaviour {
 
     public void startSlash() {
         stopSound();
-        audioSource.PlayOneShot(swordDrawClip, 0.2f);
+        audioSource.PlayOneShot(swordDrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
@@ -100,7 +100,7 @@ public class Sword : MonoBehaviour {
     public void stopSlash() {
         StopCoroutine("swordCharge");
         StopCoroutine("swingTimeMax");
-        audioSource.PlayOneShot(swordUndrawClip, 0.2f);
+        audioSource.PlayOneShot(swordUndrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
         stopPoint = swordAnchor.transform.position;
@@ -185,10 +185,10 @@ public class Sword : MonoBehaviour {
 
     IEnumerator swordCharge() {
         if (!swordCharged) {
-            audioSource.PlayOneShot(swordChargingClip, 0.2f);
+            audioSource.PlayOneShot(swordChargingClip);
             yield return new WaitForSeconds(CHARGE_DURATION);
             stopSound();
-            audioSource.PlayOneShot(swordChargedClip, 0.2f);
+            audioSource.PlayOneShot(swordChargedClip);
             InitiateHapticFeedback(vibeClip, 1);
             swordCharged = true;
             GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
