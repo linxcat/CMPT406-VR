@@ -873,7 +873,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1549719818694152
 GameObject:
   m_ObjectHideFlags: 1
@@ -2115,8 +2115,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539895977093018}
-  m_LocalRotation: {x: -0, y: 0.9926119, z: -0, w: 0.121332906}
-  m_LocalPosition: {x: 27.40184, y: 0.36920643, z: 24.80233}
+  m_LocalRotation: {x: -0, y: -0.6361657, z: -0, w: 0.7715525}
+  m_LocalPosition: {x: 33.6, y: 0.054935455, z: 7.2}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 4958832772944554}
@@ -2729,7 +2729,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2748,16 +2748,16 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
-      time: 0.002
-      value: 0.6180556
+      time: 0.008658009
+      value: 0.5267442
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
       time: 1
       value: 0
-      inSlope: -1.002004
-      outSlope: -1.002004
+      inSlope: -0.20734392
+      outSlope: -0.20734392
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

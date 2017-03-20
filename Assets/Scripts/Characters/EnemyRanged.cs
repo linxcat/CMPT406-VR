@@ -20,6 +20,11 @@ public class EnemyRanged : Enemy {
     bool attacking = false;
     bool parryable = false;
 
+    public AudioClip deathClip;
+    public AudioClip hitClip;
+    public AudioClip attackClip;
+    public AudioClip spawnClip;
+
     Animator anim;
     RaycastHit hit;
     LayerMask mask;
@@ -110,6 +115,7 @@ public class EnemyRanged : Enemy {
 
     IEnumerator spawn()
     {
+        audioSource.PlayOneShot(spawnClip);
         spawning = true;
         yield return new WaitForSeconds(spawnTimer);
         currentState = rangedState.idle;
@@ -152,6 +158,7 @@ public class EnemyRanged : Enemy {
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
+        audioSource.PlayOneShot(attackClip);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
@@ -170,17 +177,18 @@ public class EnemyRanged : Enemy {
     }
 
     public override void swingHit(Hit hit) {
+        audioSource.PlayOneShot(hitClip);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
-                audioSource.PlayOneShot(perfectHitClip, 0.2f);
+                audioSource.PlayOneShot(perfectHitClip);
                 takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
-                audioSource.PlayOneShot(goodHitClip, 0.2f);
+                audioSource.PlayOneShot(goodHitClip);
                 takeDamage(maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
-                audioSource.PlayOneShot(badHitClip, 0.2f);
+                audioSource.PlayOneShot(badHitClip);
                 takeDamage(maxDamage / 4);
                 break;
         }
@@ -192,6 +200,7 @@ public class EnemyRanged : Enemy {
     }
 
     public override void die() {
+        audioSource.PlayOneShot(deathClip);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
