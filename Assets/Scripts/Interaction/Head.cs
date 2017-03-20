@@ -7,7 +7,7 @@ public class Head : MonoBehaviour {
     private InputHandler inputHandler;
 
     void Start() {
-        inputHandler = this.transform.parent.gameObject.GetComponentInChildren<InputHandler>();
+        inputHandler = transform.parent.GetComponentInChildren<InputHandler>();
     }
 
     private void OnTriggerEnter(Collider other) {

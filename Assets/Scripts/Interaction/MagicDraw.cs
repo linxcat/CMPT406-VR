@@ -19,13 +19,16 @@ public class MagicDraw : MonoBehaviour {
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update() {
+        if (magicLines.numPositions > 1) magicLines.SetPosition(magicLines.numPositions - 1, transform.position);
+    }
+
     void OnTriggerEnter(Collider other) {
         if (!isDrawing) return;
         if (verticies.Count > 0 && other.name == verticies.Last.Value) return; //don't draw the same node twice
 
-        int nextPosition = magicLines.numPositions;
         magicLines.numPositions++;
-        magicLines.SetPosition(nextPosition, other.transform.position);
+        magicLines.SetPosition(magicLines.numPositions-2, other.transform.position);
         verticies.AddLast(other.name);
         audioSource.Stop();
         audioSource.PlayOneShot (magicTouchClip, 0.2f);
@@ -37,7 +40,7 @@ public class MagicDraw : MonoBehaviour {
 
 
     public void clear() {
-        magicLines.numPositions = 0;
+        magicLines.numPositions = 1;
         verticies.Clear();
     }
 

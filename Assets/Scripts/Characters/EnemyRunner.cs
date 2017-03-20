@@ -17,7 +17,7 @@ public class EnemyRunner : Enemy{
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
     float parryTime = 5F;
-    float HEIGHTBIAS = 0.2F;
+    float HEIGHTBIAS = 0.1F;
 
     public AudioClip runnerRoarClip;
 
