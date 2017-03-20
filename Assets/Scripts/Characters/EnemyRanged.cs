@@ -195,8 +195,20 @@ public class EnemyRanged : Enemy {
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
-        agent.SetDestination(transform.position);
+        agent.enabled = false;
         levelManager.enemyKilled();
         GetComponent<Collider>().enabled = false;
+        StartCoroutine("sink");
+    }
+
+    IEnumerator sink() {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 150; i++) {
+            Vector3 newPosition = transform.position;
+            newPosition.y -= 0.005F;
+            transform.position = newPosition;
+            yield return 0;
+        }
+        Destroy(gameObject);
     }
 }
