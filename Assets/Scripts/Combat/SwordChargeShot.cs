@@ -19,7 +19,7 @@ public class SwordChargeShot : MonoBehaviour {
             Destroy(gameObject);
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) {
-            Destroy(gameObject);
+            Destroy(gameObject, 0.1f);
         }
         
         // call damage on any enemy we hit, they will destroy us if necessary
