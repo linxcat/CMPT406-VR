@@ -14,7 +14,14 @@ public class SwordChargeShot : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        other.gameObject.SendMessage("takeDamage", 50);
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
+            other.gameObject.SendMessage("takeDamage", 50);
+            Destroy(gameObject);
+        }
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) {
+            Destroy(gameObject);
+        }
+        
         // call damage on any enemy we hit, they will destroy us if necessary
     }
 }

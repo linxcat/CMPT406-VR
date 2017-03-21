@@ -3899,6 +3899,7 @@ MonoBehaviour:
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
   slashEffect: {fileID: 0}
   vibeAudioClip: {fileID: 8300000, guid: 6a730cc2f5882b7419484f26a7f66a15, type: 3}
+  swordChargeHapticAudio: {fileID: 0}
   audioSource: {fileID: 0}
   swordDrawClip: {fileID: 8300000, guid: 9c46ec15179904bcdb73e9fe8d605aab, type: 3}
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
@@ -3984,7 +3985,9 @@ MonoBehaviour:
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
   slashEffect: {fileID: 1320487892062564, guid: b4d946b1f5edf584c8694fabe48f2730,
     type: 2}
-  vibeAudioClip: {fileID: 8300000, guid: 6a730cc2f5882b7419484f26a7f66a15, type: 3}
+  vibeAudioClip: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
+  swordChargeHapticAudio: {fileID: 8300000, guid: a153538b8c35370419224c41749aaff0,
+    type: 3}
   audioSource: {fileID: 0}
   swordDrawClip: {fileID: 8300000, guid: 9c46ec15179904bcdb73e9fe8d605aab, type: 3}
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
