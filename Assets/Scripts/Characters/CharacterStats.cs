@@ -24,6 +24,9 @@ public class CharacterStats : MonoBehaviour {
     private GUICircularHealthSubscriber healthSub;
     private GUICircularManaSubscriber manaSub;
 
+    public AudioClip hapticAudio;
+    OVRHapticsClip hapticClip;
+
     // Use this for initialization
     void Start() {
         isDead = false;
@@ -37,6 +40,8 @@ public class CharacterStats : MonoBehaviour {
         pub.Subscribe(staminaSub);
         pub.Subscribe(healthSub);
         pub.Subscribe(manaSub);
+
+        hapticClip = new OVRHapticsClip(hapticAudio);
     }
 
     // Update is called once per frame
@@ -58,6 +63,8 @@ public class CharacterStats : MonoBehaviour {
             PLAYER_HEALTH = 0;
             
         }
+        InitiateHapticFeedback(hapticClip, 0);
+        InitiateHapticFeedback(hapticClip, 1);
         healthEvent = new GUIEvent("health", PLAYER_HEALTH);
         pub.publish(healthEvent);
     }
@@ -136,6 +143,11 @@ public class CharacterStats : MonoBehaviour {
     void death() {
         isDead = true;
         levelManager.gameOver ();
+    }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 
 }

@@ -3830,6 +3830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   magicTouchClip: {fileID: 8300000, guid: fa43645ff6c44a3489bdce0e1a054d25, type: 3}
+  magicHapticAudio: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
 --- !u!114 &114017560104380738
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3898,8 +3899,9 @@ MonoBehaviour:
   swingTimeExceeded: 0
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
   slashEffect: {fileID: 0}
-  vibeAudioClip: {fileID: 8300000, guid: 6a730cc2f5882b7419484f26a7f66a15, type: 3}
-  swordChargeHapticAudio: {fileID: 0}
+  vibeAudioClip: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
+  swordChargeHapticAudio: {fileID: 8300000, guid: a153538b8c35370419224c41749aaff0,
+    type: 3}
   audioSource: {fileID: 0}
   swordDrawClip: {fileID: 8300000, guid: 9c46ec15179904bcdb73e9fe8d605aab, type: 3}
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
@@ -4179,6 +4181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IS_PRIMARY: 0
+  hapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
 --- !u!114 &114557128243747174
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4267,6 +4270,7 @@ MonoBehaviour:
   HEALTH_SLIDER: {fileID: 224679076613495702}
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
+  hapticAudio: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
 --- !u!114 &114644005032536390
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4279,6 +4283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IS_PRIMARY: 1
+  hapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
 --- !u!114 &114691840379747742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4303,6 +4308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   magicTouchClip: {fileID: 8300000, guid: fa43645ff6c44a3489bdce0e1a054d25, type: 3}
+  magicHapticAudio: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
 --- !u!114 &114708745938590500
 MonoBehaviour:
   m_ObjectHideFlags: 1
