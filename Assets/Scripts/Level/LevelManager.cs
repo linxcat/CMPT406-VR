@@ -5,36 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
-    public int numberOfEnemies;
     public string nextScene;
 
     public GameObject fader;
     public Material red;
     public Material white;
-    private bool isGameOver;
+    private bool isGameOver, isGameWon;
     private bool menuShown;
     private bool goNextScene;
     private float bufferTime = 5F;
-    private int killedEnemies;
     public GameObject winningMenu;
     public GameObject gameoverMenu;
 
 	// Use this for initialization
 	void Start () {
         isGameOver = false;
+        isGameWon = false;
         menuShown = false;
         goNextScene = false;
-        killedEnemies = 0;
         //fader = GameObject.Find("Fader");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (!menuShown && !isGameOver && killedEnemies >= numberOfEnemies) {
-            isGameOver = true;
+        if (!menuShown && isGameWon) {
             menuShown = true;
             StartCoroutine ("showWinningMenu");
-        } else if (!menuShown && isGameOver && killedEnemies < numberOfEnemies) {
+        } else if (!menuShown && isGameOver) {
             menuShown = true;
             StartCoroutine ("showGameoverMenu");
         }
@@ -47,8 +44,8 @@ public class LevelManager : MonoBehaviour {
         isGameOver = true;
     }
 
-    public void enemyKilled(){
-        killedEnemies++;
+    public void gameWon(){
+        isGameWon = true;
     }
 
     IEnumerator showWinningMenu(){

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyRunner : Enemy{
 
-    private LevelManager levelManager;
+    private SpawnManager spawnManager;
     private float detectRange = 100;
     private float atkRange;
     private float atkWindUp = 0.5F;
@@ -45,7 +45,7 @@ public class EnemyRunner : Enemy{
 	// Use this for initialization
     void Start() {
         base.Start();
-        levelManager = FindObjectOfType<LevelManager> ();
+        spawnManager = FindObjectOfType<SpawnManager> ();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
         agent.SetDestination (transform.position);
@@ -190,7 +190,7 @@ public class EnemyRunner : Enemy{
         audioSource.PlayOneShot(deathSound, 0.2f);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
-        levelManager.enemyKilled();
+        spawnManager.EnemyKilled();
         agent.enabled = false;
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
