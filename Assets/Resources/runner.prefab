@@ -2073,7 +2073,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1068742407868336}
-  m_LocalRotation: {x: 0.11842546, y: -0.87388426, z: 0.32378328, w: -0.3427335}
+  m_LocalRotation: {x: 0.118425444, y: -0.87388414, z: 0.32378325, w: -0.34273347}
   m_LocalPosition: {x: -0.86873984, y: 0.44703138, z: -0.45930612}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2860,6 +2860,9 @@ MonoBehaviour:
   hitAttack: {fileID: 0}
   beingHit: {fileID: 0}
   deathSound: {fileID: 0}
+  badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
+  goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
+  perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
 --- !u!136 &136090027790409878
 CapsuleCollider:
   m_ObjectHideFlags: 1

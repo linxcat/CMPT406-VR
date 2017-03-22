@@ -24,6 +24,14 @@ public class EnemyRanged : Enemy {
     RaycastHit hit;
     LayerMask mask;
 
+    // Haptics
+    public AudioClip badHapticAudio;
+    public AudioClip goodHapticAudio;
+    public AudioClip perfectHapticAudio;
+    OVRHapticsClip badHapticClip;
+    OVRHapticsClip goodHapticClip;
+    OVRHapticsClip perfectHapticClip;
+
     enum rangedState {
         spawn,
         idle,
@@ -44,6 +52,11 @@ public class EnemyRanged : Enemy {
         turnSpeed = 4;
         anim = GetComponent<Animator>();
         mask = LayerMask.GetMask(new string[2] { "Player", "Ground" });
+
+        //Haptics
+        badHapticClip = new OVRHapticsClip(badHapticAudio);
+        goodHapticClip = new OVRHapticsClip(goodHapticAudio);
+        perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
     }
 
     // Update is called once per frame
@@ -173,14 +186,17 @@ public class EnemyRanged : Enemy {
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
+                InitiateHapticFeedback(perfectHapticClip, 1);
                 takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip, 0.2f);
+                InitiateHapticFeedback(goodHapticClip, 1);
                 takeDamage(maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip, 0.2f);
+                InitiateHapticFeedback(badHapticClip, 1);
                 takeDamage(maxDamage / 4);
                 break;
         }
