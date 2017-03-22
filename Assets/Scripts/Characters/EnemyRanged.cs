@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyRanged : Enemy {
 
-    private LevelManager levelManager;
+    private SpawnManager spawnManager;
     public GameObject projectile;
     private float detectRange = 100; //tuning required
     private float backupRange = 10;
@@ -47,7 +47,7 @@ public class EnemyRanged : Enemy {
     void Start() {
         base.Start();
         hp = 50;
-        levelManager = FindObjectOfType<LevelManager>();
+        spawnManager = FindObjectOfType<SpawnManager>();
         //TODO find projectile object
         turnSpeed = 4;
         anim = GetComponent<Animator>();
@@ -212,7 +212,7 @@ public class EnemyRanged : Enemy {
         StopAllCoroutines();
         currentState = rangedState.dead;
         agent.enabled = false;
-        levelManager.enemyKilled();
+        spawnManager.EnemyKilled();
         GetComponent<Collider>().enabled = false;
         StartCoroutine("sink");
     }
