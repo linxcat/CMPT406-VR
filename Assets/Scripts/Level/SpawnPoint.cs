@@ -27,7 +27,7 @@ public class SpawnPoint : MonoBehaviour {
 	void Start () {
         waveCount = 0;
         enemyCount = 0;
-        runner = Resources.Load("runner");
+        runner = Resources.Load("fastBoy");
         walker = Resources.Load("runner");
         ranged = Resources.Load("ranged");
 	}
@@ -54,6 +54,7 @@ public class SpawnPoint : MonoBehaviour {
                 case enemyType.nothing:
                     break;
                 case enemyType.runner:
+<<<<<<< HEAD
                     temp = (GameObject)Instantiate(runner, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
