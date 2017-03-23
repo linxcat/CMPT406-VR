@@ -427,7 +427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4145807452398856}
   - component: {fileID: 135119299181763206}
-  - component: {fileID: 114451712325589420}
+  - component: {fileID: 114951318091462972}
   m_Layer: 17
   m_Name: Bip01 L Hand
   m_TagString: Untagged
@@ -444,7 +444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4613508372784552}
   - component: {fileID: 135454410293942358}
-  - component: {fileID: 114610433954665710}
+  - component: {fileID: 114225538887678336}
   m_Layer: 17
   m_Name: Bip01 R Hand
   m_TagString: Untagged
@@ -956,7 +956,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1914272463144170}
   m_LocalRotation: {x: 0, y: -0.49394187, z: 0, w: 0.869495}
-  m_LocalPosition: {x: 30.29403, y: 0.84, z: 20.116934}
+  m_LocalPosition: {x: 29.745392, y: 0.85, z: 19.422386}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4800523024640738}
@@ -1456,19 +1456,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114451712325589420
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1501651801303870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b6a35d6ef002b499674c8fbb7b1ccf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myParent: {fileID: 0}
---- !u!114 &114610433954665710
+--- !u!114 &114225538887678336
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1476,7 +1464,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1554926846746978}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b6a35d6ef002b499674c8fbb7b1ccf, type: 3}
+  m_Script: {fileID: 11500000, guid: 113abce84bda4f7498304f2c149d90b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myParent: {fileID: 0}
@@ -1504,6 +1492,18 @@ MonoBehaviour:
   badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
   goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
   perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
+--- !u!114 &114951318091462972
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1501651801303870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 113abce84bda4f7498304f2c149d90b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myParent: {fileID: 0}
 --- !u!135 &135119299181763206
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1641,7 +1641,7 @@ NavMeshAgent:
   m_Acceleration: 5
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

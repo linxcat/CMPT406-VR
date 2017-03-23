@@ -50,10 +50,10 @@ public class SpawnPoint : MonoBehaviour {
                 case enemyType.nothing:
                     break;
                 case enemyType.runner:
-                    temp = (GameObject)Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(Resources.Load("fastBoy"), transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
-                case enemyType.walker: //TODO put walker here
+                case enemyType.walker:
                     temp = (GameObject)Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;

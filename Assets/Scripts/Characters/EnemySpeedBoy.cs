@@ -197,6 +197,7 @@ public class EnemySpeedBoy : Enemy{
         if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             agent.Stop();
+            agent.destination = transform.position;
             facePlayer();
             return true;
         }
