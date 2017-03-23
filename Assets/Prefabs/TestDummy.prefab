@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 4314216165829544}
   - component: {fileID: 136009909463226780}
   - component: {fileID: 82389622351550414}
-  - component: {fileID: 114201606678669548}
+  - component: {fileID: 114570592398377272}
   m_Layer: 23
   m_Name: TestDummy
   m_TagString: Untagged
@@ -86,13 +86,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1037390304573570}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4314216165829544}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4314216165829544
 Transform:
   m_ObjectHideFlags: 1
@@ -115,26 +115,26 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1666709376512432}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -0.6, y: 0.4, z: -0.429}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.6, y: 0.4, z: 0.43}
   m_LocalScale: {x: 0.099999964, y: 1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4314216165829544}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4978172349292558
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1927266064922592}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -0.6, y: -0.126, z: -0.429}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.6, y: -0.126, z: 0.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4314216165829544}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23093683264919016
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -315,7 +315,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114201606678669548
+--- !u!114 &114570592398377272
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -323,13 +323,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1382641412542518}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 928361d7551e74e498ba97cf7ffea536, type: 3}
+  m_Script: {fileID: 11500000, guid: 74ae175ca7ea291478fb05af6fc5edf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 100
+  maxDamage: 50
   audioSource: {fileID: 0}
-  badHitClip: {fileID: 0}
-  goodHitClip: {fileID: 0}
-  perfectHitClip: {fileID: 0}
+  badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
+  goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
+  perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
+  badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
+  goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
+  perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
 --- !u!136 &136009909463226780
 CapsuleCollider:
   m_ObjectHideFlags: 1

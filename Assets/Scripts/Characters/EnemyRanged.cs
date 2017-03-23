@@ -1,191 +1,239 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRanged : MonoBehaviour{
+public class EnemyRanged : Enemy {
 
-    Material colourMaterial;
+    private LevelManager levelManager;
     public GameObject projectile;
-	public int hp = 100;
-	private float detectRange = 100; //tuning required
-	private float backupRange = 20;
-	private float atkRange = 20;
-	private float atkDelay = 5;
-	private int speed = 3;
-    private int turnSpeed = 3;
+    private float detectRange = 100; //tuning required
+    private float backupRange = 10;
+    private float atkRange = 15;
+    private float atkDelay = 5;
+    private float speed = 2.5F;
     private int attackDmg = 30;
-    private int searchAngle = 80;
-    private bool isAttack;
-	GameObject player;
+    private int searchAngle = 180;
+    private float spawnTimer = 3.5F;
 
-	enum rangedState{
-		idle,
-		follow,
-		backup,
-		attack,
-		dead
-	};
+    bool spawning = false;
+    bool attacking = false;
+    bool parryable = false;
 
-	private rangedState currentState;
+    public AudioClip deathClip;
+    public AudioClip hitClip;
+    public AudioClip attackClip;
+    public AudioClip spawnClip;
 
-	// Use this for initialization
-	void Start () {
-        //TODO
-        //find projectile object
-        foreach (Transform child in transform)
-        {
-            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
+    Animator anim;
+    RaycastHit hit;
+    LayerMask mask;
+
+    // Haptics
+    public AudioClip badHapticAudio;
+    public AudioClip goodHapticAudio;
+    public AudioClip perfectHapticAudio;
+    OVRHapticsClip badHapticClip;
+    OVRHapticsClip goodHapticClip;
+    OVRHapticsClip perfectHapticClip;
+
+    enum rangedState {
+        spawn,
+        idle,
+        follow,
+        //backup,
+        attack,
+        dead
+    };
+
+    private rangedState currentState = rangedState.spawn;
+
+    // Use this for initialization
+    void Start() {
+        base.Start();
+        hp = 50;
+        levelManager = FindObjectOfType<LevelManager>();
+        //TODO find projectile object
+        turnSpeed = 4;
+        anim = GetComponent<Animator>();
+        mask = LayerMask.GetMask(new string[2] { "Player", "Ground" });
+
+        //Haptics
+        badHapticClip = new OVRHapticsClip(badHapticAudio);
+        goodHapticClip = new OVRHapticsClip(goodHapticAudio);
+        perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
+    }
+
+    // Update is called once per frame
+    void Update() {
+        switch (currentState) {
+            case rangedState.idle:
+                searchPlayer();
+                break;
+            case rangedState.spawn:
+                if (!spawning) StartCoroutine("spawn");
+                break;
+            case rangedState.follow:
+                moveTowardsPlayer();
+                break;
+            /*case rangedState.backup:
+                facePlayer();
+                backUp();
+                break;*/
+            case rangedState.attack:
+                facePlayer();
+                if (!attacking) StartCoroutine("fireProjectile");
+                break;
         }
-        isAttack = false;
-		currentState = rangedState.idle;
-		player = GameObject.FindGameObjectWithTag ("Player");
-	}
+    }
 
-	// Update is called once per frame
-	void Update () {
-		switch (currentState) {
-		case rangedState.idle:
-			searchPlayer ();
-                this.GetComponent<Animation>().Play("stand_vigilance");
-			break;
-		case rangedState.follow:
-			moveTowardsPlayer ();
-                this.GetComponent<Animation>().Play("walk");
-                break;
-		case rangedState.backup:
-			backup ();
-                this.GetComponent<Animation>().Play("walk");
-                break;
-		case rangedState.attack:
-                if (!isAttack) {
-                    isAttack = true;
-                    StartCoroutine("fireProjectile");
-                    this.GetComponent<Animation>().Play("attack01");
-                }
-			break;
-		case rangedState.dead:
-                this.GetComponent<Animation>().Play("dead");
-                break;
+    private void searchPlayer() {
+        anim.SetBool("moving", false);
+        currentState = rangedState.idle;
+
+        float angle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+        if (angle < searchAngle && distance < detectRange)
+            currentState = rangedState.follow;
+
+        fall();
+    }
+
+    private void moveTowardsPlayer() {
+        Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
         
-		}
-	}
+        float angle = Vector3.Angle(axisRotate, transform.forward);
 
-	IEnumerator fireProjectile()
-	{
+        anim.SetBool("moving", true);
+        agent.Resume();
+        agent.destination = player.transform.position;
+        fall();
+        attackCheck();
+    }
+
+    //void move(bool forward) {
+    //    float step = speed * Time.deltaTime;
+    //    if (!forward) step = -step;
+    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+    //}
+
+    void fall() {
+        RaycastHit hitPoint = new RaycastHit();
+        Vector3 aboveGround = transform.position;
+        aboveGround.y += 1F;
+        Physics.Raycast(aboveGround, Vector3.down, out hitPoint, float.MaxValue, LayerMask.GetMask(new string[] { "Ground" }));
+        transform.position = hitPoint.point;
+    }
+
+    IEnumerator spawn()
+    {
+        audioSource.PlayOneShot(spawnClip);
+        spawning = true;
+        yield return new WaitForSeconds(spawnTimer);
+        currentState = rangedState.idle;
+    }
+
+    /*
+    private void backUp() {
+        Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
+        float angle = Vector3.Angle(axisRotate, transform.forward);
+
+        if (angle > 5) {
+            slowFacePlayer();
+        }
+        else {
+            anim.SetBool("moving", true);
+            move(false);
+            fall();
+        }
+    }*/
+
+    bool attackCheck()
+    {
+        Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+        //Debug.Log(Vector3.Distance(temp, player.transform.position));
+        if (Vector3.Distance(temp, player.transform.position) <= atkRange &&
+            Physics.Raycast(transform.position, transform.forward, out hit, float.MaxValue, mask))
+        {
+            if (hit.collider.name == "Hitbox") {
+                currentState = rangedState.attack;
+                facePlayer();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    IEnumerator fireProjectile() {
+        agent.Stop();
+        anim.SetBool("moving", false);
+        anim.SetTrigger("attack");
+        attacking = true;
+        parryable = true;
+        audioSource.PlayOneShot(attackClip);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
-        isAttack = false;
-        if (Vector3.Distance(this.transform.position, player.transform.position) <= backupRange) {
-            currentState = rangedState.backup;
-        }
-        else {
-            currentState = rangedState.follow;
-        }
-
-       
+        attacking = false;
+        parryable = false;
+        if(!attackCheck())
+            currentState = rangedState.idle;
 
     }
 
     private void spawnProjectile() {
         GameObject x = (GameObject)Instantiate(projectile);
-        x.transform.position = this.transform.position + new Vector3(0, 1f, 0);
+        x.transform.position = transform.position + new Vector3(0, 1f, 0);
+        x.GetComponent<Projectile>().setTarget(player);
+        x.GetComponent<Projectile>().setOriginator(gameObject);
     }
 
-    private void searchPlayer()
+    public override void swingHit(Hit hit) {
+        audioSource.PlayOneShot(hitClip);
+        switch (hit.getAccuracy()) {
+            case Hit.ACCURACY.Perfect:
+                audioSource.PlayOneShot(perfectHitClip);
+                InitiateHapticFeedback(perfectHapticClip, 1);
+                takeDamage(maxDamage);
+                break;
+            case Hit.ACCURACY.Good:
+                audioSource.PlayOneShot(goodHitClip);
+                InitiateHapticFeedback(goodHapticClip, 1);
+                takeDamage(maxDamage / 2);
+                break;
+            case Hit.ACCURACY.Bad:
+                audioSource.PlayOneShot(badHitClip);
+                InitiateHapticFeedback(badHapticClip, 1);
+                takeDamage(maxDamage / 4);
+                break;
+        }
+    }
+
+    public override void counter()
     {
-
-        //colourMaterial.SetColor("_Color", Color.white);
-        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
-        float distance = Vector3.Distance(this.transform.position, player.transform.position);
-        Debug.Log("Angle: " + angle + "Distance: " + distance);
-        if (angle < searchAngle && distance < detectRange)
-        {
-            currentState = rangedState.follow;
-        }
+        return;
     }
 
-    private void moveTowardsPlayer() {
-        //colourMaterial.SetColor("_Color", Color.blue);
-        float step = speed * Time.deltaTime;
-        //Horizontal angle between this and player
-        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
-        Debug.Log("Angle: " + angle);
-        if (angle > 5)
-        {
-            Vector3 lookPos = player.transform.position - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
-        }
-        else
-        {
-            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, newPos, step);
-            //lock on player
-            facePlayer(newPos);
-            if (Vector3.Distance(this.transform.position, player.transform.position) < atkRange)
-            {
-                currentState = rangedState.attack;
-            }
-        }
+    public override void die() {
+        audioSource.PlayOneShot(deathClip);
+        GetComponent<Animator>().SetTrigger("kill");
+        StopAllCoroutines();
+        currentState = rangedState.dead;
+        agent.enabled = false;
+        levelManager.enemyKilled();
+        GetComponent<Collider>().enabled = false;
+        StartCoroutine("sink");
     }
 
-	private void backup(){
-        //colourMaterial.SetColor("_Color", Color.green);
-        float step = speed * Time.deltaTime;
-        //Horizontal angle between this and player
-        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z) - this.transform.position, this.transform.forward);
-        Debug.Log("Angle: " + angle);
-        if (angle < 175)
-        {
-            Vector3 lookPos = transform.position - player.transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+    IEnumerator sink() {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 150; i++) {
+            Vector3 newPosition = transform.position;
+            newPosition.y -= 0.005F;
+            transform.position = newPosition;
+            yield return 0;
         }
-        else
-        {
-            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, newPos, -step);
-            //lock on player
-            //facePlayer(newPos);
-            if (Vector3.Distance(this.transform.position, player.transform.position) > backupRange)
-            {
-                currentState = rangedState.follow;
-            }
-        }
+        Destroy(gameObject);
     }
-
-    private void facePlayer(Vector3 other)
-    {
-        transform.LookAt(other);
-    }
-
-    private void OnTriggerEnter(Collider other) {
-		//replace player with blade collider
-		//need to get player hp
-		int playerHp = 100; //we do not have a player yet
-		if (other.gameObject == GameObject.Find("Sword").gameObject) {
-			takeDamage(20);
-			//this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
-		}
-	}
-
-	private void takeDamage(int damage) {
-		this.hp = this.hp - damage;
-	}
-
-	private bool isAlive() {
-		if (hp <= 0) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-
-	public int getHp() {
-		return this.hp;
-	}
 }

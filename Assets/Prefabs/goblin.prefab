@@ -575,7 +575,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4698750757772780}
-  - component: {fileID: 111002857163616776}
+  - component: {fileID: 95565629331077884}
   - component: {fileID: 114387535575634794}
   m_Layer: 0
   m_Name: goblin
@@ -1160,15 +1160,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1854487172030536}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.2, y: -2.2999997, z: -18.894022}
+  m_LocalRotation: {x: 0, y: -0.49394187, z: 0, w: 0.869495}
+  m_LocalPosition: {x: 26.582401, y: 0.16480541, z: 0.28888035}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4606704192139180}
   - {fileID: 4408914108394068}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -59.2, z: 0}
 --- !u!4 &4709454349051026
 Transform:
   m_ObjectHideFlags: 1
@@ -1322,30 +1322,23 @@ Transform:
   m_Father: {fileID: 4584151187629844}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!111 &111002857163616776
-Animation:
+--- !u!95 &95565629331077884
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1854487172030536}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: bd1161f86ba98d9478e05fb2a306766e, type: 3}
-  m_Animations:
-  - {fileID: 7400000, guid: 647572c860471a94aa00f9d2437d81e9, type: 3}
-  - {fileID: 7400000, guid: 1febf3f7bf4677448aad7f0f67cee27f, type: 3}
-  - {fileID: 7400000, guid: 05a28ecbb33a989479703c11c26c36f5, type: 3}
-  - {fileID: 7400000, guid: 2788750f9cd2c174aa4fa84ba74dab03, type: 3}
-  - {fileID: 7400000, guid: 672c05914fed26c449c0d7de38742287, type: 3}
-  - {fileID: 7400000, guid: 2cd2576496f932842974b17d1663a997, type: 3}
-  - {fileID: 7400000, guid: a5c6f776405815846bea514fa28a3257, type: 3}
-  - {fileID: 7400000, guid: 8c52d12f36f8be148a226be34cd9adcf, type: 3}
-  - {fileID: 7400000, guid: 0f5ecab30258a624c838f05fe6cb56db, type: 3}
-  - {fileID: 7400000, guid: bd1161f86ba98d9478e05fb2a306766e, type: 3}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114387535575634794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1357,8 +1350,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50463a9d55064ccd8657686e44a2caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 1438467653274888, guid: 391df0fa2df394842b1552d77d534b83, type: 2}
   hp: 100
+  maxDamage: 50
+  audioSource: {fileID: 0}
+  badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
+  goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
+  perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
+  projectile: {fileID: 1438467653274888, guid: 391df0fa2df394842b1552d77d534b83, type: 2}
 --- !u!137 &137393822790081086
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

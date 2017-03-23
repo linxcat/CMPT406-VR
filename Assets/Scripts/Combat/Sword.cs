@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour {
 
-    public float SWINGTIME = 0.12F; // TODO this
+    float SWINGTIME = 0.4F;
+    public bool swingTimeExceeded;
 
     GameObject swordAnchor;
     HitArray hitArray;
@@ -31,11 +32,17 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
+	public GameObject slashEffect;
+
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
+    public AudioClip swordChargeHapticAudio;
+    OVRHapticsClip swordChargeHapticClip;
 
     public AudioSource audioSource;
     public AudioClip swordDrawClip;
+    public AudioClip swordChargingClip;
+    public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
     // Use this for initialization
@@ -44,16 +51,17 @@ public class Sword : MonoBehaviour {
         hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
+        swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (isSwinging) {
             timeStep++;
             slashStep();
         }
-	}
+    }
 
     void OnTriggerEnter(Collider other) {
         if (isSwinging) {
@@ -63,6 +71,8 @@ public class Sword : MonoBehaviour {
     }
 
     public void startSlash() {
+        stopSound();
+        audioSource.PlayOneShot(swordDrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
@@ -72,6 +82,7 @@ public class Sword : MonoBehaviour {
         lastPoint = swordAnchor.transform.position;
         startPoint = swordAnchor.transform.position;
         isSwinging = true;
+        StartCoroutine("swingTimeMax");
     }
 
     void slashStep() {
@@ -90,10 +101,11 @@ public class Sword : MonoBehaviour {
     }
 
     public void stopSlash() {
-        audioSource.PlayOneShot(swordUndrawClip, 0.2f);
+        StopCoroutine("swordCharge");
+        StopCoroutine("swingTimeMax");
+        audioSource.PlayOneShot(swordUndrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
-        StopCoroutine("swordCharge");
         stopPoint = swordAnchor.transform.position;
 
         float bestDirectionDeviation = float.MaxValue;
@@ -108,23 +120,26 @@ public class Sword : MonoBehaviour {
             }
         }
 
+		//Vector3 spawnOffset = (stopPoint - startPoint) / 2;
+        Vector3 spawnOffset = (stopPoint - startPoint);
+		Vector3 spawn = startPoint + spawnOffset;
+		Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
+
+		if (swordCharged) {
+			FireChargedShot(spawn, shotDirection);
+			swordCharged = false;
+			GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+		}
+
         Hit.DIRECTION correctedDirection = fixDirection(swingDirection);
 
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
         foreach (GameObject enemy in enemyContacts) {
+			CreateSlashEffect (enemy, startPoint, spawnOffset); //incorrect so far
             enemy.SendMessageUpwards("swingHit", hit);
         }
         enemyContacts.Clear();
-
-        if (swordCharged) {
-            Vector3 spawnOffset = (stopPoint - startPoint) / 2;
-            Vector3 spawn = startPoint + spawnOffset;
-            Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
-            FireChargedShot(spawn, shotDirection);
-            swordCharged = false;
-            GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        }
-        
+      
         if (debugMode) {
             directionDeviationSaves.AddFirst(bestDirectionDeviation);
             alignmentDeviationSaves.AddFirst(bestAlignmentDeviation);
@@ -172,15 +187,41 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
-        yield return new WaitForSeconds(CHARGE_DURATION);
-        InitiateHapticFeedback(vibeClip, 1);
-        swordCharged = true;
-        GetComponent<Renderer>().material.SetColor("_Color", Color.blue); // TODO remove colouring
+        if (!swordCharged) {
+            audioSource.PlayOneShot(swordChargingClip);
+            InitiateHapticFeedback(swordChargeHapticClip, 1);
+            yield return new WaitForSeconds(CHARGE_DURATION);
+            stopSound();
+            audioSource.PlayOneShot(swordChargedClip);
+            InitiateHapticFeedback(vibeClip, 1);
+            swordCharged = true;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+        }
+    }
+
+    IEnumerator swingTimeMax() {
+        swingTimeExceeded = false;
+        yield return new WaitForSeconds(SWINGTIME);
+        swingTimeExceeded = true;
+        stopSlash(); //force stop
+    }
+
+    public void stopSound() {
+        audioSource.Stop();
+        OVRHaptics.LeftChannel.Clear();
+        OVRHaptics.RightChannel.Clear();
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {
         GameObject shot = Instantiate(ChargeShot, startlocation, facing);
     }
+
+	void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
+		GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
+        slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
+		slash.GetComponent<ParticleSystem>().Play();
+		GameObject.Destroy (slash, 0.5f);
+	}
 
     //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
     public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
@@ -226,7 +267,7 @@ public class Sword : MonoBehaviour {
             }
             averageAlignmentDeviation = averageAlignmentDeviation / alignmentDeviationSaves.Count;
             stdDevAlignment = System.Math.Sqrt(S / (k - 2));
-            
+
             Debug.Log("Average Direction Deviation = " + averageDirectionDeviation +
                 "\nStandard Deviation = " + stdDevDirection +
                 "\n------------------------" +

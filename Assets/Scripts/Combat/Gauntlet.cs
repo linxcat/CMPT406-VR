@@ -10,9 +10,13 @@ public class Gauntlet : MonoBehaviour {
 	private float totalSpeed, avgSpeed;
     Rigidbody gauntletRigidbody;
 
+    public AudioClip hapticsAudio;
+    OVRHapticsClip hapticsClip;
+
     // Use this for initialization
     void Start () {
         gauntletRigidbody = this.GetComponent<Rigidbody>();
+        hapticsClip = new OVRHapticsClip(hapticsAudio);
 	}
 	
 	// Update is called once per frame
@@ -32,6 +36,7 @@ public class Gauntlet : MonoBehaviour {
 		Debug.Log("Gauntlet speed check with: " + avgSpeed);
 		if (speedCheck (validSpeed)) {
 			//check tag
+            OVRHaptics.Channels[0].Mix(hapticsClip);
 			if (other.tag == "Weapon") {
 				//Call enemy's counter function
 				//EnemyScript enemyscript = other.gameObject.GetComponent<EnemyScript>();

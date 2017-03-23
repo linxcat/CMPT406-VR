@@ -1,215 +1,234 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRunner : MonoBehaviour{
+public class EnemyRunner : Enemy{
 
-    Material colourMaterial;
-    GameObject weapon;
-    Transform pivot;
-    public int hp = 100;
-	private float detectRange = 100;
-	private float atkRange = 1.5F;
-    private int speed = 1;
-    private int turnSpeed = 3;
-    private int attackDmg = 30;
-    private int searchAngle = 80;
-	private bool isAttack;
-    GameObject player;
-
-    Vector3 weaponStartPosition;
-
-    float swingSpeed = 1.75F; //note, the flips in swinging must be > swingSpeed/2
-    bool swingDown = true;
-
+    private LevelManager levelManager;
+    private float detectRange = 100;
+    private float atkRange;
+    private float atkWindUp = 0.5F;
+    private float atkDuration = 1F;
+    private float atkCD = 4F;
+    private float speed = 2F;
+    private int attackDmg = 20;
+    private int searchAngle = 180;
+    private float spawnTimer = 3.5F;
+    private float spawnRoarDelay = 2F;
     float parryTime = 5F;
+    float HEIGHTBIAS = 0.1F;
 
-	enum runnerState{
-		idle,
-		follow,
-		attack,
-		dead
-	};
+    public AudioClip runnerRoarClip;
 
-	private runnerState currentState;
+    bool spawning = false;
+    bool attacking = false;
+    bool parryable = false;
+
+    public AudioClip hitAttack;
+    public AudioClip beingHit;
+    public AudioClip deathSound;
+
+    // Haptics
+    public AudioClip badHapticAudio;
+    public AudioClip goodHapticAudio;
+    public AudioClip perfectHapticAudio;
+    OVRHapticsClip badHapticClip;
+    OVRHapticsClip goodHapticClip;
+    OVRHapticsClip perfectHapticClip;
+
+    Animator anim;
+
+    enum runnerState{
+        spawning,
+        idle,
+        follow,
+        attack,
+        dead
+    };
+
+    private runnerState currentState = runnerState.spawning;
 
 	// Use this for initialization
-	void Start () {
-        foreach (Transform child in transform)
-        {
-            if (child.name == "weapon") {
-                weapon = child.gameObject;
-                weaponStartPosition = child.localPosition;
-            }
-            if (child.name == "pivot") {
-                pivot = child.transform;
-            }
-            if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
-        }
-		isAttack = false;
-		currentState = runnerState.idle;
-		player = GameObject.FindGameObjectWithTag ("Player");
-        //StartCoroutine("swingWeapon", 0F);
-	}
+    void Start() {
+        base.Start();
+        levelManager = FindObjectOfType<LevelManager> ();
+        atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
+        anim = GetComponent<Animator>();
+        agent.SetDestination (transform.position);
+        agent.Stop();
+
+        //Haptics
+        badHapticClip = new OVRHapticsClip(badHapticAudio);
+        goodHapticClip = new OVRHapticsClip(goodHapticAudio);
+        perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
+    }
 	
 	// Update is called once per frame
-	void Update () {
-		switch (currentState) {
+	void Update() {
+
+        switch (currentState) {
+			case runnerState.spawning:
+				if (!spawning) StartCoroutine ("spawn");
+				break;
             case runnerState.idle:
-                if (this.GetComponent<Animator>().GetInteger("state") != 4) {
-                    this.GetComponent<Animator>().SetInteger("state", 4);
-                }
-			searchPlayer ();
-			break;
+			    searchPlayer();
+			    break;
             case runnerState.follow:
-                if (this.GetComponent<Animator>().GetInteger("state") != 3) {
-                    this.GetComponent<Animator>().SetInteger("state", 3);
-                }
-                moveTowardsPlayer ();
-			break;
-		case runnerState.attack:
-			if (!isAttack) {
-                    this.GetComponent<Animator>().SetInteger("state", 1);
-                    isAttack = true;
-				StartCoroutine ("swingWeapon", 0F);
-			}
-			break;
-		case runnerState.dead:
-                
-                this.GetComponent<Animator>().SetInteger("state", 2);
+                moveTowardsPlayer();
+			    break;
+            case runnerState.attack:
+                if (!attacking) StartCoroutine("attack");
                 break;
 		}
 	}
 
-    public void swingHit(Hit hit) {
-        StopCoroutine("colourFlash");
-        StartCoroutine("colourFlash", hit.getAccuracy());
-    }
-
-    IEnumerator colourFlash(Hit.ACCURACY accuracy) {
-        switch (accuracy) {
+    public override void swingHit(Hit hit) {
+        audioSource.PlayOneShot(beingHit);
+        switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
-                colourMaterial.SetColor("_Color", Color.blue);
+                audioSource.PlayOneShot(perfectHitClip);
+                InitiateHapticFeedback(perfectHapticClip, 1);
+                takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
-                colourMaterial.SetColor("_Color", Color.green);
+                audioSource.PlayOneShot(goodHitClip);
+                InitiateHapticFeedback(goodHapticClip, 1);
+                takeDamage(maxDamage/2);
                 break;
             case Hit.ACCURACY.Bad:
-                colourMaterial.SetColor("_Color", Color.red);
+                audioSource.PlayOneShot(badHitClip);
+                InitiateHapticFeedback(badHapticClip, 1);
+                takeDamage(maxDamage/4);
                 break;
         }
-        yield return new WaitForSeconds(0.75F);
-        colourMaterial.SetColor("_Color", Color.white);
     }
 
-    IEnumerator swingWeapon(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-		int count = 1;
-
-		while (count>0)
-        {
-            if (swingDown)
-            {
-                //weapon.transform.RotateAround(pivot.position, pivot.right, swingSpeed);
-            }
-            else
-            {
-                //weapon.transform.RotateAround(pivot.position, pivot.right, -swingSpeed);
-            }
-			//if (swingDown && (Vector3.Angle (weapon.transform.up, pivot.forward) < 1F))
-			//	swingDown = false;
-			//else if (!swingDown && (Vector3.Angle (weapon.transform.up, pivot.up) < 1F)) {
-			//	swingDown = true;
-			//	count--;
-			//}
-
-            yield return null;
+    private void searchPlayer() {
+        anim.SetBool("moving", false);
+        float angle = Vector3.Angle(player.transform.position - transform.position, transform.forward);
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+        if (angle < searchAngle && distance < detectRange) {
+            currentState = runnerState.follow;
         }
-		isAttack = false;
-		currentState = runnerState.follow;
+        fall();
     }
-
-    public void counter() {
-        if (!swingDown) return;
-
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        weapon.transform.up = pivot.up;
-        weapon.transform.localPosition = weaponStartPosition;
-        swingDown = true;
-        StopCoroutine("swingWeapon");
-        StartCoroutine("parried");
-    }
-
-    IEnumerator parried()
-    {
-        yield return new WaitForSeconds(parryTime);
-        currentState = runnerState.idle;
-        isAttack = false;
-        weapon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-    }
-
-
-    private void searchPlayer(){
-		float angle = Vector3.Angle (player.transform.position - this.transform.position, this.transform.forward);
-		float distance = Vector3.Distance (this.transform.position, player.transform.position);
-        //Debug.Log("Angle: " + angle + "Distance: " + distance);
-		if (angle < searchAngle && distance < detectRange) {
-			currentState = runnerState.follow;
-		}
-	}
 
     private void moveTowardsPlayer() {
-        float step = speed * Time.deltaTime;
-        //Horizontal angle between this and player
-        float angle = Vector3.Angle(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z)- this.transform.position, this.transform.forward);
-        //Debug.Log("Angle: "+ angle);
-        if (angle > 5)
-        {
-            Vector3 lookPos = player.transform.position - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
-        }
-        else {
-            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, newPos, step);
-            //lock on player
-            facePlayer(newPos);
-            if (Vector3.Distance(this.transform.position, player.transform.position) < atkRange) {
-                currentState = runnerState.attack;
-            }
-        }
+        Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
+        float angle = Vector3.Angle(axisRotate, transform.forward);
+
+        //if (angle > 5) {
+        //    slowFacePlayer();
+        //}
+        //else {
+            anim.SetBool("moving", true);
+            //move();
+            agent.Resume();
+            agent.destination = player.transform.position;
+            fall();
+            attackCheck();
+        //}
     }
 
-    private void facePlayer(Vector3 other) {
-		transform.LookAt(other);
+    //void move() {
+    //    float step = speed * Time.deltaTime;
+    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+    //}
+    
+    void fall() {
+        RaycastHit hitPoint = new RaycastHit();
+        Vector3 aboveGround = transform.position;
+        aboveGround.y += 1F;
+        Physics.Raycast(aboveGround, Vector3.down, out hitPoint, float.MaxValue, LayerMask.GetMask(new string[] {"Ground"}));
+        Vector3 groundPoint = hitPoint.point;
+        groundPoint.y -= HEIGHTBIAS;
+        transform.position = groundPoint;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        //replace player with blade collider
-        //need to get player hp
-        int playerHp = 100; //we do not have a player yet
-        if (other.gameObject == GameObject.Find("Sword").gameObject) {
-            takeDamage(20);
-            //this.publish(new GUIPubSub.GUIEvent("health", playerHp - attackDmg));
-        }
+	IEnumerator spawn(){
+		spawning = true;
+		yield return new WaitForSeconds (spawnRoarDelay);
+		audioSource.PlayOneShot(runnerRoarClip);
+		yield return new WaitForSeconds (spawnTimer - spawnRoarDelay);
+		currentState = runnerState.idle;
+	}
+
+    IEnumerator attack() {
+        attacking = true;
+        StartCoroutine("attackOnCD");
+        anim.SetBool("moving", false);
+        agent.Stop();
+        anim.SetTrigger("attack");
+        audioSource.PlayOneShot(hitAttack);
+        yield return new WaitForSeconds(atkWindUp);
+        parryable = true;
+        yield return new WaitForSeconds(atkDuration);
+        parryable = false;
+        if(!attackCheck())
+            currentState = runnerState.idle;
     }
 
-    private void takeDamage(int damage) {
-        this.hp = this.hp - damage;
+    IEnumerator attackOnCD()
+    {
+        yield return new WaitForSeconds(atkCD);
+        attacking = false;
     }
 
-    private bool isAlive() {
-        if (hp <= 0) {
-            return false;
-        }
-        else {
+    public override void counter() {
+        if (!parryable) return;
+        StartCoroutine("parry");
+    }
+
+    IEnumerator parry()
+    {
+        anim.SetTrigger("counter");
+        StopCoroutine("attack");
+        parryable = false;
+        yield return new WaitForSeconds(parryTime);
+        if (!attackCheck())
+            currentState = runnerState.idle;
+    }
+
+    bool attackCheck() {
+        Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+        if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
+            currentState = runnerState.attack;
+            facePlayer();
             return true;
         }
+        return false;
     }
 
-    public int getHp() {
-        return this.hp;
+    public override void die() {
+        audioSource.PlayOneShot(deathSound);
+        GetComponent<Animator>().SetTrigger("kill");
+        StopAllCoroutines();
+        levelManager.enemyKilled();
+        agent.enabled = false;
+        currentState = runnerState.dead;
+        GetComponent<Collider>().enabled = false;
+        StartCoroutine("sink");
     }
+
+    IEnumerator sink() {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 150; i ++) {
+            Vector3 newPosition = transform.position;
+            newPosition.y -= 0.005F;
+            transform.position = newPosition;
+            yield return 0;
+        }
+        Destroy(gameObject);
+    }
+
+	public int getAtkDmg(){
+		return attackDmg;
+	}
+
+    public bool isParriable(){
+        return parryable;
+    }
+
 }

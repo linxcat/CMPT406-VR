@@ -11,6 +11,12 @@ public class Hand : MonoBehaviour {
     float HIT_ARRAY_DISTANCE = 0.6F;
     float HIT_ARRAY_VERT_BIAS = 0.2F;
 
+    //this is the projectile that is affected by the slow ui, which there can be only one
+    static GameObject currentProjectile = null;
+    GameObject player;
+    //difference between this and the current time is the duration the time is still slowed
+    public static float timeSlowed;
+
     bool swordIsOn = true;
     bool locked = false;
     bool locking = false;
@@ -18,50 +24,69 @@ public class Hand : MonoBehaviour {
     float speedThreshold = 0.025F;
     private float[] pastSpeeds = new float[10];
 
+    static GameObject counterUI;
     GameObject sigilAnchor;
     GameObject hitArray;
+    GameObject GUIAnchor;
+    Transform wristAnchor;
     Sword sword;
     Transform teleLineSpawn;
     MagicDraw magicDraw;
     Spells spells;
     GameObject centerEyeAnchor;
     Teleport teleportScript;
+    LevelManager levelManager;
+
+    public AudioClip hapticAudio;
+    OVRHapticsClip hapticClip;
 
     void Awake() {
         sigilAnchor = GameObject.Find("SigilAnchor"); //need before the other hand sets it inactive
     }
 
     // Use this for initialization
-	void Start () {
+    void Start () {
+        player = GameObject.FindGameObjectWithTag("Player");
         hitArray = GameObject.Find("HitArray");
+        GUIAnchor = GameObject.Find("GUIAnchor");
+        wristAnchor = transform.FindChild("WristAnchor");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
         magicDraw = transform.Find("DrawTouch").gameObject.GetComponent<MagicDraw>();
         spells = GameObject.Find("Player").GetComponent<Spells>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         teleportScript = GameObject.Find("Player").GetComponent<Teleport>();
+        levelManager = FindObjectOfType<LevelManager>();
+
+        hapticClip = new OVRHapticsClip(hapticAudio);
+
         initialize();
         StartCoroutine("trackSpeed");
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if (IS_PRIMARY) {
             if (!swordIsOn && !locking) updateSigilAnchor();
             if (!swordIsOn && locking) magicDraw.gameObject.SetActive(true);
             if (!swordIsOn && !locking && locked) doMagic();
             if (swordIsOn && !locking) updateHitArray();
             if (swordIsOn && locking && !locked) sword.startSlash();
-            if (swordIsOn && !locking && locked) sword.stopSlash();
+            if (swordIsOn && !locking && locked && !sword.swingTimeExceeded) sword.stopSlash();
         }
        else {
             // gauntlet
+            if(!levelManager.IsGameOver() && Time.time > timeSlowed) {
+                Time.timeScale = 1f;
+                Destroy(counterUI);
+            }
+            placeGUI();
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
             locked = !locked;
         }
-	}
+    }
 
     void initialize() {
         swordIsOn = false;
@@ -81,11 +106,11 @@ public class Hand : MonoBehaviour {
         sword.gameObject.SetActive(swordIsOn);
         hitArray.SetActive(swordIsOn);
         sigilAnchor.SetActive(!swordIsOn);
+        if (!swordIsOn) magicDraw.clear();
         // TODO handle active slashes and sigils on switch
     }
 
-    void updateSigilAnchor()
-    {
+    void updateSigilAnchor() {
         Vector3 sigilDirection = transform.position - centerEyeAnchor.transform.position;
         sigilDirection.Normalize();
         Vector3 sigilTransform = sigilDirection * SIGIL_DISTANCE;
@@ -106,6 +131,11 @@ public class Hand : MonoBehaviour {
 
         hitArray.transform.position = anchorTransform;
         hitArray.transform.forward = headFacing;
+    }
+
+    void placeGUI() {
+        GUIAnchor.transform.position = wristAnchor.position;
+        GUIAnchor.transform.forward = GUIAnchor.transform.position - centerEyeAnchor.transform.position;
     }
 
     IEnumerator trackSpeed() {
@@ -129,9 +159,16 @@ public class Hand : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (IS_PRIMARY) return;
-
+        currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
-            other.SendMessageUpwards("counter");
+            InitiateHapticFeedback(hapticClip, 0);
+            if (other.gameObject.tag == "Projectile"){
+                    counterProjectile();
+                    other.gameObject.GetComponent<Projectile>().reflect();
+            }
+            else {
+                other.SendMessageUpwards("counter");
+            }
         }
     }
 
@@ -149,19 +186,45 @@ public class Hand : MonoBehaviour {
         sword.switchDebug();
     }
 
-    public void setLock(bool value)
-    {
+    public void setLock(bool value) {
         locking = value;
     }
 
     public void chargeSword(bool charge) {
-        if (charge) sword.StartCoroutine("swordCharge");
-        else sword.StopCoroutine("swordCharge");
+        if (charge) {
+            sword.StartCoroutine ("swordCharge");
+        }
+        else {
+            sword.stopSound();
+            sword.StopCoroutine ("swordCharge");
+        }
     }
 
-    public void switchPrimaryHand()
-    {
+    public void switchPrimaryHand() {
         IS_PRIMARY = !IS_PRIMARY;
         initialize();
+    }
+
+    public void counterProjectile() {
+        timeSlowed = Time.time + 1f;
+        Time.timeScale = 0.111111f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        //if (counterUI == null) {
+            GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+            counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
+            counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
+        //}
+    }
+
+
+    public static void absorb() {
+        if(currentProjectile != null) {
+            Destroy(currentProjectile);
+        }
+    }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 }

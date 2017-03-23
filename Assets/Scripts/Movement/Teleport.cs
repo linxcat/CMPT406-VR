@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Teleport : MonoBehaviour {
 
@@ -80,11 +81,31 @@ public class Teleport : MonoBehaviour {
                 secondDirection = Vector3.Reflect(incomingVec, hitInfo.normal);
             }
             else {
-                Vector3 downwardAngle = teleLineSpawn.forward;
-                Vector3.ProjectOnPlane(downwardAngle, Vector3.up);
-                Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(teleLineSpawn.right, Vector3.up);
-                secondDirection = Quaternion.AngleAxis(45, flattenedHandAxis) * downwardAngle;
+                float angle = 45;
+                Vector3 appropriateAxis;
+
+                float handRoll = teleLineSpawn.rotation.eulerAngles.z;
+                Vector3 flatForward = Vector3.ProjectOnPlane(teleLineSpawn.forward, Vector3.up);
+
+                GameObject toy = Instantiate(teleLineSpawn.gameObject, teleLineSpawn.position, teleLineSpawn.localRotation, teleLineSpawn.parent);
+                toy.transform.rotation *= Quaternion.LookRotation(flatForward, teleLineSpawn.transform.up);
+                float upAmount = Vector3.Project(toy.transform.up, Vector3.up).magnitude;
+                float rightAmount = Vector3.Project(toy.transform.right, Vector3.up).magnitude;
+
+                if (rightAmount < upAmount) {
+                    appropriateAxis = toy.transform.right;
+                    if (handRoll >= 90 && handRoll <= 270) angle = -angle;
+                }
+                else {
+                    appropriateAxis = toy.transform.up;
+                    if (handRoll > 0 && handRoll < 180) angle = -angle;
+                }
+                Destroy(toy);
+                Vector3 flattenedHandAxis = Vector3.ProjectOnPlane(appropriateAxis, Vector3.up);
+                
+                secondDirection = Quaternion.AngleAxis(angle, flattenedHandAxis) * flatForward;
             }
+
             Physics.Raycast(hitInfo.point, secondDirection, out secondHit, float.MaxValue, secondArcMask);
             if (secondHit.collider == null) {
                 Debug.LogError("MISSED THEGROUND!!");
@@ -139,11 +160,13 @@ public class Teleport : MonoBehaviour {
         fadeOut();
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
 
-        yield return new WaitForSeconds(FADE_DURATION);
+        yield return new WaitForSecondsRealtime(FADE_DURATION);
 
         avatar.SetActive(true);
         player.transform.position = groundLocation.position;
         player.transform.forward = groundLocation.forward;
+        groundLocation.position = player.transform.position; //childed objects get shoved forward, avoid inside walls
+        apex.position = player.transform.position;
         fadeIn();
         teleporting = false;
     }
@@ -165,15 +188,17 @@ public class Teleport : MonoBehaviour {
     }
 
     Vector3 groundCast(Vector3 startPoint) {
+        Vector3 higherPoint = startPoint;
+        higherPoint.y += 1;
         RaycastHit hitInfo = new RaycastHit();
-        Physics.Raycast(startPoint, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
+        Physics.Raycast(higherPoint, -Vector3.up, out hitInfo, float.MaxValue, LayerMask.GetMask(new string[1] { "Ground" }));
         return hitInfo.point;
     }
 
     private void placeOnGround(Vector3 spot) {
-        Collider[] possibleObstacles = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[2] { "EnemyRange", "Walls" }));
+        Collider[] possibleObstacles = Physics.OverlapSphere(spot, groundSphereCollider.radius, LayerMask.GetMask(new string[1] { "EnemyRange" }));
 
-        if (possibleObstacles.Length == 0) groundLocation.position = spot;
+        if (possibleObstacles.Length == 0) onNavMesh(spot);
         else {
             Vector3[] safePoints = new Vector3[possibleObstacles.Length];
             for (int i = 0; i < possibleObstacles.Length; i ++) {
@@ -192,13 +217,27 @@ public class Teleport : MonoBehaviour {
 
             // PLACEHOLDER (TODO)
             if (safePoints.Length == 1) {
-                groundLocation.position = safePoints[0];
+                onNavMesh(safePoints[0]);
             }
             else {
                 Debug.LogError(" HARD FLOOR PLACEMENT CASE!!");
+                disable();
             }
         }
 
+    }
+
+    void onNavMesh(Vector3 point) {
+        NavMeshHit hitPoint;
+
+        if (!NavMesh.Raycast(player.transform.position, point, out hitPoint, NavMesh.AllAreas)) {
+            groundLocation.position = point;
+        }
+        else {
+            NavMeshHit newLocation;
+            NavMesh.SamplePosition(hitPoint.position, out newLocation, 0.1F, NavMesh.AllAreas);
+        }
+        
     }
 
     public void setRotation(Vector2 vector) {

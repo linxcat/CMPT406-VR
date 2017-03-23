@@ -6,6 +6,13 @@ TagManager:
   tags:
   - Sigil
   - coneCap
+  - Hand
+  - Enemy
+  - slow
+  - Projectile
+  - reflect
+  - absorb
+  - PlayerHitBox
   layers:
   - Default
   - TransparentFX
@@ -21,7 +28,7 @@ TagManager:
   - Sigils
   - 
   - GroundMark
-  - 
+  - Projectile
   - 
   - Enemy
   - EnemyWeapon
@@ -33,7 +40,7 @@ TagManager:
   - EnemyRange
   - Walls
   - Ground
-  - 
+  - GroundDetector
   - 
   - 
   - TeleportCollider
