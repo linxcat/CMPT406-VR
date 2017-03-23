@@ -13,7 +13,7 @@ public class LevelManager : MonoBehaviour {
     private bool isGameOver, isGameWon;
     private bool menuShown;
     private bool goNextScene;
-    private float bufferTime = 5F;
+    private float bufferTime = 3F;
     public GameObject winningMenu;
     public GameObject gameoverMenu;
 
@@ -76,6 +76,6 @@ public class LevelManager : MonoBehaviour {
 
     public bool IsGameOver()
     {
-        return isGameOver;
+        return isGameOver||isGameWon;
     }
 }

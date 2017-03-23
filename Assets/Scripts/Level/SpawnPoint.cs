@@ -14,12 +14,12 @@ public enum enemyType
 public class Wave
 {
     public enemyType[] enemy;
+    public float delay;
 }
 
 public class SpawnPoint : MonoBehaviour {
 
     public Wave[] waves;
-	public float[] spawnDelay;
     private int waveCount, enemyCount;
 
 	// Use this for initialization
@@ -43,8 +43,7 @@ public class SpawnPoint : MonoBehaviour {
 		GameObject temp;
         enemyCount = 0;
         while (enemyCount < waves[waveCount].enemy.Length) {
-            if (waveCount < spawnDelay.Length)
-                yield return new WaitForSeconds(spawnDelay[waveCount]);
+            yield return new WaitForSeconds(waves[waveCount].delay);
             Debug.Log(gameObject.name + "spawn " + waves[waveCount] + " on " + transform.position.x + " " + transform.position.y + " " + transform.position.z);
             switch (waves[waveCount].enemy[enemyCount])
             {
