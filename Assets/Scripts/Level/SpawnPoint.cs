@@ -54,7 +54,6 @@ public class SpawnPoint : MonoBehaviour {
                 case enemyType.nothing:
                     break;
                 case enemyType.runner:
-<<<<<<< HEAD
                     temp = (GameObject)Instantiate(runner, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
