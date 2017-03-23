@@ -17,7 +17,7 @@ public class EnemyRunner : Enemy{
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
     float parryTime = 5F;
-    float HEIGHTBIAS = 0F;
+    float HEIGHTBIAS = 0.1F;
 
     public AudioClip runnerRoarClip;
 
@@ -29,6 +29,13 @@ public class EnemyRunner : Enemy{
     public AudioClip beingHit;
     public AudioClip deathSound;
 
+    // Haptics
+    public AudioClip badHapticAudio;
+    public AudioClip goodHapticAudio;
+    public AudioClip perfectHapticAudio;
+    OVRHapticsClip badHapticClip;
+    OVRHapticsClip goodHapticClip;
+    OVRHapticsClip perfectHapticClip;
 
     Animator anim;
 
@@ -43,24 +50,29 @@ public class EnemyRunner : Enemy{
     private runnerState currentState = runnerState.spawning;
 
 	// Use this for initialization
-    void Start () {
+    void Start() {
         base.Start();
         levelManager = FindObjectOfType<LevelManager> ();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
         agent.SetDestination (transform.position);
-        agent.Stop ();
+        agent.Stop();
+
+        //Haptics
+        badHapticClip = new OVRHapticsClip(badHapticAudio);
+        goodHapticClip = new OVRHapticsClip(goodHapticAudio);
+        perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 
         switch (currentState) {
 			case runnerState.spawning:
 				if (!spawning) StartCoroutine ("spawn");
 				break;
             case runnerState.idle:
-			    searchPlayer ();
+			    searchPlayer();
 			    break;
             case runnerState.follow:
                 moveTowardsPlayer();
@@ -76,15 +88,18 @@ public class EnemyRunner : Enemy{
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
+                InitiateHapticFeedback(perfectHapticClip, 1);
                 takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
-                takeDamage(maxDamage / 2);
+                InitiateHapticFeedback(goodHapticClip, 1);
+                takeDamage(maxDamage/2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
-                takeDamage(maxDamage / 4);
+                InitiateHapticFeedback(badHapticClip, 1);
+                takeDamage(maxDamage/4);
                 break;
         }
     }
@@ -178,7 +193,6 @@ public class EnemyRunner : Enemy{
 
     bool attackCheck() {
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-        //Debug.Log(Vector3.Distance(temp, player.transform.position));
         if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             facePlayer();
@@ -191,10 +205,22 @@ public class EnemyRunner : Enemy{
         audioSource.PlayOneShot(deathSound);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
-        levelManager.enemyKilled ();
-        agent.SetDestination (transform.position);
+        levelManager.enemyKilled();
+        agent.enabled = false;
         currentState = runnerState.dead;
         GetComponent<Collider>().enabled = false;
+        StartCoroutine("sink");
+    }
+
+    IEnumerator sink() {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 150; i ++) {
+            Vector3 newPosition = transform.position;
+            newPosition.y -= 0.005F;
+            transform.position = newPosition;
+            yield return 0;
+        }
+        Destroy(gameObject);
     }
 
 	public int getAtkDmg(){
@@ -204,4 +230,5 @@ public class EnemyRunner : Enemy{
     public bool isParriable(){
         return parryable;
     }
+
 }

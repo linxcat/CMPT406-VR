@@ -37,6 +37,9 @@ public class Hand : MonoBehaviour {
     Teleport teleportScript;
     LevelManager levelManager;
 
+    public AudioClip hapticAudio;
+    OVRHapticsClip hapticClip;
+
     void Awake() {
         sigilAnchor = GameObject.Find("SigilAnchor"); //need before the other hand sets it inactive
     }
@@ -54,6 +57,9 @@ public class Hand : MonoBehaviour {
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         teleportScript = GameObject.Find("Player").GetComponent<Teleport>();
         levelManager = FindObjectOfType<LevelManager>();
+
+        hapticClip = new OVRHapticsClip(hapticAudio);
+
         initialize();
         StartCoroutine("trackSpeed");
     }
@@ -155,7 +161,7 @@ public class Hand : MonoBehaviour {
         if (IS_PRIMARY) return;
         currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
-
+            InitiateHapticFeedback(hapticClip, 0);
             if (other.gameObject.tag == "Projectile"){
                     counterProjectile();
                     other.gameObject.GetComponent<Projectile>().reflect();
@@ -215,5 +221,10 @@ public class Hand : MonoBehaviour {
         if(currentProjectile != null) {
             Destroy(currentProjectile);
         }
+    }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 }

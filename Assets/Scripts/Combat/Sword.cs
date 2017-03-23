@@ -36,6 +36,8 @@ public class Sword : MonoBehaviour {
 
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
+    public AudioClip swordChargeHapticAudio;
+    OVRHapticsClip swordChargeHapticClip;
 
     public AudioSource audioSource;
     public AudioClip swordDrawClip;
@@ -49,6 +51,7 @@ public class Sword : MonoBehaviour {
         hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
+        swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -186,6 +189,7 @@ public class Sword : MonoBehaviour {
     IEnumerator swordCharge() {
         if (!swordCharged) {
             audioSource.PlayOneShot(swordChargingClip);
+            InitiateHapticFeedback(swordChargeHapticClip, 1);
             yield return new WaitForSeconds(CHARGE_DURATION);
             stopSound();
             audioSource.PlayOneShot(swordChargedClip);
@@ -204,6 +208,8 @@ public class Sword : MonoBehaviour {
 
     public void stopSound() {
         audioSource.Stop();
+        OVRHaptics.LeftChannel.Clear();
+        OVRHaptics.RightChannel.Clear();
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {

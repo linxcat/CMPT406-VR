@@ -2860,6 +2860,9 @@ MonoBehaviour:
   hitAttack: {fileID: 8300000, guid: 572eace4b2361e14081eb52b04be566d, type: 3}
   beingHit: {fileID: 8300000, guid: d38bc4d987ba7da49bcf9e6ba1d24ccb, type: 3}
   deathSound: {fileID: 8300000, guid: c07835b847f54834a9430fef0efa7147, type: 3}
+  badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
+  goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
+  perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
 --- !u!136 &136090027790409878
 CapsuleCollider:
   m_ObjectHideFlags: 1

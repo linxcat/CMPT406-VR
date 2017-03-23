@@ -65,4 +65,9 @@ public abstract class Enemy : MonoBehaviour {
     {
         return hp;
     }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
+    }
 }

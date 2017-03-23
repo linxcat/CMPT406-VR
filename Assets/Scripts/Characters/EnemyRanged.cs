@@ -29,6 +29,14 @@ public class EnemyRanged : Enemy {
     RaycastHit hit;
     LayerMask mask;
 
+    // Haptics
+    public AudioClip badHapticAudio;
+    public AudioClip goodHapticAudio;
+    public AudioClip perfectHapticAudio;
+    OVRHapticsClip badHapticClip;
+    OVRHapticsClip goodHapticClip;
+    OVRHapticsClip perfectHapticClip;
+
     enum rangedState {
         spawn,
         idle,
@@ -49,6 +57,11 @@ public class EnemyRanged : Enemy {
         turnSpeed = 4;
         anim = GetComponent<Animator>();
         mask = LayerMask.GetMask(new string[2] { "Player", "Ground" });
+
+        //Haptics
+        badHapticClip = new OVRHapticsClip(badHapticAudio);
+        goodHapticClip = new OVRHapticsClip(goodHapticAudio);
+        perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
     }
 
     // Update is called once per frame
@@ -181,14 +194,17 @@ public class EnemyRanged : Enemy {
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
+                InitiateHapticFeedback(perfectHapticClip, 1);
                 takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
+                InitiateHapticFeedback(goodHapticClip, 1);
                 takeDamage(maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
+                InitiateHapticFeedback(badHapticClip, 1);
                 takeDamage(maxDamage / 4);
                 break;
         }
@@ -204,8 +220,20 @@ public class EnemyRanged : Enemy {
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
-        agent.SetDestination(transform.position);
+        agent.enabled = false;
         levelManager.enemyKilled();
         GetComponent<Collider>().enabled = false;
+        StartCoroutine("sink");
+    }
+
+    IEnumerator sink() {
+        yield return new WaitForSeconds(5);
+        for (int i = 0; i < 150; i++) {
+            Vector3 newPosition = transform.position;
+            newPosition.y -= 0.005F;
+            transform.position = newPosition;
+            yield return 0;
+        }
+        Destroy(gameObject);
     }
 }
