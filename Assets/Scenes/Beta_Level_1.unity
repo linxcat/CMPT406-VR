@@ -1408,8 +1408,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfWaves: 5
-  enemiesToNextWave: 0000000001000000020000000300000004000000
   totalEnemies: 33
+  enemiesToNextWave: 0000000001000000020000000300000004000000
   timeInterval:
   - 0
   - 30
