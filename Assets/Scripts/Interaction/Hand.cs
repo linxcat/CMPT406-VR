@@ -15,7 +15,7 @@ public class Hand : MonoBehaviour {
     static GameObject currentProjectile = null;
     GameObject player;
     //difference between this and the current time is the duration the time is still slowed
-    public static float timeSlowed;
+
 
     bool swordIsOn = true;
     bool locked = false;
@@ -46,7 +46,7 @@ public class Hand : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("MainCamera");
         hitArray = GameObject.Find("HitArray");
         GUIAnchor = GameObject.Find("GUIAnchor");
         wristAnchor = transform.FindChild("WristAnchor");
@@ -76,10 +76,9 @@ public class Hand : MonoBehaviour {
         }
        else {
             // gauntlet
-            if(!levelManager.IsGameOver() && Time.time > timeSlowed) {
-                Time.timeScale = 1f;
-                Destroy(counterUI);
-            }
+ 
+
+
             placeGUI();
         }
 
@@ -206,14 +205,14 @@ public class Hand : MonoBehaviour {
     }
 
     public void counterProjectile() {
-        timeSlowed = Time.time + 1f;
+       
         Time.timeScale = 0.111111f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        //if (counterUI == null) {
-            GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
-            counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
-            counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
-        //}
+        
+        GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+        counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
+        counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
+        
     }
 
 
