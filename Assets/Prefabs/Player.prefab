@@ -4430,6 +4430,7 @@ MonoBehaviour:
   HEALTH_SLIDER: {fileID: 224679076613495702}
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
+  staminaPerSec: 2
   hapticAudio: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
 --- !u!114 &114644005032536390
 MonoBehaviour:
@@ -4587,6 +4588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineSegmentSize: 0.15
+  teleportMaterial: {fileID: 2100000, guid: f47ccb597a7b35c4a972d4f647d46451, type: 2}
   teleportStartClip: {fileID: 8300000, guid: bf4950fb221ee824c9c1974e3997d7d6, type: 3}
   teleportExecuteClip: {fileID: 8300000, guid: fe27d0a72dcfe0b48bc472d62c98bea7, type: 3}
 --- !u!114 &114814816551171534
