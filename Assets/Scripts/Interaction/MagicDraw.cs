@@ -35,7 +35,7 @@ public class MagicDraw : MonoBehaviour {
         magicLines.SetPosition(magicLines.numPositions-2, other.transform.position);
         verticies.AddLast(other.name);
         audioSource.Stop();
-        audioSource.PlayOneShot (magicTouchClip, 0.2f);
+        audioSource.PlayOneShot (magicTouchClip);
         InitiateHapticFeedback(magicHapticClip, 1);
     }
 

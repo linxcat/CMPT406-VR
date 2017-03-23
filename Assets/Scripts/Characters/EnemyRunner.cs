@@ -84,20 +84,20 @@ public class EnemyRunner : Enemy{
 	}
 
     public override void swingHit(Hit hit) {
-        audioSource.PlayOneShot(beingHit, 0.2f);
+        audioSource.PlayOneShot(beingHit);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
-                audioSource.PlayOneShot(perfectHitClip, 0.2f);
+                audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
                 takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
-                audioSource.PlayOneShot(goodHitClip, 0.2f);
+                audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
                 takeDamage(maxDamage/2);
                 break;
             case Hit.ACCURACY.Bad:
-                audioSource.PlayOneShot(badHitClip, 0.2f);
+                audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
                 takeDamage(maxDamage/4);
                 break;
@@ -161,7 +161,7 @@ public class EnemyRunner : Enemy{
         anim.SetBool("moving", false);
         agent.Stop();
         anim.SetTrigger("attack");
-        audioSource.PlayOneShot(hitAttack, 0.2f);
+        audioSource.PlayOneShot(hitAttack);
         yield return new WaitForSeconds(atkWindUp);
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
@@ -202,7 +202,7 @@ public class EnemyRunner : Enemy{
     }
 
     public override void die() {
-        audioSource.PlayOneShot(deathSound, 0.2f);
+        audioSource.PlayOneShot(deathSound);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         levelManager.enemyKilled();
