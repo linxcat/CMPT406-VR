@@ -4423,7 +4423,8 @@ MonoBehaviour:
   HEALTH_SLIDER: {fileID: 224679076613495702}
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
-  staminaPerSec: 2
+  staminaPerSec: 5
+  staminaRegenCooldown: 3
   hapticAudio: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
 --- !u!114 &114644005032536390
 MonoBehaviour:

@@ -13,9 +13,11 @@ public class CharacterStats : MonoBehaviour {
     public Transform HEALTH_SLIDER;
     public Transform MANA_SLIDER;
     public Transform STAMINA_SLIDER;
-    public float staminaPerSec = 2F;
+    public float staminaPerSec = 5F;
+    public float staminaRegenCooldown = 3F;
+    private float timeCount;
     private float timePerStamina;
-    private bool isDead, isInvincible;
+    private bool isDead, isInvincible, canRegen;
     private float invincibleTime = 2F;
     GameObject fader;
     private LevelManager levelManager;
@@ -38,7 +40,7 @@ public class CharacterStats : MonoBehaviour {
     void Start() {
         isDead = false;
         isInvincible = false;
-        
+        canRegen = true;
         levelManager = FindObjectOfType<LevelManager> ();
         pub = GUIPublisher.create();
         staminaSub = new GUICircularStaminaSubscriber(STAMINA_SLIDER);
@@ -122,7 +124,6 @@ public class CharacterStats : MonoBehaviour {
         pub.publish(manaEvent);
     }
 
-
     /** Removes the amount from players stamina 
 	returns:
 		True if players stamina is >= amount
@@ -133,6 +134,8 @@ public class CharacterStats : MonoBehaviour {
             PLAYER_STAMINA = PLAYER_STAMINA - amount;
             staminaEvent = new GUIEvent("stamina", PLAYER_STAMINA);
             pub.publish(staminaEvent);
+            canRegen = false;
+            timeCount = 0;
             return true;
         }
         else {
@@ -163,7 +166,9 @@ public class CharacterStats : MonoBehaviour {
     IEnumerator staminaRegen()
     {
         while (true){
-            if (PLAYER_STAMINA < 100)
+            timeCount += Time.deltaTime;
+            if (timeCount > staminaRegenCooldown) canRegen = true;
+            if (canRegen && PLAYER_STAMINA < 100)
             {
                 yield return new WaitForSeconds(timePerStamina);
                 addStamina(1);
