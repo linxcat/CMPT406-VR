@@ -13,6 +13,8 @@ public class CharacterStats : MonoBehaviour {
     public Transform HEALTH_SLIDER;
     public Transform MANA_SLIDER;
     public Transform STAMINA_SLIDER;
+    public float staminaPerSec = 2F;
+    private float timePerStamina;
     private bool isDead, isInvincible;
     private float invincibleTime = 2F;
     private LevelManager levelManager;
@@ -42,6 +44,8 @@ public class CharacterStats : MonoBehaviour {
         pub.Subscribe(manaSub);
 
         hapticClip = new OVRHapticsClip(hapticAudio);
+        timePerStamina = 1F / staminaPerSec;
+        StartCoroutine("staminaRegen");
     }
 
     // Update is called once per frame
@@ -150,4 +154,15 @@ public class CharacterStats : MonoBehaviour {
         OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 
+    IEnumerator staminaRegen()
+    {
+        while (true){
+            if (PLAYER_STAMINA < 100)
+            {
+                yield return new WaitForSeconds(timePerStamina);
+                addStamina(1);
+            }else
+                yield return null;
+        }
+    }
 }
