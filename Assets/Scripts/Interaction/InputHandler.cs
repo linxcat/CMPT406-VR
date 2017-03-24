@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour {
 
+    CharacterStats playerStats;
     Hand leftHand;
     Hand rightHand;
     Teleport teleport;
@@ -18,6 +19,7 @@ public class InputHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        playerStats = GameObject.Find("PlayerStatManager").GetComponent<CharacterStats>();
         leftHand = GameObject.Find("LeftHand").GetComponent<Hand>();
         rightHand = GameObject.Find("RightHand").GetComponent<Hand>();
         teleport = GameObject.Find("Player").GetComponent<Teleport>();
@@ -33,11 +35,25 @@ public class InputHandler : MonoBehaviour {
             return;
         }
 
-        if (OVRInput.GetDown(modeSwitch)) switchHandMode();
-        if (OVRInput.GetDown(debugSwitch)) switchDebug();
+        if (OVRInput.GetDown(modeSwitch)) {
+            switchHandMode();
+            return;
+        }
+        //if (OVRInput.GetDown(debugSwitch)) switchDebug();
+
+        if (OVRInput.Get(OVRInput.Button.One) && OVRInput.Get(OVRInput.Button.Three)) {
+            teleport.disable();
+            leftHand.setLock(false);
+            rightHand.setLock(false);
+            playerStats.StartCoroutine("manaCharge");
+            return;
+        }
+        else {
+            playerStats.StopCoroutine("manaCharge");
+        }
 
         if (OVRInput.GetDown(chargeButton)) swordCharge(true);
-        if (OVRInput.GetUp(chargeButton)) swordCharge(false);
+        else if (OVRInput.GetUp(chargeButton)) swordCharge(false);
 
         Vector2 thumbstickAxis = OVRInput.Get(teleThumbstick);
         bool teleGo = OVRInput.GetDown(teleButton);
@@ -68,7 +84,7 @@ public class InputHandler : MonoBehaviour {
         }
     }
     void rightButtons() {
-        modeSwitch = OVRInput.Button.One;
+        modeSwitch = OVRInput.Button.Two;
         debugSwitch = OVRInput.Button.PrimaryThumbstick;
         teleButton = OVRInput.Button.Four;
         chargeButton = OVRInput.Button.SecondaryIndexTrigger;
@@ -77,7 +93,7 @@ public class InputHandler : MonoBehaviour {
     }
 
     void leftButtons() {
-        modeSwitch = OVRInput.Button.Three;
+        modeSwitch = OVRInput.Button.Four;
         debugSwitch = OVRInput.Button.SecondaryThumbstick;
         teleButton = OVRInput.Button.Two;
         chargeButton = OVRInput.Button.PrimaryIndexTrigger;

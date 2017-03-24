@@ -176,4 +176,13 @@ public class CharacterStats : MonoBehaviour {
                 yield return null;
         }
     }
+
+    IEnumerator manaCharge() {
+        // Fader set to charging
+        yield return new WaitForSeconds(1F);
+        while (true) {
+            addMana(5);
+            yield return new WaitForSeconds(1F);
+        }
+    }
 }
