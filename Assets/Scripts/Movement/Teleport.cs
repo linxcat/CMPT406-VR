@@ -7,7 +7,6 @@ public class Teleport : MonoBehaviour {
 
     public const float FADE_DURATION = 0.2f; // TODO change all constants to constant type
     public float lineSegmentSize = 0.15f;
-    public Material teleportMaterial;
 
     private int baseCost = 10;
     private int maxScaleCost = 20;
@@ -19,6 +18,7 @@ public class Teleport : MonoBehaviour {
     GameObject avatar;
     GameObject fader;
     LineRenderer teleportArc;
+    Renderer marker, arrow;
     Transform teleLineSpawn;
     Transform apex;
     Transform groundLocation;
@@ -38,6 +38,8 @@ public class Teleport : MonoBehaviour {
         fader = GameObject.Find("Fader");
         fader.SetActive(false);
         teleportArc = GetComponent<LineRenderer>();
+        marker = GameObject.Find("circle").GetComponent<Renderer>();
+        arrow = GameObject.Find("arrow").GetComponent<Renderer>();
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
@@ -169,12 +171,18 @@ public class Teleport : MonoBehaviour {
     private bool staminaCheck(){
         if (player.GetComponentInChildren<CharacterStats>().PLAYER_STAMINA >= staminaUsage())
         {
-            teleportMaterial.color = new Color32(66, 169, 255, 255);
+            //teleportMaterial.color = new Color32(66, 169, 255, 255);
+            teleportArc.material.color = new Color32(66, 169, 255, 255);
+            marker.material.color = new Color32(66, 169, 255, 255);
+            arrow.material.color = new Color32(66, 169, 255, 255);
             return true;
         }
         else
         {
-            teleportMaterial.color = new Color32(255, 66, 66, 255);
+            //teleportMaterial.color = new Color32(255, 66, 66, 255);
+            teleportArc.material.color = new Color32(255, 66, 66, 255);
+            marker.material.color = new Color32(255, 66, 66, 255);
+            arrow.material.color = new Color32(255, 66, 66, 255);
             return false;
         }
     }
