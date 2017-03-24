@@ -788,8 +788,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextScene: Beta_Level_2
   fader: {fileID: 1252943227}
-  red: {fileID: 2100000, guid: fd0b39dd466e4854f932ad7ebebe3135, type: 2}
-  white: {fileID: 2100000, guid: 5f81b30a5ca5d784892e35f9ccaabe0d, type: 2}
   winningMenu: {fileID: 713908215}
   gameoverMenu: {fileID: 2041530753}
 --- !u!1001 &1160251980

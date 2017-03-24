@@ -27,12 +27,14 @@ public class Teleport : MonoBehaviour {
     public AudioClip teleportStartClip;
     public AudioClip teleportExecuteClip;
 
+    void Awake() {
+        fader = GameObject.Find("Fader");
+    }
+
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
         avatar = GameObject.Find("LocalAvatar");
-        fader = GameObject.Find("Fader");
-        fader.SetActive(false);
         teleportArc = GetComponent<LineRenderer>();
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
@@ -157,7 +159,7 @@ public class Teleport : MonoBehaviour {
     IEnumerator TeleportPosition() {
         audioSource.PlayOneShot(teleportExecuteClip, 0.2f);
         teleporting = true;
-        fadeOut();
+        fader.SendMessage("teleFade", FADE_DURATION);
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
 
         yield return new WaitForSecondsRealtime(FADE_DURATION);
@@ -167,7 +169,6 @@ public class Teleport : MonoBehaviour {
         player.transform.forward = groundLocation.forward;
         groundLocation.position = player.transform.position; //childed objects get shoved forward, avoid inside walls
         apex.position = player.transform.position;
-        fadeIn();
         teleporting = false;
     }
 
@@ -249,14 +250,6 @@ public class Teleport : MonoBehaviour {
 
     public void disable() {
         active = false;
-    }
-
-    private void fadeOut() {
-        fader.SetActive(true);
-    }
-
-    private void fadeIn() {
-        fader.SetActive(false);
     }
 
     public void setTeleLineSpawn(Transform value) {

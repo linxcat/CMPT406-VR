@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4a8b1b2a86164dbd9f8a59263a65250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfEnemies: 1
   nextScene: 
   fader: {fileID: 0}
   red: {fileID: 0}
