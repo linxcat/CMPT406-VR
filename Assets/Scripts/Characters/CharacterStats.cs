@@ -15,6 +15,7 @@ public class CharacterStats : MonoBehaviour {
     public Transform STAMINA_SLIDER;
     private bool isDead, isInvincible;
     private float invincibleTime = 2F;
+    GameObject fader;
     private LevelManager levelManager;
     private GUIEvent healthEvent;
     private GUIEvent manaEvent;
@@ -27,10 +28,15 @@ public class CharacterStats : MonoBehaviour {
     public AudioClip hapticAudio;
     OVRHapticsClip hapticClip;
 
+    void Awake() {
+        fader = GameObject.Find("Fader");
+    }
+
     // Use this for initialization
     void Start() {
         isDead = false;
         isInvincible = false;
+        
         levelManager = FindObjectOfType<LevelManager> ();
         pub = GUIPublisher.create();
         staminaSub = new GUICircularStaminaSubscriber(STAMINA_SLIDER);
@@ -53,9 +59,9 @@ public class CharacterStats : MonoBehaviour {
 
     /** Cause the player to loose health = damage */
     public void takeDamage(int damage) {
-        if (isInvincible == true)
-            return;
+        if (isInvincible) return;
         StartCoroutine ("startInvincible");
+        fader.SendMessage("damageEdge");
         if (PLAYER_HEALTH > damage) {
             PLAYER_HEALTH = PLAYER_HEALTH - damage;
         }
@@ -75,7 +81,7 @@ public class CharacterStats : MonoBehaviour {
         isInvincible = false;
     }
 
-    /** Increment the amount of health the player has  by amount*/
+    /** Increment the amount of health the player has by amount*/
     public void addHealth(int amount) {
         PLAYER_HEALTH = PLAYER_HEALTH + amount;
         healthEvent = new GUIEvent("health", PLAYER_HEALTH);
