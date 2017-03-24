@@ -22,7 +22,7 @@ public class Hand : MonoBehaviour {
     bool locking = false;
 
     float speedThreshold = 0.025F;
-    private float[] pastSpeeds = new float[10];
+    private float[] pastSpeeds = new float[23];
 
     static GameObject counterUI;
     GameObject sigilAnchor;
