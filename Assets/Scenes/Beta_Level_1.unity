@@ -688,8 +688,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1086109800}
   - component: {fileID: 1086109799}
+  - component: {fileID: 1086109801}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: MusicPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -704,8 +705,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 856a10c99ed75a947b77df55e4b76674, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
@@ -788,6 +789,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1086109801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1086109798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f191210205b5674291046529a63f11f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelMusic: {fileID: 8300000, guid: 856a10c99ed75a947b77df55e4b76674, type: 3}
+  deathMusic: {fileID: 8300000, guid: c9050798de84f0a4aad79b3063d34aeb, type: 3}
+  winMusic: {fileID: 8300000, guid: 61e02f28a14dfda4e9268062639bba41, type: 3}
 --- !u!1001 &1128284705
 Prefab:
   m_ObjectHideFlags: 0
@@ -1427,6 +1442,11 @@ Prefab:
     - target: {fileID: 4694751777169452, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82129963842926168, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: BypassReverbZones
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
