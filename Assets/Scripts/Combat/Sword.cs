@@ -46,7 +46,7 @@ public class Sword : MonoBehaviour {
     public AudioClip swordUndrawClip;
 
     private CharacterStats characterStats;
-    private int chargeShotCost = 7;
+    private int chargeShotCost = 100;
 
     // Use this for initialization
     void Start () {
