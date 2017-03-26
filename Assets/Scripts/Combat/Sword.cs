@@ -46,7 +46,7 @@ public class Sword : MonoBehaviour {
     public AudioClip swordUndrawClip;
 
     private CharacterStats characterStats;
-    private int chargeShotCost = 7;
+    private int chargeShotCost = 100;
 
     // Use this for initialization
     void Start () {
@@ -56,7 +56,7 @@ public class Sword : MonoBehaviour {
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
-        characterStats = FindObjectsOfType<CharacterStats> ();
+        characterStats = FindObjectOfType<CharacterStats> ();
     }
 
     // Update is called once per frame

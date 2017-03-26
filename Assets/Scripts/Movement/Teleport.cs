@@ -8,8 +8,8 @@ public class Teleport : MonoBehaviour {
     public const float FADE_DURATION = 0.2f; // TODO change all constants to constant type
     public float lineSegmentSize = 0.15f;
 
-    private int baseCost = 10;
-    private int maxScaleCost = 20;
+    private int baseCost = 100;
+    private int maxScaleCost = 100;
     private float maxDistance = 10F;
     private bool active = false;
     private bool teleporting = false;
