@@ -56,7 +56,7 @@ public class Sword : MonoBehaviour {
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
-        characterStats = FindObjectsOfType<CharacterStats> ();
+        characterStats = FindObjectOfType<CharacterStats> ();
     }
 
     // Update is called once per frame
