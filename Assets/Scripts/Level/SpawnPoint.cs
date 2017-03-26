@@ -21,11 +21,15 @@ public class SpawnPoint : MonoBehaviour {
 
     public Wave[] waves;
     private int waveCount, enemyCount;
+    Object runner, walker, ranged;
 
 	// Use this for initialization
 	void Start () {
         waveCount = 0;
         enemyCount = 0;
+        runner = Resources.Load("runner");
+        walker = Resources.Load("runner");
+        ranged = Resources.Load("ranged");
 	}
 	
 	// Update is called once per frame
@@ -50,15 +54,15 @@ public class SpawnPoint : MonoBehaviour {
                 case enemyType.nothing:
                     break;
                 case enemyType.runner:
-                    temp = (GameObject)Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(runner, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
                 case enemyType.walker: //TODO put walker here
-                    temp = (GameObject)Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(walker, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
                 case enemyType.ranged:
-                    temp = (GameObject)Instantiate(Resources.Load("ranged"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(ranged, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
                 default:
