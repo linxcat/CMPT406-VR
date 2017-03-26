@@ -45,6 +45,9 @@ public class Sword : MonoBehaviour {
     public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
+    private CharacterStats characterStats;
+    private int chargeShotCost = 7;
+
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
@@ -53,6 +56,7 @@ public class Sword : MonoBehaviour {
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
+        characterStats = FindObjectsOfType<CharacterStats> ();
     }
 
     // Update is called once per frame
@@ -213,6 +217,7 @@ public class Sword : MonoBehaviour {
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {
+        characterStats.removeMana (chargeShotCost);
         GameObject shot = Instantiate(ChargeShot, startlocation, facing);
     }
 

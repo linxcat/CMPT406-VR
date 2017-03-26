@@ -8,6 +8,9 @@ public class Teleport : MonoBehaviour {
     public const float FADE_DURATION = 0.2f; // TODO change all constants to constant type
     public float lineSegmentSize = 0.15f;
 
+    private int baseCost = 10;
+    private int maxScaleCost = 20;
+    private float maxDistance = 10F;
     private bool active = false;
     private bool teleporting = false;
     private Transform[] linePoints = new Transform[3];
@@ -15,6 +18,7 @@ public class Teleport : MonoBehaviour {
     GameObject avatar;
     GameObject fader;
     LineRenderer teleportArc;
+    Renderer marker, arrow;
     Transform teleLineSpawn;
     Transform apex;
     Transform groundLocation;
@@ -36,6 +40,8 @@ public class Teleport : MonoBehaviour {
         player = GameObject.Find("Player");
         avatar = GameObject.Find("LocalAvatar");
         teleportArc = GetComponent<LineRenderer>();
+        marker = GameObject.Find("circle").GetComponent<Renderer>();
+        arrow = GameObject.Find("arrow").GetComponent<Renderer>();
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
@@ -53,6 +59,7 @@ public class Teleport : MonoBehaviour {
 	// Update is called once per frame
     void Update () {
         if (active && !teleporting) {
+            staminaCheck();
             teleportArc.enabled = true;
             groundLocation.gameObject.SetActive(true);
             setPoints();
@@ -152,8 +159,34 @@ public class Teleport : MonoBehaviour {
     }
 
     public void go() {
-        if (teleporting || !active) return;
+        if (teleporting || !active || !staminaCheck()) return;
         StartCoroutine("TeleportPosition");
+    }
+
+    private int staminaUsage(){
+        int stamina = baseCost;
+        Vector3 distance = groundLocation.position - player.transform.position;
+        stamina += (int)(distance.magnitude/maxDistance * maxScaleCost);
+        return stamina;
+    }
+
+    private bool staminaCheck(){
+        if (player.GetComponentInChildren<CharacterStats>().PLAYER_STAMINA >= staminaUsage())
+        {
+            //teleportMaterial.color = new Color32(66, 169, 255, 255);
+            teleportArc.material.color = new Color32(66, 169, 255, 255);
+            marker.material.color = new Color32(66, 169, 255, 255);
+            arrow.material.color = new Color32(66, 169, 255, 255);
+            return true;
+        }
+        else
+        {
+            //teleportMaterial.color = new Color32(255, 66, 66, 255);
+            teleportArc.material.color = new Color32(255, 66, 66, 255);
+            marker.material.color = new Color32(255, 66, 66, 255);
+            arrow.material.color = new Color32(255, 66, 66, 255);
+            return false;
+        }
     }
 
     IEnumerator TeleportPosition() {
@@ -161,7 +194,7 @@ public class Teleport : MonoBehaviour {
         teleporting = true;
         fader.SendMessage("teleFade", FADE_DURATION);
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
-
+        player.GetComponentInChildren<CharacterStats>().removeStamina(staminaUsage());
         yield return new WaitForSecondsRealtime(FADE_DURATION);
 
         avatar.SetActive(true);
