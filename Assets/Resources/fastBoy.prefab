@@ -1370,7 +1370,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1479,8 +1479,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3364935febb394e85968d95db845a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  maxDamage: 50
+  perfectDamage: 180
+  goodDamage: 100
+  badDamage: 50
   audioSource: {fileID: 0}
   badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
   goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}

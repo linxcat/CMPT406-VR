@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class EnemySpeedBoy : Enemy{
 
+    private int speedboyMaxHealth = 320;
     private SpawnManager spawnManager;
     private float detectRange = 100;
     private float atkRange;
     private float atkWindUp = 0F;
-    private float atkDuration = 1.5F;
+    private float atkDuration = 1.2F;
     private float atkCD = 4F;
     private float speed = 2F;
-    private int attackDmg = 20;
+    private int attackDmg = 40;
     private int searchAngle = 180;
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
@@ -52,6 +53,7 @@ public class EnemySpeedBoy : Enemy{
 	// Use this for initialization
     void Start() {
         base.Start();
+        hp = speedboyMaxHealth;
         spawnManager = FindObjectOfType<SpawnManager> ();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
@@ -89,17 +91,17 @@ public class EnemySpeedBoy : Enemy{
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
-                takeDamage(maxDamage);
+                takeDamage(perfectDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
-                takeDamage(maxDamage/2);
+                takeDamage(goodDamage);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
-                takeDamage(maxDamage/4);
+                takeDamage(badDamage);
                 break;
         }
     }

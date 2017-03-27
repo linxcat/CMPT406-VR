@@ -30,6 +30,9 @@ public class Spells : MonoBehaviour {
             case SPELL_NAMES.SlowTime:
                 StartCoroutine("slowTime", slowTimeDuration);
                 break;
+            case SPELL_NAMES.Heal:
+                heal();
+                break;
             default:
                 return;
         }
@@ -60,7 +63,7 @@ public class Spells : MonoBehaviour {
     void heal() {
         if ((healTimer >= 0 && characterStats.removeMana (healCost * 2)) || (healTimer < 0 && characterStats.removeMana (healCost))) {
             healTimer = healDoublePeriod;
-            GameObject.FindGameObjectWithTag ("Player").GetComponent<CharacterStats> ().addHealth (125);
+            characterStats.addHealth(125);
         }
     }
 
