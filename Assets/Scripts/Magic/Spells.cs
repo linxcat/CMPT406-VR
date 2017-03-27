@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class Spells : MonoBehaviour {
 
-    const float slowTimeDuration = 4F;
+    const float slowTimeDuration = 20F;
+
+    private int slowTimeCost = 750;
+    private int healCost = 125;
+    private float healTimer = 0;
+    private float healDoublePeriod = 20F;
+    private CharacterStats characterStats;
 
     public enum SPELL_NAMES { SlowTime , Heal};
     static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
 
     void Awake() {
+        characterStats = FindObjectOfType<CharacterStats> ();
         spells.Add("UL.UR.DR.DL.", SPELL_NAMES.SlowTime);
         spells.Add("U.D.L.R.", SPELL_NAMES.Heal);
+        StartCoroutine ("HealTimer");
     }
 
     public void cast(string spell) {
@@ -27,20 +35,33 @@ public class Spells : MonoBehaviour {
         }
     }
 
+    IEnumerator HealTimer(){
+        if (healTimer >= 0) {
+            healTimer -= Time.deltaTime;
+        }
+        yield return null;
+    }
+
     IEnumerator slowTime(float duration) {
-        float originalDelta = Time.fixedDeltaTime;
+        if (characterStats.removeMana (slowTimeCost)) {
 
-        Time.timeScale = 0.5F;
-        Time.fixedDeltaTime = Time.fixedDeltaTime * 0.5F;
+            float originalDelta = Time.fixedDeltaTime;
 
-        yield return new WaitForSecondsRealtime(duration);
+            Time.timeScale = 0.5F;
+            Time.fixedDeltaTime = Time.fixedDeltaTime * 0.5F;
 
-        Time.timeScale = 1F;
-        Time.fixedDeltaTime = originalDelta;
+            yield return new WaitForSecondsRealtime (duration);
+
+            Time.timeScale = 1F;
+            Time.fixedDeltaTime = originalDelta;
+        }
     }
 
     void heal() {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().addHealth(50);
+        if ((healTimer >= 0 && characterStats.removeMana (healCost * 2)) || (healTimer < 0 && characterStats.removeMana (healCost))) {
+            healTimer = healDoublePeriod;
+            GameObject.FindGameObjectWithTag ("Player").GetComponent<CharacterStats> ().addHealth (125);
+        }
     }
 
     void shootProjectile() {

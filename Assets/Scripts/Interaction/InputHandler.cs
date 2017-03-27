@@ -9,6 +9,7 @@ public class InputHandler : MonoBehaviour {
     Hand rightHand;
     Teleport teleport;
     Sword sword;
+    private bool charging;
     float thumbstickDeadzone = 0.1F;
 
     bool truePrimary = false; // is the primary (left) hand dominant?
@@ -45,10 +46,14 @@ public class InputHandler : MonoBehaviour {
             teleport.disable();
             leftHand.setLock(false);
             rightHand.setLock(false);
-            playerStats.StartCoroutine("manaCharge");
+            if (!charging) {
+                playerStats.StartCoroutine("manaCharge");
+                charging = true;
+            }
             return;
         }
         else {
+            charging = false;
             playerStats.StopCoroutine("manaCharge");
         }
 

@@ -42,7 +42,7 @@ namespace GUIPubSub {
 
         public class GUICircularManaSubscriber : GUISubscriber {
             private Transform MANA_SLIDER;
-            private int TO_SLIDER_VALUE = 100;
+            private float TO_SLIDER_VALUE = 100;
 
             public GUICircularManaSubscriber(Transform manaSlider) {
                 MANA_SLIDER = manaSlider;

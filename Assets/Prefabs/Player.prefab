@@ -4096,10 +4096,10 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 0.983
+  m_FillMethod: 3
+  m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 1
+  m_FillOrigin: 3
 --- !u!114 &114196829976417446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4417,14 +4417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c68601e94122934f86a55d07147b960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PLAYER_HEALTH: 100
-  PLAYER_MANA: 100
-  PLAYER_STAMINA: 100
   HEALTH_SLIDER: {fileID: 224679076613495702}
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
-  staminaPerSec: 5
-  staminaRegenCooldown: 3
   hapticAudio: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
 --- !u!114 &114644005032536390
 MonoBehaviour:

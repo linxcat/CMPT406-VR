@@ -8,8 +8,8 @@ public class Teleport : MonoBehaviour {
     public const float FADE_DURATION = 0.2f; // TODO change all constants to constant type
     public float lineSegmentSize = 0.15f;
 
-    private int baseCost = 10;
-    private int maxScaleCost = 20;
+    private int baseCost = 100;
+    private int maxScaleCost = 100;
     private float maxDistance = 10F;
     private bool active = false;
     private bool teleporting = false;
@@ -171,7 +171,7 @@ public class Teleport : MonoBehaviour {
     }
 
     private bool staminaCheck(){
-        if (player.GetComponentInChildren<CharacterStats>().PLAYER_STAMINA >= staminaUsage())
+        if (player.GetComponentInChildren<CharacterStats>().getStamina() >= staminaUsage())
         {
             //teleportMaterial.color = new Color32(66, 169, 255, 255);
             teleportArc.material.color = new Color32(66, 169, 255, 255);
