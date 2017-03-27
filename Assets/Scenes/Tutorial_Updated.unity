@@ -186,8 +186,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextScene: 
   fader: {fileID: 0}
-  red: {fileID: 0}
-  white: {fileID: 0}
   winningMenu: {fileID: 0}
   gameoverMenu: {fileID: 0}
 --- !u!114 &350755874
@@ -541,6 +539,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 23498654112178012, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c1bfa856ff1e538489ef3219ca56a5f7, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
   m_IsPrefabParent: 0

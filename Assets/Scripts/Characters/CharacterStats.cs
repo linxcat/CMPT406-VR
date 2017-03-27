@@ -206,11 +206,16 @@ public class CharacterStats : MonoBehaviour {
     }
 
     IEnumerator manaCharge() {
-        // Fader set to charging
         yield return new WaitForSeconds(1F);
         while (true) {
+            fader.SendMessage("chargeEdge");
             addMana(manaPerSec);
             yield return new WaitForSeconds(1F);
         }
+    }
+
+    public void manaChargeOff() {
+        StopCoroutine("manaCharge");
+        fader.SendMessage("turnOff");
     }
 }
