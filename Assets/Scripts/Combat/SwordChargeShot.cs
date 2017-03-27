@@ -16,7 +16,9 @@ public class SwordChargeShot : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-            other.gameObject.SendMessage("takeDamage", damage);
+            if (other.tag != "TutorialEnemy") { //don't damage tutorial enemies
+                other.gameObject.SendMessage("takeDamage", damage);
+            }
             Destroy(gameObject);
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) {
