@@ -1857,8 +1857,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1142716713057216}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: 12}
+  m_LocalRotation: {x: -0, y: 0.7000457, z: -0, w: 0.71409804}
+  m_LocalPosition: {x: 6, y: 0, z: 18.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4710574800262870}
@@ -4605,7 +4605,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineSegmentSize: 0.15
-  teleportMaterial: {fileID: 2100000, guid: f47ccb597a7b35c4a972d4f647d46451, type: 2}
   teleportStartClip: {fileID: 8300000, guid: bf4950fb221ee824c9c1974e3997d7d6, type: 3}
   teleportExecuteClip: {fileID: 8300000, guid: fe27d0a72dcfe0b48bc472d62c98bea7, type: 3}
 --- !u!114 &114814816551171534
@@ -4974,10 +4973,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 3
+  m_Radius: 0.15
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: -1.86, z: 0}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!136 &136059155893010430
 CapsuleCollider:
   m_ObjectHideFlags: 1
