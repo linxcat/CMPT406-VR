@@ -8,6 +8,9 @@ public class Teleport : MonoBehaviour {
     public const float FADE_DURATION = 0.2f; // TODO change all constants to constant type
     public float lineSegmentSize = 0.15f;
 
+    private int baseCost = 100;
+    private int maxScaleCost = 100;
+    private float maxDistance = 10F;
     private bool active = false;
     private bool teleporting = false;
     private Transform[] linePoints = new Transform[3];
@@ -15,6 +18,7 @@ public class Teleport : MonoBehaviour {
     GameObject avatar;
     GameObject fader;
     LineRenderer teleportArc;
+    Renderer marker, arrow;
     Transform teleLineSpawn;
     Transform apex;
     Transform groundLocation;
@@ -27,13 +31,17 @@ public class Teleport : MonoBehaviour {
     public AudioClip teleportStartClip;
     public AudioClip teleportExecuteClip;
 
+    void Awake() {
+        fader = GameObject.Find("Fader");
+    }
+
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
         avatar = GameObject.Find("LocalAvatar");
-        fader = GameObject.Find("Fader");
-        fader.SetActive(false);
         teleportArc = GetComponent<LineRenderer>();
+        marker = GameObject.Find("circle").GetComponent<Renderer>();
+        arrow = GameObject.Find("arrow").GetComponent<Renderer>();
         apex = GameObject.Find("apex").transform;
         groundLocation = GameObject.Find("groundMarker").transform;
         groundSphereCollider = groundLocation.GetComponent<SphereCollider>();
@@ -51,6 +59,7 @@ public class Teleport : MonoBehaviour {
 	// Update is called once per frame
     void Update () {
         if (active && !teleporting) {
+            staminaCheck();
             teleportArc.enabled = true;
             groundLocation.gameObject.SetActive(true);
             setPoints();
@@ -150,16 +159,42 @@ public class Teleport : MonoBehaviour {
     }
 
     public void go() {
-        if (teleporting || !active) return;
+        if (teleporting || !active || !staminaCheck()) return;
         StartCoroutine("TeleportPosition");
+    }
+
+    private int staminaUsage(){
+        int stamina = baseCost;
+        Vector3 distance = groundLocation.position - player.transform.position;
+        stamina += (int)(distance.magnitude/maxDistance * maxScaleCost);
+        return stamina;
+    }
+
+    private bool staminaCheck(){
+        if (player.GetComponentInChildren<CharacterStats>().getStamina() >= staminaUsage())
+        {
+            //teleportMaterial.color = new Color32(66, 169, 255, 255);
+            teleportArc.material.color = new Color32(66, 169, 255, 255);
+            marker.material.color = new Color32(66, 169, 255, 255);
+            arrow.material.color = new Color32(66, 169, 255, 255);
+            return true;
+        }
+        else
+        {
+            //teleportMaterial.color = new Color32(255, 66, 66, 255);
+            teleportArc.material.color = new Color32(255, 66, 66, 255);
+            marker.material.color = new Color32(255, 66, 66, 255);
+            arrow.material.color = new Color32(255, 66, 66, 255);
+            return false;
+        }
     }
 
     IEnumerator TeleportPosition() {
         audioSource.PlayOneShot(teleportExecuteClip, 0.2f);
         teleporting = true;
-        fadeOut();
+        fader.SendMessage("teleFade", FADE_DURATION);
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
-
+        player.GetComponentInChildren<CharacterStats>().removeStamina(staminaUsage());
         yield return new WaitForSecondsRealtime(FADE_DURATION);
 
         avatar.SetActive(true);
@@ -167,7 +202,6 @@ public class Teleport : MonoBehaviour {
         player.transform.forward = groundLocation.forward;
         groundLocation.position = player.transform.position; //childed objects get shoved forward, avoid inside walls
         apex.position = player.transform.position;
-        fadeIn();
         teleporting = false;
     }
 
@@ -249,14 +283,6 @@ public class Teleport : MonoBehaviour {
 
     public void disable() {
         active = false;
-    }
-
-    private void fadeOut() {
-        fader.SetActive(true);
-    }
-
-    private void fadeIn() {
-        fader.SetActive(false);
     }
 
     public void setTeleLineSpawn(Transform value) {

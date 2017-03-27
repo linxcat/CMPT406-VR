@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyRanged : Enemy {
 
+    private int rangedMaxHealth = 150;
     private SpawnManager spawnManager;
     public GameObject projectile;
     private float detectRange = 100; //tuning required
@@ -51,7 +52,7 @@ public class EnemyRanged : Enemy {
     // Use this for initialization
     void Start() {
         base.Start();
-        hp = 50;
+        hp = rangedMaxHealth;
         spawnManager = FindObjectOfType<SpawnManager>();
         //TODO find projectile object
         turnSpeed = 4;
@@ -195,17 +196,17 @@ public class EnemyRanged : Enemy {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
-                takeDamage(maxDamage);
+                takeDamage(perfectDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
-                takeDamage(maxDamage / 2);
+                takeDamage(goodDamage);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
-                takeDamage(maxDamage / 4);
+                takeDamage(badDamage);
                 break;
         }
     }

@@ -368,15 +368,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - enemy: 02000000
-    delay: 3
-  - enemy: 02000000020000000300000003000000
-    delay: 7
+    delay: []
+  - enemy: 030000000200000003000000
+    delay:
+    - 0
+    - 4
+    - 16
+  - enemy: 0300000002000000
+    delay:
+    - 0
+    - 10
   - enemy: 0200000003000000
-    delay: 12
+    delay:
+    - 0
+    - 30
   - enemy: 0200000003000000
-    delay: 12
-  - enemy: 0200000003000000
-    delay: 6
+    delay:
+    - 0
+    - 20
 --- !u!1 &713908215 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1387898142567522, guid: a560a5b237eaf9b489b671a6f034d074,
@@ -424,15 +433,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - enemy: 
-    delay: 0
+    delay: []
   - enemy: 
-    delay: 0
+    delay: []
   - enemy: 0100000003000000
-    delay: 7
-  - enemy: 02000000030000000300000003000000
-    delay: 7
-  - enemy: 02000000030000000100000001000000
-    delay: 7
+    delay:
+    - 0
+    - 20
+  - enemy: 03000000030000000200000003000000
+    delay:
+    - 0
+    - 15
+    - 15
+    - 20
+  - enemy: 01000000020000000300000001000000
+    delay:
+    - 0
+    - 25
+    - 25
+    - 5
 --- !u!1001 &736654571
 Prefab:
   m_ObjectHideFlags: 0
@@ -788,8 +807,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextScene: Beta_Level_2
   fader: {fileID: 1252943227}
-  red: {fileID: 2100000, guid: fd0b39dd466e4854f932ad7ebebe3135, type: 2}
-  white: {fileID: 2100000, guid: 5f81b30a5ca5d784892e35f9ccaabe0d, type: 2}
   winningMenu: {fileID: 713908215}
   gameoverMenu: {fileID: 2041530753}
 --- !u!1001 &1160251980
@@ -1371,15 +1388,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - enemy: 0200000001000000
-    delay: 10
+    delay:
+    - 0
+    - 20
   - enemy: 0200000002000000
-    delay: 10
-  - enemy: 020000000200000001000000
-    delay: 5
+    delay:
+    - 0
+    - 20
+  - enemy: 020000000100000002000000
+    delay:
+    - 0
+    - 10
+    - 10
   - enemy: 0100000001000000
-    delay: 10
-  - enemy: 020000000300000001000000
-    delay: 5
+    delay:
+    - 0
+    - 40
+  - enemy: 030000000100000002000000
+    delay:
+    - 0
+    - 15
+    - 25
 --- !u!1 &2116360277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,14 +1437,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfWaves: 5
-  totalEnemies: 33
+  totalEnemies: 32
   enemiesToNextWave: 0000000001000000020000000300000004000000
   timeInterval:
-  - 0
-  - 30
+  - 10
   - 45
-  - 120
-  - 150
+  - 75
+  - 140
+  - 180
 --- !u!4 &2116360279
 Transform:
   m_ObjectHideFlags: 0

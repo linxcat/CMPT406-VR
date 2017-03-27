@@ -22,7 +22,7 @@ public class Hand : MonoBehaviour {
     bool locking = false;
 
     float speedThreshold = 0.025F;
-    private float[] pastSpeeds = new float[10];
+    private float[] pastSpeeds = new float[23];
 
     static GameObject counterUI;
     GameObject sigilAnchor;
@@ -190,6 +190,7 @@ public class Hand : MonoBehaviour {
     }
 
     public void chargeSword(bool charge) {
+        //TODO Check mana
         if (charge) {
             sword.StartCoroutine ("swordCharge");
         }

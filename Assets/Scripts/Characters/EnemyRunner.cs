@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyRunner : Enemy{
 
+    private int runnerMaxHealth = 570;
     private SpawnManager spawnManager;
     private float detectRange = 100;
     private float atkRange;
@@ -12,7 +13,7 @@ public class EnemyRunner : Enemy{
     private float atkDuration = 1F;
     private float atkCD = 4F;
     private float speed = 2F;
-    private int attackDmg = 20;
+    private int attackDmg = 100;
     private int searchAngle = 180;
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
@@ -52,6 +53,7 @@ public class EnemyRunner : Enemy{
 	// Use this for initialization
     void Start() {
         base.Start();
+        hp = runnerMaxHealth;
         spawnManager = FindObjectOfType<SpawnManager> ();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
@@ -66,7 +68,7 @@ public class EnemyRunner : Enemy{
 	
 	// Update is called once per frame
 	void Update() {
-
+        fall();
         switch (currentState) {
 			case runnerState.spawning:
 				if (!spawning) StartCoroutine ("spawn");
@@ -89,17 +91,17 @@ public class EnemyRunner : Enemy{
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
-                takeDamage(maxDamage);
+                takeDamage(perfectDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
-                takeDamage(maxDamage/2);
+                takeDamage(goodDamage);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
-                takeDamage(maxDamage/4);
+                takeDamage(badDamage);
                 break;
         }
     }
@@ -111,7 +113,7 @@ public class EnemyRunner : Enemy{
         if (angle < searchAngle && distance < detectRange) {
             currentState = runnerState.follow;
         }
-        fall();
+        //fall();
     }
 
     private void moveTowardsPlayer() {
@@ -126,7 +128,7 @@ public class EnemyRunner : Enemy{
             //move();
             agent.Resume();
             agent.destination = player.transform.position;
-            fall();
+            //fall();
             attackCheck();
         //}
     }
@@ -195,6 +197,7 @@ public class EnemyRunner : Enemy{
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
         if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
+            agent.Stop();
             facePlayer();
             return true;
         }
