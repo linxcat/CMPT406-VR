@@ -8,6 +8,9 @@ public class Spells : MonoBehaviour {
 
     public enum SPELL_NAMES { SlowTime , Heal};
     static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
+    public AudioSource audioSource;
+    public AudioClip healSound;
+    public AudioClip slowSound;
 
     void Awake() {
         spells.Add("UL.UR.DR.DL.", SPELL_NAMES.SlowTime);
@@ -28,6 +31,8 @@ public class Spells : MonoBehaviour {
     }
 
     IEnumerator slowTime(float duration) {
+        audioSource.Stop ();
+        audioSource.PlayOneShot (slowSound);
         float originalDelta = Time.fixedDeltaTime;
 
         Time.timeScale = 0.5F;
@@ -40,6 +45,8 @@ public class Spells : MonoBehaviour {
     }
 
     void heal() {
+        audioSource.Stop ();
+        audioSource.PlayOneShot(healSound);
         GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().addHealth(50);
     }
 
