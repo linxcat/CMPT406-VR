@@ -7,8 +7,8 @@ public class Spells : MonoBehaviour {
     const float slowTimeDuration = 20F;
 
     private int slowTimeCost = 750;
-    private int healCost;
-    private float healTimer;
+    private int healCost = 125;
+    private float healTimer = 0;
     private float healDoublePeriod = 20F;
     private CharacterStats characterStats;
 
