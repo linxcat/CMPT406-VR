@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Spells : MonoBehaviour {
 
-    const float slowTimeDuration = 4F;
+    const float slowTimeDuration = 20F;
 
     private int slowTimeCost = 750;
     private int healCost;
