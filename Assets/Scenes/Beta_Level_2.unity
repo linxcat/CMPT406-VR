@@ -2297,10 +2297,10 @@ MonoBehaviour:
   enemiesToNextWave: 0000000001000000020000000300000004000000
   timeInterval:
   - 10
-  - 80
-  - 130
-  - 180
-  - 240
+  - 40
+  - 60
+  - 135
+  - 175
 --- !u!4 &1424621308
 Transform:
   m_ObjectHideFlags: 0
