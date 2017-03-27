@@ -212,4 +212,4 @@ MonoBehaviour:
   swordDrawClip: {fileID: 8300000, guid: 9c46ec15179904bcdb73e9fe8d605aab, type: 3}
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
   swordChargedClip: {fileID: 8300000, guid: 3ef0fd5e4c0ed4158af05ce00f868f74, type: 3}
-  swordUndrawClip: {fileID: 8300000, guid: db2ef412c9d5949dbb493c23cfd26467, type: 3}
+  swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}

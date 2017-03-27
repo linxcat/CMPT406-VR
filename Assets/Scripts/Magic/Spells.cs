@@ -14,6 +14,9 @@ public class Spells : MonoBehaviour {
 
     public enum SPELL_NAMES { SlowTime , Heal};
     static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
+    public AudioSource audioSource;
+    public AudioClip healSound;
+    public AudioClip slowSound;
 
     void Awake() {
         characterStats = FindObjectOfType<CharacterStats> ();
@@ -47,7 +50,8 @@ public class Spells : MonoBehaviour {
 
     IEnumerator slowTime(float duration) {
         if (characterStats.removeMana (slowTimeCost)) {
-
+            audioSource.Stop ();
+            audioSource.PlayOneShot (slowSound);
             float originalDelta = Time.fixedDeltaTime;
 
             Time.timeScale = 0.5F;
@@ -62,6 +66,8 @@ public class Spells : MonoBehaviour {
 
     void heal() {
         if ((healTimer >= 0 && characterStats.removeMana (healCost * 2)) || (healTimer < 0 && characterStats.removeMana (healCost))) {
+            audioSource.Stop ();
+            audioSource.PlayOneShot(healSound);
             healTimer = healDoublePeriod;
             characterStats.addHealth(125);
         }

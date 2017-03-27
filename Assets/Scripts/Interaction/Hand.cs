@@ -40,6 +40,9 @@ public class Hand : MonoBehaviour {
     public AudioClip hapticAudio;
     OVRHapticsClip hapticClip;
 
+    public AudioSource audioSource;
+    public AudioClip counterSound;
+
     void Awake() {
         sigilAnchor = GameObject.Find("SigilAnchor"); //need before the other hand sets it inactive
     }
@@ -59,6 +62,7 @@ public class Hand : MonoBehaviour {
         levelManager = FindObjectOfType<LevelManager>();
 
         hapticClip = new OVRHapticsClip(hapticAudio);
+        audioSource = GetComponent<AudioSource>();
 
         initialize();
         StartCoroutine("trackSpeed");
@@ -161,6 +165,7 @@ public class Hand : MonoBehaviour {
         currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
             InitiateHapticFeedback(hapticClip, 0);
+            audioSource.PlayOneShot(counterSound);
             if (other.gameObject.tag == "Projectile"){
                     counterProjectile();
                     other.gameObject.GetComponent<Projectile>().reflect();

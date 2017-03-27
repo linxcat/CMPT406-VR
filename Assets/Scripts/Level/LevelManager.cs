@@ -15,12 +15,20 @@ public class LevelManager : MonoBehaviour {
     public GameObject winningMenu;
     public GameObject gameoverMenu;
 
+    public AudioSource levelMusic;
+    public AudioSource deathMusic;
+    public AudioSource victoryMusic;
+
+
+
     void Awake() {
         fader = GameObject.Find("Fader");
     }
 
 	// Use this for initialization
 	void Start () {
+        levelMusic.Play();
+
         isGameOver = false;
         isGameWon = false;
         menuShown = false;
@@ -42,10 +50,15 @@ public class LevelManager : MonoBehaviour {
 	}
 
     public void gameOver(){
+        levelMusic.Stop();
+        deathMusic.Play();
         isGameOver = true;
+
     }
 
     public void gameWon(){
+        levelMusic.Stop();
+        victoryMusic.Play();
         isGameWon = true;
     }
 
