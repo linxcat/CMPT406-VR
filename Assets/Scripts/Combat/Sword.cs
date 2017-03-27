@@ -191,7 +191,8 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
-        if (!swordCharged) {
+        if (!swordCharged && chargeShotCost < characterStats.getMana())
+        {
             audioSource.PlayOneShot(swordChargingClip);
             InitiateHapticFeedback(swordChargeHapticClip, 1);
             yield return new WaitForSeconds(CHARGE_DURATION);

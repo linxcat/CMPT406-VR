@@ -7,18 +7,18 @@ using GUIPubSub;
 public class CharacterStats : MonoBehaviour {
 
 
-    public float PLAYER_HEALTH;
-    public float PLAYER_MANA;
-    public float PLAYER_STAMINA;
+    private float PLAYER_HEALTH;
+    private float PLAYER_MANA;
+    private float PLAYER_STAMINA;
     private float PLAYER_MAX_HEALTH = 1000;
     private float PLAYER_MAX_MANA = 1500;
     private float PLAYER_MAX_STAMINA = 600;
     public Transform HEALTH_SLIDER;
     public Transform MANA_SLIDER;
     public Transform STAMINA_SLIDER;
-    public float staminaPerSec = 75F;
-    public float staminaRegenCooldown = 3F;
-    public int manaPerSec = 50;
+    private float staminaPerSec = 75F;
+    private float staminaRegenCooldown = 5F;
+    private int manaPerSec = 50;
     private float timeCount;
     private float timePerStamina;
     private bool isDead, isInvincible, canRegen;
@@ -109,6 +109,16 @@ public class CharacterStats : MonoBehaviour {
     /** get the amount of health the player has */
     public float getHealth() {
         return PLAYER_HEALTH;
+    }
+
+    public float getStamina()
+    {
+        return PLAYER_STAMINA;
+    }
+
+    public float getMana()
+    {
+        return PLAYER_MANA;
     }
 
     /** Removes the amount from players mana 

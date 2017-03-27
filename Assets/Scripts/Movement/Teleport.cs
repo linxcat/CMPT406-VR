@@ -171,7 +171,7 @@ public class Teleport : MonoBehaviour {
     }
 
     private bool staminaCheck(){
-        if (player.GetComponentInChildren<CharacterStats>().PLAYER_STAMINA >= staminaUsage())
+        if (player.GetComponentInChildren<CharacterStats>().getStamina() >= staminaUsage())
         {
             //teleportMaterial.color = new Color32(66, 169, 255, 255);
             teleportArc.material.color = new Color32(66, 169, 255, 255);

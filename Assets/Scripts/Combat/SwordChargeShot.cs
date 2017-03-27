@@ -6,6 +6,7 @@ public class SwordChargeShot : MonoBehaviour {
 
     float LIFETIME = 5F;
     float FLIGHT_SPEED = 12F;
+    private int damage = 100;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +16,7 @@ public class SwordChargeShot : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-            other.gameObject.SendMessage("takeDamage", 50);
+            other.gameObject.SendMessage("takeDamage", damage);
             Destroy(gameObject);
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) {

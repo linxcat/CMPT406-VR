@@ -982,10 +982,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4a8b1b2a86164dbd9f8a59263a65250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: Beta_Level_2
+  nextScene: Beta_Level_1
   fader: {fileID: 0}
-  winningMenu: {fileID: 0}
-  gameoverMenu: {fileID: 0}
+  winningMenu: {fileID: 573841050}
+  gameoverMenu: {fileID: 1200345222}
 --- !u!4 &534121989
 Transform:
   m_ObjectHideFlags: 0
@@ -1062,6 +1062,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4061058621570488, guid: f613228ae9dcd4acf9b198b508c7ef07,
     type: 2}
   m_PrefabInternal: {fileID: 569595337}
+--- !u!1 &573841050 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1387898142567522, guid: a560a5b237eaf9b489b671a6f034d074,
+    type: 2}
+  m_PrefabInternal: {fileID: 1488883925}
 --- !u!1001 &703592418
 Prefab:
   m_ObjectHideFlags: 0
@@ -1818,6 +1823,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4061058621570488, guid: f613228ae9dcd4acf9b198b508c7ef07,
     type: 2}
   m_PrefabInternal: {fileID: 1193992141}
+--- !u!1 &1200345222 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1051313653541600, guid: a560a5b237eaf9b489b671a6f034d074,
+    type: 2}
+  m_PrefabInternal: {fileID: 1488883925}
 --- !u!1001 &1237178370
 Prefab:
   m_ObjectHideFlags: 0
@@ -2286,7 +2296,7 @@ MonoBehaviour:
   totalEnemies: 44
   enemiesToNextWave: 0000000001000000020000000300000004000000
   timeInterval:
-  - 0
+  - 10
   - 80
   - 130
   - 180

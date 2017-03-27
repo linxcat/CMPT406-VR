@@ -8,8 +8,10 @@ public abstract class Enemy : MonoBehaviour {
     //protected Material colourMaterial;
     protected GameObject player;
     protected NavMeshAgent agent;
-    public int hp = 100;
-    public int maxDamage = 50;
+    protected int hp;
+    public int perfectDamage = 180;
+    public int goodDamage = 100;
+    public int badDamage = 50;
 
     protected float turnSpeed = 3F;
 
