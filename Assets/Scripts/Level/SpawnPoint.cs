@@ -14,18 +14,22 @@ public enum enemyType
 public class Wave
 {
     public enemyType[] enemy;
-    public float delay;
+    public float[] delay;
 }
 
 public class SpawnPoint : MonoBehaviour {
 
     public Wave[] waves;
     private int waveCount, enemyCount;
+    Object runner, walker, ranged;
 
 	// Use this for initialization
 	void Start () {
         waveCount = 0;
         enemyCount = 0;
+        runner = Resources.Load("fastBoy");
+        walker = Resources.Load("runner");
+        ranged = Resources.Load("ranged");
 	}
 	
 	// Update is called once per frame
@@ -43,22 +47,23 @@ public class SpawnPoint : MonoBehaviour {
 		GameObject temp;
         enemyCount = 0;
         while (enemyCount < waves[waveCount].enemy.Length) {
-            yield return new WaitForSeconds(waves[waveCount].delay);
+            if(enemyCount < waves[waveCount].delay.Length)
+                yield return new WaitForSeconds(waves[waveCount].delay[enemyCount]);
             Debug.Log(gameObject.name + "spawn " + waves[waveCount] + " on " + transform.position.x + " " + transform.position.y + " " + transform.position.z);
             switch (waves[waveCount].enemy[enemyCount])
             {
                 case enemyType.nothing:
                     break;
                 case enemyType.runner:
-                    temp = (GameObject)Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(runner, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
                 case enemyType.walker: //TODO put walker here
-                    temp = (GameObject)Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(walker, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
                 case enemyType.ranged:
-                    temp = (GameObject)Instantiate(Resources.Load("ranged"), transform.position, transform.rotation);
+                    temp = (GameObject)Instantiate(ranged, transform.position, transform.rotation);
                     SendMessageUpwards("EnemySpawned");
                     break;
                 default:

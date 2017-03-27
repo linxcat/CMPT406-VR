@@ -8,8 +8,9 @@ public class fader : MonoBehaviour {
     public Material transparent;
     public Material blackout;
 
-    Color transparentRed = new Color(100, 0, 0, 0.44F);
+    Color transparentRed = new Color(1F, 0, 0, 0.44F);
     Color transparentWhite = new Color(0, 0, 0, 0.61F);
+    Color chargingBlue = new Color(0.37F, 0.75F, 1F, 0.8F);
 
     Renderer render;
 
@@ -29,7 +30,7 @@ public class fader : MonoBehaviour {
     }
 
     public void chargeEdge() {
-        edgeMode(Color.blue);
+        edgeMode(chargingBlue);
         turnOn(); //up to caller to turn off
     }
 

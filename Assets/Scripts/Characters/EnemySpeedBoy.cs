@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRunner : Enemy{
+public class EnemySpeedBoy : Enemy{
 
-    private int runnerMaxHealth = 570;
+    private int speedboyMaxHealth = 320;
     private SpawnManager spawnManager;
     private float detectRange = 100;
     private float atkRange;
-    private float atkWindUp = 0.5F;
-    private float atkDuration = 1F;
+    private float atkWindUp = 0F;
+    private float atkDuration = 1.2F;
     private float atkCD = 4F;
     private float speed = 2F;
-    private int attackDmg = 100;
+    private int attackDmg = 40;
     private int searchAngle = 180;
     private float spawnTimer = 3.5F;
     private float spawnRoarDelay = 2F;
@@ -53,7 +53,7 @@ public class EnemyRunner : Enemy{
 	// Use this for initialization
     void Start() {
         base.Start();
-        hp = runnerMaxHealth;
+        hp = speedboyMaxHealth;
         spawnManager = FindObjectOfType<SpawnManager> ();
         atkRange = transform.FindChild("Range").GetComponent<CapsuleCollider>().radius + player.GetComponent<CapsuleCollider>().radius;
         anim = GetComponent<Animator>();
@@ -195,9 +195,11 @@ public class EnemyRunner : Enemy{
 
     bool attackCheck() {
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+        Debug.Log(Vector3.Distance(temp, player.transform.position));
         if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             agent.Stop();
+            agent.destination = transform.position;
             facePlayer();
             return true;
         }

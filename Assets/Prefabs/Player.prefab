@@ -4258,10 +4258,10 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 0.983
+  m_FillMethod: 3
+  m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 1
+  m_FillOrigin: 3
 --- !u!114 &114196829976417446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4581,9 +4581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c68601e94122934f86a55d07147b960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PLAYER_HEALTH: 100
-  PLAYER_MANA: 100
-  PLAYER_STAMINA: 100
   HEALTH_SLIDER: {fileID: 224679076613495702}
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
@@ -5137,10 +5134,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 3
+  m_Radius: 0.15
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: -1.86, z: 0}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!136 &136059155893010430
 CapsuleCollider:
   m_ObjectHideFlags: 1

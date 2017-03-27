@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRanged : Enemy {
+public class TutorialRangedEnemy : Enemy {
 
-    private int rangedMaxHealth = 150;
-    private SpawnManager spawnManager;
+    //private SpawnManager spawnManager;
     public GameObject projectile;
     private float detectRange = 100; //tuning required
     private float backupRange = 10;
-    private float atkRange = 15;
+    private float atkRange = 8;
     private float atkDelay = 5;
     private float speed = 2.5F;
     private int attackDmg = 30;
@@ -47,13 +45,13 @@ public class EnemyRanged : Enemy {
         dead
     };
 
-    private rangedState currentState = rangedState.spawn;
+    private rangedState currentState = rangedState.idle;
 
     // Use this for initialization
     void Start() {
         base.Start();
-        hp = rangedMaxHealth;
-        spawnManager = FindObjectOfType<SpawnManager>();
+        hp = 50;
+        //spawnManager = FindObjectOfType<SpawnManager>();
         //TODO find projectile object
         turnSpeed = 4;
         anim = GetComponent<Animator>();
@@ -63,26 +61,29 @@ public class EnemyRanged : Enemy {
         badHapticClip = new OVRHapticsClip(badHapticAudio);
         goodHapticClip = new OVRHapticsClip(goodHapticAudio);
         perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
+        fall();
     }
 
     // Update is called once per frame
     void Update() {
         switch (currentState) {
             case rangedState.idle:
-                searchPlayer();
+                //searchPlayer();
+                attackCheck();
                 break;
             case rangedState.spawn:
                 if (!spawning) StartCoroutine("spawn");
                 break;
             case rangedState.follow:
-                moveTowardsPlayer();
+                //moveTowardsPlayer();
+
                 break;
             /*case rangedState.backup:
                 facePlayer();
                 backUp();
                 break;*/
             case rangedState.attack:
-                facePlayer();
+                //facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
                 break;
         }
@@ -106,8 +107,8 @@ public class EnemyRanged : Enemy {
         float angle = Vector3.Angle(axisRotate, transform.forward);
 
         anim.SetBool("moving", true);
-        agent.Resume();
-        agent.destination = player.transform.position;
+        ////agent.Resume();
+        ////agent.destination = player.transform.position;
         fall();
         attackCheck();
     }
@@ -167,7 +168,7 @@ public class EnemyRanged : Enemy {
     }
 
     IEnumerator fireProjectile() {
-        agent.Stop();
+        //agent.Stop();
         anim.SetBool("moving", false);
         anim.SetTrigger("attack");
         attacking = true;
@@ -196,17 +197,17 @@ public class EnemyRanged : Enemy {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
-                takeDamage(perfectDamage);
+                //takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
-                takeDamage(goodDamage);
+                //takeDamage(maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
-                takeDamage(badDamage);
+                //takeDamage(maxDamage / 4);
                 break;
         }
     }
@@ -221,8 +222,8 @@ public class EnemyRanged : Enemy {
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
-        agent.enabled = false;
-        spawnManager.EnemyKilled();
+        //agent.enabled = false;
+        //spawnManager.EnemyKilled();
         GetComponent<Collider>().enabled = false;
         StartCoroutine("sink");
     }

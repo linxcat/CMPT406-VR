@@ -195,6 +195,7 @@ public class Hand : MonoBehaviour {
     }
 
     public void chargeSword(bool charge) {
+        //TODO Check mana
         if (charge) {
             sword.StartCoroutine ("swordCharge");
         }
