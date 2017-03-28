@@ -33,6 +33,8 @@ public class CharacterStats : MonoBehaviour {
     private GUICircularHealthSubscriber healthSub;
     private GUICircularManaSubscriber manaSub;
 
+    public AudioSource audioSource;
+
     public AudioClip hapticAudio;
     OVRHapticsClip hapticClip;
 
@@ -206,7 +208,9 @@ public class CharacterStats : MonoBehaviour {
     }
 
     IEnumerator manaCharge() {
+
         yield return new WaitForSeconds(1F);
+        audioSource.Play();
         while (true) {
             fader.SendMessage("chargeEdge");
             addMana(manaPerSec);
@@ -215,6 +219,7 @@ public class CharacterStats : MonoBehaviour {
     }
 
     public void manaChargeOff() {
+        audioSource.Stop();
         StopCoroutine("manaCharge");
         fader.SendMessage("turnOff");
     }
