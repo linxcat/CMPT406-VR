@@ -2750,6 +2750,13 @@ MonoBehaviour:
   badHitClip: {fileID: 0}
   goodHitClip: {fileID: 0}
   perfectHitClip: {fileID: 0}
+  runnerRoarClip: {fileID: 0}
+  hitAttack: {fileID: 0}
+  beingHit: {fileID: 0}
+  deathSound: {fileID: 0}
+  badHapticAudio: {fileID: 0}
+  goodHapticAudio: {fileID: 0}
+  perfectHapticAudio: {fileID: 0}
 --- !u!114 &114780908043711596
 MonoBehaviour:
   m_ObjectHideFlags: 1

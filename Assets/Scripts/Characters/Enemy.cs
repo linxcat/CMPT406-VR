@@ -8,8 +8,10 @@ public abstract class Enemy : MonoBehaviour {
     //protected Material colourMaterial;
     protected GameObject player;
     protected NavMeshAgent agent;
-    public int hp = 100;
-    public int maxDamage = 50;
+    protected int hp;
+    public int perfectDamage = 180;
+    public int goodDamage = 100;
+    public int badDamage = 50;
 
     protected float turnSpeed = 3F;
 
@@ -64,5 +66,10 @@ public abstract class Enemy : MonoBehaviour {
     public int getHp()
     {
         return hp;
+    }
+
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
     }
 }

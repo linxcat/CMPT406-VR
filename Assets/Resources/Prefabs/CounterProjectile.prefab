@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4761665792701792}
   - component: {fileID: 212425900798969702}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Reflect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 65470583600008062}
   - component: {fileID: 23221432456320976}
   - component: {fileID: 114498842127694304}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: AbsorbBox
   m_TagString: absorb
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 65379687840811300}
   - component: {fileID: 23851814206330762}
   - component: {fileID: 114492946132536656}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: ReflectBox
   m_TagString: reflect
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4915213163585102}
   - component: {fileID: 212051801761252630}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Absorb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4931290042073184}
-  m_Layer: 0
+  - component: {fileID: 114614024031713290}
+  m_Layer: 16
   m_Name: CounterProjectile
   m_TagString: slow
   m_Icon: {fileID: 0}
@@ -282,6 +283,17 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1475600318836512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275bade5ac7c00248a06ff17db71fd8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114614024031713290
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1803426702825390}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 275bade5ac7c00248a06ff17db71fd8e, type: 3}

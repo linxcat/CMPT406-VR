@@ -332,6 +332,9 @@ MonoBehaviour:
   badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
   goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
   perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
+  badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
+  goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
+  perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
 --- !u!136 &136009909463226780
 CapsuleCollider:
   m_ObjectHideFlags: 1

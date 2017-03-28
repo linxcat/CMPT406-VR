@@ -2073,7 +2073,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1068742407868336}
-  m_LocalRotation: {x: 0.11842546, y: -0.87388426, z: 0.32378328, w: -0.3427335}
+  m_LocalRotation: {x: 0.118425444, y: -0.87388414, z: 0.32378325, w: -0.34273347}
   m_LocalPosition: {x: -0.86873984, y: 0.44703138, z: -0.45930612}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2116,7 +2116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539895977093018}
   m_LocalRotation: {x: -0, y: -0.6361657, z: -0, w: 0.7715525}
-  m_LocalPosition: {x: 21.576487, y: 0.054935455, z: 9.536496}
+  m_LocalPosition: {x: 33.6, y: 0.054935455, z: 7.2}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 4958832772944554}
@@ -2728,8 +2728,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.18
+  m_PlayOnAwake: 0
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2738,9 +2738,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 50
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -2748,26 +2748,26 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
-      time: 0
-      value: 1
+      time: 0.008658009
+      value: 0.5267442
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
       time: 1
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.20734392
+      outSlope: -0.20734392
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   panLevelCustomCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2785,7 +2785,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -2853,13 +2853,16 @@ MonoBehaviour:
   hp: 100
   maxDamage: 50
   audioSource: {fileID: 82626206269951944}
-  badHitClip: {fileID: 0}
-  goodHitClip: {fileID: 0}
-  perfectHitClip: {fileID: 0}
+  badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
+  goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
+  perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
   runnerRoarClip: {fileID: 8300000, guid: ba212728f5f374340883050a08608331, type: 3}
-  hitAttack: {fileID: 0}
-  beingHit: {fileID: 0}
-  deathSound: {fileID: 0}
+  hitAttack: {fileID: 8300000, guid: 572eace4b2361e14081eb52b04be566d, type: 3}
+  beingHit: {fileID: 8300000, guid: d38bc4d987ba7da49bcf9e6ba1d24ccb, type: 3}
+  deathSound: {fileID: 8300000, guid: c07835b847f54834a9430fef0efa7147, type: 3}
+  badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
+  goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
+  perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
 --- !u!136 &136090027790409878
 CapsuleCollider:
   m_ObjectHideFlags: 1
