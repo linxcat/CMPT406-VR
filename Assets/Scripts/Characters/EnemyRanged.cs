@@ -21,6 +21,8 @@ public class EnemyRanged : Enemy {
     bool attacking = false;
     bool parryable = false;
 
+    public AudioSource gruntSource;
+
     public AudioClip deathClip;
     public AudioClip hitClip;
     public AudioClip attackClip;
@@ -63,6 +65,7 @@ public class EnemyRanged : Enemy {
         badHapticClip = new OVRHapticsClip(badHapticAudio);
         goodHapticClip = new OVRHapticsClip(goodHapticAudio);
         perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
+
     }
 
     // Update is called once per frame
@@ -129,7 +132,7 @@ public class EnemyRanged : Enemy {
 
     IEnumerator spawn()
     {
-        audioSource.PlayOneShot(spawnClip);
+        gruntSource.PlayOneShot(spawnClip);
         spawning = true;
         yield return new WaitForSeconds(spawnTimer);
         currentState = rangedState.idle;
@@ -172,7 +175,7 @@ public class EnemyRanged : Enemy {
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
-        audioSource.PlayOneShot(attackClip);
+        gruntSource.PlayOneShot(attackClip);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
@@ -191,7 +194,7 @@ public class EnemyRanged : Enemy {
     }
 
     public override void swingHit(Hit hit) {
-        audioSource.PlayOneShot(hitClip);
+        gruntSource.PlayOneShot(hitClip);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
@@ -217,7 +220,7 @@ public class EnemyRanged : Enemy {
     }
 
     public override void die() {
-        audioSource.PlayOneShot(deathClip);
+        gruntSource.PlayOneShot(deathClip);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;

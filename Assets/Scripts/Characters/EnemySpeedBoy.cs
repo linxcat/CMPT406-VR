@@ -30,6 +30,7 @@ public class EnemySpeedBoy : Enemy{
     public AudioClip beingHit;
     public AudioClip deathSound;
 
+    public AudioSource gruntSource;
     // Haptics
     public AudioClip badHapticAudio;
     public AudioClip goodHapticAudio;
@@ -86,7 +87,7 @@ public class EnemySpeedBoy : Enemy{
 	}
 
     public override void swingHit(Hit hit) {
-        audioSource.PlayOneShot(beingHit);
+        gruntSource.PlayOneShot(beingHit);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
@@ -152,7 +153,7 @@ public class EnemySpeedBoy : Enemy{
 	IEnumerator spawn(){
 		spawning = true;
 		yield return new WaitForSeconds (spawnRoarDelay);
-		audioSource.PlayOneShot(runnerRoarClip);
+		gruntSource.PlayOneShot(runnerRoarClip);
 		yield return new WaitForSeconds (spawnTimer - spawnRoarDelay);
 		currentState = runnerState.idle;
 	}
@@ -163,7 +164,7 @@ public class EnemySpeedBoy : Enemy{
         anim.SetBool("moving", false);
         agent.Stop();
         anim.SetTrigger("attack");
-        audioSource.PlayOneShot(hitAttack);
+        gruntSource.PlayOneShot(hitAttack);
         yield return new WaitForSeconds(atkWindUp);
         parryable = true;
         yield return new WaitForSeconds(atkDuration);
@@ -207,7 +208,7 @@ public class EnemySpeedBoy : Enemy{
     }
 
     public override void die() {
-        audioSource.PlayOneShot(deathSound);
+        gruntSource.PlayOneShot(deathSound);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         spawnManager.EnemyKilled();
