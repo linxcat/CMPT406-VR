@@ -738,6 +738,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4273480935055942}
   - component: {fileID: 114595972730223150}
+  - component: {fileID: 82797643130111944}
   m_Layer: 0
   m_Name: PlayerStatManager
   m_TagString: Untagged
@@ -3980,6 +3981,86 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!82 &82797643130111944
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1502568006746324}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 455ece9be0a264dee841ce70aa91257a, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!82 &82805640437700924
 AudioSource:
   m_ObjectHideFlags: 1
@@ -4359,6 +4440,8 @@ MonoBehaviour:
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
   swordChargedClip: {fileID: 8300000, guid: 3ef0fd5e4c0ed4158af05ce00f868f74, type: 3}
   swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
+  activeMaterial: {fileID: 2100000, guid: 71d4012ba1c08e04baca1d8fb5a6e489, type: 2}
+  inactiveMaterial: {fileID: 2100000, guid: d7d98c80fbc1f924e92002fa709cd671, type: 2}
 --- !u!114 &114434230823427598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4587,7 +4670,7 @@ MonoBehaviour:
   HEALTH_SLIDER: {fileID: 224679076613495702}
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 82797643130111944}
   hapticAudio: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
 --- !u!114 &114644005032536390
 MonoBehaviour:
@@ -4758,6 +4841,8 @@ MonoBehaviour:
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
   swordChargedClip: {fileID: 8300000, guid: 3ef0fd5e4c0ed4158af05ce00f868f74, type: 3}
   swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
+  activeMaterial: {fileID: 2100000, guid: 71d4012ba1c08e04baca1d8fb5a6e489, type: 2}
+  inactiveMaterial: {fileID: 2100000, guid: d7d98c80fbc1f924e92002fa709cd671, type: 2}
 --- !u!114 &114810036695010986
 MonoBehaviour:
   m_ObjectHideFlags: 1
