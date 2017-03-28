@@ -32,7 +32,7 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
-	public GameObject slashEffect;
+    public GameObject slashEffect;
 
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
@@ -47,6 +47,9 @@ public class Sword : MonoBehaviour {
 
     private CharacterStats characterStats;
     private int chargeShotCost = 100;
+    MeshRenderer renderer;
+    public Material activeMaterial;
+    public Material inactiveMaterial;
 
     // Use this for initialization
     void Start () {
@@ -57,6 +60,8 @@ public class Sword : MonoBehaviour {
         swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
         characterStats = FindObjectOfType<CharacterStats> ();
+        renderer = GetComponent<MeshRenderer>();
+        renderer.material = inactiveMaterial;
     }
 
     // Update is called once per frame
@@ -76,6 +81,7 @@ public class Sword : MonoBehaviour {
 
     public void startSlash() {
         stopSound();
+        renderer.material = activeMaterial;
         audioSource.PlayOneShot(swordDrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
@@ -107,6 +113,7 @@ public class Sword : MonoBehaviour {
     public void stopSlash() {
         StopCoroutine("swordCharge");
         StopCoroutine("swingTimeMax");
+        renderer.material = inactiveMaterial;
         audioSource.PlayOneShot(swordUndrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
