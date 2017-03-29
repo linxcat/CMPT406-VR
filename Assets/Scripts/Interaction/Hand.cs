@@ -15,14 +15,14 @@ public class Hand : MonoBehaviour {
     static GameObject currentProjectile = null;
     GameObject player;
     //difference between this and the current time is the duration the time is still slowed
-    public static float timeSlowed;
+
 
     bool swordIsOn = true;
     bool locked = false;
     bool locking = false;
 
     float speedThreshold = 0.025F;
-    private float[] pastSpeeds = new float[10];
+    private float[] pastSpeeds = new float[23];
 
     static GameObject counterUI;
     GameObject sigilAnchor;
@@ -35,14 +35,21 @@ public class Hand : MonoBehaviour {
     Spells spells;
     GameObject centerEyeAnchor;
     Teleport teleportScript;
+    LevelManager levelManager;
+
+    public AudioClip hapticAudio;
+    OVRHapticsClip hapticClip;
+
+    public AudioSource audioSource;
+    public AudioClip counterSound;
 
     void Awake() {
         sigilAnchor = GameObject.Find("SigilAnchor"); //need before the other hand sets it inactive
     }
 
     // Use this for initialization
-	void Start () {
-        player = GameObject.FindGameObjectWithTag("Player");
+    void Start () {
+        player = GameObject.FindGameObjectWithTag("MainCamera");
         hitArray = GameObject.Find("HitArray");
         GUIAnchor = GameObject.Find("GUIAnchor");
         wristAnchor = transform.FindChild("WristAnchor");
@@ -52,6 +59,11 @@ public class Hand : MonoBehaviour {
         spells = GameObject.Find("Player").GetComponent<Spells>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         teleportScript = GameObject.Find("Player").GetComponent<Teleport>();
+        levelManager = FindObjectOfType<LevelManager>();
+
+        hapticClip = new OVRHapticsClip(hapticAudio);
+        audioSource = GetComponent<AudioSource>();
+
         initialize();
         StartCoroutine("trackSpeed");
     }
@@ -68,13 +80,10 @@ public class Hand : MonoBehaviour {
         }
        else {
             // gauntlet
-            if(Time.time > timeSlowed)
-            {
-                Time.timeScale = 1f;
-                Destroy(counterUI);
-            }
-            placeGUI();
+ 
 
+
+            placeGUI();
         }
 
         if ((locking && !locked) || (!locking && locked)) { // finalize hand lock
@@ -104,8 +113,7 @@ public class Hand : MonoBehaviour {
         // TODO handle active slashes and sigils on switch
     }
 
-    void updateSigilAnchor()
-    {
+    void updateSigilAnchor() {
         Vector3 sigilDirection = transform.position - centerEyeAnchor.transform.position;
         sigilDirection.Normalize();
         Vector3 sigilTransform = sigilDirection * SIGIL_DISTANCE;
@@ -156,12 +164,13 @@ public class Hand : MonoBehaviour {
         if (IS_PRIMARY) return;
         currentProjectile = other.gameObject;
         if (getSpeed() > speedThreshold) {
-
+            InitiateHapticFeedback(hapticClip, 0);
+            audioSource.PlayOneShot(counterSound);
             if (other.gameObject.tag == "Projectile"){
                     counterProjectile();
                     other.gameObject.GetComponent<Projectile>().reflect();
             }
-            else{
+            else {
                 other.SendMessageUpwards("counter");
             }
         }
@@ -181,12 +190,12 @@ public class Hand : MonoBehaviour {
         sword.switchDebug();
     }
 
-    public void setLock(bool value)
-    {
+    public void setLock(bool value) {
         locking = value;
     }
 
     public void chargeSword(bool charge) {
+        //TODO Check mana
         if (charge) {
             sword.StartCoroutine ("swordCharge");
         }
@@ -196,30 +205,31 @@ public class Hand : MonoBehaviour {
         }
     }
 
-    public void switchPrimaryHand()
-    {
+    public void switchPrimaryHand() {
         IS_PRIMARY = !IS_PRIMARY;
         initialize();
     }
 
     public void counterProjectile() {
-        timeSlowed = Time.time + 1f;
+       
         Time.timeScale = 0.111111f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        //if (counterUI == null) {
-            GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
-            counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
-            counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
-        //}
+        
+        GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+        counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
+        counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
+        
     }
 
 
-    public static void absorb()
-    {
-        if(currentProjectile != null)
-        {
+    public static void absorb() {
+        if(currentProjectile != null) {
             Destroy(currentProjectile);
         }
     }
 
+    //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
+    public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {
+        OVRHaptics.Channels[channel].Mix(hapticsClip);
+    }
 }

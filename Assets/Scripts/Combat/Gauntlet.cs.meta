@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: 822ceb92a82f3b94bb1c2686a3ea0457
-timeCreated: 1486666834
+timeCreated: 1490061155
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - hapticsAudio: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

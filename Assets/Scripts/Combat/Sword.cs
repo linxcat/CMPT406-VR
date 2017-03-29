@@ -32,10 +32,12 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
-	public GameObject slashEffect;
+    public GameObject slashEffect;
 
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
+    public AudioClip swordChargeHapticAudio;
+    OVRHapticsClip swordChargeHapticClip;
 
     public AudioSource audioSource;
     public AudioClip swordDrawClip;
@@ -43,13 +45,23 @@ public class Sword : MonoBehaviour {
     public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
+    private CharacterStats characterStats;
+    private int chargeShotCost = 100;
+    MeshRenderer renderer;
+    public Material activeMaterial;
+    public Material inactiveMaterial;
+
     // Use this for initialization
     void Start () {
         swordAnchor = transform.parent.gameObject;
         hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
+        swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
         audioSource = GetComponent<AudioSource>();
+        characterStats = FindObjectOfType<CharacterStats> ();
+        renderer = GetComponent<MeshRenderer>();
+        renderer.material = inactiveMaterial;
     }
 
     // Update is called once per frame
@@ -69,7 +81,8 @@ public class Sword : MonoBehaviour {
 
     public void startSlash() {
         stopSound();
-        audioSource.PlayOneShot(swordDrawClip, 0.2f);
+        renderer.material = activeMaterial;
+        audioSource.PlayOneShot(swordDrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
         for (int i = 0; i < directionDeviations.Length; i++) {
@@ -100,7 +113,8 @@ public class Sword : MonoBehaviour {
     public void stopSlash() {
         StopCoroutine("swordCharge");
         StopCoroutine("swingTimeMax");
-        audioSource.PlayOneShot(swordUndrawClip, 0.2f);
+        renderer.material = inactiveMaterial;
+        audioSource.PlayOneShot(swordUndrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
         stopPoint = swordAnchor.transform.position;
@@ -184,11 +198,13 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
-        if (!swordCharged) {
-            audioSource.PlayOneShot(swordChargingClip, 0.2f);
+        if (!swordCharged && chargeShotCost < characterStats.getMana())
+        {
+            audioSource.PlayOneShot(swordChargingClip);
+            InitiateHapticFeedback(swordChargeHapticClip, 1);
             yield return new WaitForSeconds(CHARGE_DURATION);
             stopSound();
-            audioSource.PlayOneShot(swordChargedClip, 0.2f);
+            audioSource.PlayOneShot(swordChargedClip);
             InitiateHapticFeedback(vibeClip, 1);
             swordCharged = true;
             GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
@@ -204,9 +220,12 @@ public class Sword : MonoBehaviour {
 
     public void stopSound() {
         audioSource.Stop();
+        OVRHaptics.LeftChannel.Clear();
+        OVRHaptics.RightChannel.Clear();
     }
 
     void FireChargedShot(Vector3 startlocation, Quaternion facing) {
+        characterStats.removeMana (chargeShotCost);
         GameObject shot = Instantiate(ChargeShot, startlocation, facing);
     }
 

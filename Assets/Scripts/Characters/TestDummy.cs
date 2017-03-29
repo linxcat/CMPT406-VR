@@ -16,6 +16,14 @@ public class TestDummy : Enemy {
 
     float parryTime = 2F;
 
+    // Haptics
+    public AudioClip badHapticAudio;
+    public AudioClip goodHapticAudio;
+    public AudioClip perfectHapticAudio;
+    OVRHapticsClip badHapticClip;
+    OVRHapticsClip goodHapticClip;
+    OVRHapticsClip perfectHapticClip;
+
     // Use this for initialization
     void Start () {
         base.Start();
@@ -31,6 +39,11 @@ public class TestDummy : Enemy {
             if (child.name == "model") colourMaterial = child.GetComponent<Renderer>().material;
         }
         StartCoroutine("swingWeapon", 0F);
+
+        //Haptics
+        badHapticClip = new OVRHapticsClip(badHapticAudio);
+        goodHapticClip = new OVRHapticsClip(goodHapticAudio);
+        perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
     }
 	
 	// Update is called once per frame
@@ -66,19 +79,21 @@ public class TestDummy : Enemy {
         switch (accuracy) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip, 0.2f);
+                InitiateHapticFeedback(perfectHapticClip, 1);
                 colourMaterial.SetColor("_Color", Color.blue);
-                takeDamage(maxDamage);
-                Debug.Log("Enemy hit! Damage: " + maxDamage);
+                Debug.Log("Enemy hit! Damage: " + perfectDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip, 0.2f);
+                InitiateHapticFeedback(goodHapticClip, 1);
                 colourMaterial.SetColor("_Color", Color.green);
-                Debug.Log("Enemy hit! Damage: " + maxDamage / 2);
+                Debug.Log("Enemy hit! Damage: " + goodDamage);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip, 0.2f);
+                InitiateHapticFeedback(badHapticClip, 1);
                 colourMaterial.SetColor("_Color", Color.red);
-                Debug.Log("Enemy hit! Damage: " + maxDamage / 4);
+                Debug.Log("Enemy hit! Damage: " + badDamage);
                 break;
         }
         yield return new WaitForSeconds(0.75F);
@@ -105,4 +120,5 @@ public class TestDummy : Enemy {
             yield return null;
         }
     }
+
 }

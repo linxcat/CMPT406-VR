@@ -5,25 +5,45 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour {
 
     public int numberOfWaves = 3;
-    public float timeInterval = 10F;
-    public float timeIntervalIncreasePerWave = 2F;
+    private int currentWave;
+    public int totalEnemies;
+    public int[] enemiesToNextWave;
+    public float[] timeInterval;
     private float timeCount;
     private string spawnMesasge = "spawn";
+    private int enemiesLive, enemiesKilled;
+    private LevelManager levelManager;
 
 	// Use this for initialization
 	void Start () {
         timeCount = 0;
+        currentWave = 0;
+        levelManager = FindObjectOfType<LevelManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         timeCount += Time.deltaTime;
-        if (numberOfWaves > 0 && timeCount > timeInterval)
-        {
-            BroadcastMessage(spawnMesasge);
-            timeCount = 0;
-            timeInterval += timeIntervalIncreasePerWave;
-            numberOfWaves--;
+        if (currentWave < numberOfWaves && currentWave < timeInterval.Length && timeCount > timeInterval[currentWave]) {
+            if (currentWave < enemiesToNextWave.Length && enemiesLive <= enemiesToNextWave[currentWave]) {
+                BroadcastMessage(spawnMesasge);
+                timeCount = 0;
+                currentWave++;
+            }
         }
+        if (enemiesKilled >= totalEnemies)
+        {
+            levelManager.gameWon();
+        }
+
 	}
+
+    public void EnemySpawned() {
+        enemiesLive++;
+    }
+
+    public void EnemyKilled() {
+        enemiesLive--;
+        enemiesKilled++;
+    }
 }
