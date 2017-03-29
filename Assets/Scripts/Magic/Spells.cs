@@ -6,23 +6,30 @@ public class Spells : MonoBehaviour {
 
     const float slowTimeDuration = 20F;
 
-    private int slowTimeCost = 750;
-    private int healCost = 125;
+    private const int slowTimeCost = 1200;
+    private const int healCost = 125;
+    private const int fireballCost = 300;
     private float healTimer = 0;
     private float healDoublePeriod = 20F;
     private CharacterStats characterStats;
 
-    public enum SPELL_NAMES { SlowTime , Heal};
+    public enum SPELL_NAMES {SlowTime , Heal, Fireball};
     static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
     public AudioSource audioSource;
     public AudioClip healSound;
     public AudioClip slowSound;
+    public Sword sword;
+
+    private void Start() {
+        sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
+    }
 
     void Awake() {
         characterStats = FindObjectOfType<CharacterStats> ();
         spells.Add("UL.UR.DR.DL.", SPELL_NAMES.SlowTime);
         spells.Add("U.D.L.R.", SPELL_NAMES.Heal);
-        StartCoroutine ("HealTimer");
+        spells.Add("U.R.L.U.D.", SPELL_NAMES.Fireball);
+        StartCoroutine(HealTimer());
     }
 
     public void cast(string spell) {
@@ -35,6 +42,9 @@ public class Spells : MonoBehaviour {
                 break;
             case SPELL_NAMES.Heal:
                 heal();
+                break;
+            case SPELL_NAMES.Fireball:
+                fireball();
                 break;
             default:
                 return;
@@ -71,6 +81,11 @@ public class Spells : MonoBehaviour {
             healTimer = healDoublePeriod;
             characterStats.addHealth(125);
         }
+    }
+
+    void fireball() {
+        if( sword.storeFireball() && fireballCost < characterStats.getMana() )
+          characterStats.removeMana(fireballCost);
     }
 
     void shootProjectile() {

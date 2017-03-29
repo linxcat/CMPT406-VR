@@ -215,3 +215,5 @@ MonoBehaviour:
   swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
   activeMaterial: {fileID: 2100000, guid: 71d4012ba1c08e04baca1d8fb5a6e489, type: 2}
   inactiveMaterial: {fileID: 2100000, guid: d7d98c80fbc1f924e92002fa709cd671, type: 2}
+  chargedMaterial: {fileID: 2100000, guid: e63821e593add204e8846367c73c338e, type: 2}
+  fireMaterial: {fileID: 2100000, guid: 122f6f4502eced44bb80ea05ebb12b77, type: 2}

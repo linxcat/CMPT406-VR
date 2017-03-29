@@ -9,10 +9,15 @@ public class MagicDraw : MonoBehaviour {
     public AudioSource audioSource;
     public AudioClip magicTouchClip;
 
+    public SpriteRenderer sigilRenderer;
+    public Sprite sigil;
+    public Sprite sigilWithGuide;
+
     public AudioClip magicHapticAudio;
     OVRHapticsClip magicHapticClip;
 
     bool isDrawing = false;
+    bool casting;
 
     void Awake () {
         magicLines = GameObject.Find("SigilAnchor").GetComponent<LineRenderer>();
@@ -29,6 +34,10 @@ public class MagicDraw : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (!isDrawing) return;
+        if(!casting) {
+            casting = true;
+            sigilRenderer.sprite = sigil;
+        }
         if (verticies.Count > 0 && other.name == verticies.Last.Value) return; //don't draw the same node twice
 
         magicLines.numPositions++;
@@ -47,6 +56,7 @@ public class MagicDraw : MonoBehaviour {
     public void clear() {
         magicLines.numPositions = 1;
         verticies.Clear();
+        sigilRenderer.sprite = sigilWithGuide;
     }
 
     public string getSpell() {

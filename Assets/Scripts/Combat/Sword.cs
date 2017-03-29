@@ -32,6 +32,9 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
+    bool fireballCharged = false;
+    public GameObject Fireball;
+
     public GameObject slashEffect;
 
     public AudioClip vibeAudioClip;
@@ -50,6 +53,8 @@ public class Sword : MonoBehaviour {
     MeshRenderer renderer;
     public Material activeMaterial;
     public Material inactiveMaterial;
+    public Material chargedMaterial;
+    public Material fireMaterial;
 
     // Use this for initialization
     void Start () {
@@ -131,24 +136,30 @@ public class Sword : MonoBehaviour {
             }
         }
 
-		//Vector3 spawnOffset = (stopPoint - startPoint) / 2;
+        //Vector3 spawnOffset = (stopPoint - startPoint) / 2;
         Vector3 spawnOffset = (stopPoint - startPoint);
-		Vector3 spawn = startPoint + spawnOffset;
-		Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
-
-		if (swordCharged) {
-			FireChargedShot(spawn, shotDirection);
-			swordCharged = false;
-			GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-		}
+        Vector3 spawn = startPoint + spawnOffset;
+        Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
+ 
+		    if (swordCharged) {
+			      FireChargedShot();
+			      swordCharged = false;
+            renderer.material = inactiveMaterial;
+		    }
+        else if (fireballCharged) {
+            FireFireball();
+            fireballCharged = false;
+            renderer.material = inactiveMaterial;
+        }
 
         Hit.DIRECTION correctedDirection = fixDirection(swingDirection);
-
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
+
         foreach (GameObject enemy in enemyContacts) {
-			CreateSlashEffect (enemy, startPoint, spawnOffset); //incorrect so far
-            enemy.SendMessageUpwards("swingHit", hit);
+            CreateSlashEffect (enemy, startPoint, spawnOffset); //incorrect so far
+                enemy.SendMessageUpwards("swingHit", hit);
         }
+
         enemyContacts.Clear();
       
         if (debugMode) {
@@ -198,7 +209,7 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
-        if (!swordCharged && chargeShotCost < characterStats.getMana())
+        if (!swordCharged && !fireballCharged && chargeShotCost < characterStats.getMana())
         {
             audioSource.PlayOneShot(swordChargingClip);
             InitiateHapticFeedback(swordChargeHapticClip, 1);
@@ -207,7 +218,7 @@ public class Sword : MonoBehaviour {
             audioSource.PlayOneShot(swordChargedClip);
             InitiateHapticFeedback(vibeClip, 1);
             swordCharged = true;
-            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            renderer.material = chargedMaterial;
         }
     }
 
@@ -224,17 +235,31 @@ public class Sword : MonoBehaviour {
         OVRHaptics.RightChannel.Clear();
     }
 
-    void FireChargedShot(Vector3 startlocation, Quaternion facing) {
+    void FireChargedShot() {
         characterStats.removeMana (chargeShotCost);
-        GameObject shot = Instantiate(ChargeShot, startlocation, facing);
+        GameObject shot = Instantiate(ChargeShot, this.transform.position,
+          Quaternion.LookRotation(this.transform.forward));
     }
 
-	void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
-		GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
-        slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
-		slash.GetComponent<ParticleSystem>().Play();
-		GameObject.Destroy (slash, 0.5f);
-	}
+    void FireFireball() {
+        GameObject fireball = Instantiate(Fireball, this.transform.position,
+          Quaternion.LookRotation(this.transform.forward));
+    }
+
+    public bool storeFireball() {
+        if(!fireballCharged)
+            fireballCharged = true;
+        else
+            return false;
+        return true;
+    }
+
+    void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
+		    GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
+            slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
+		    slash.GetComponent<ParticleSystem>().Play();
+		    GameObject.Destroy (slash, 0.5f);
+	  }
 
     //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
     public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {

@@ -1860,8 +1860,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1142716713057216}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 5, y: 0, z: 4}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 1.7, y: 0, z: 19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4710574800262870}
@@ -1878,7 +1878,7 @@ Transform:
   - {fileID: 224729841166050858}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4710574800262870
 Transform:
   m_ObjectHideFlags: 1
@@ -4234,6 +4234,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   magicTouchClip: {fileID: 8300000, guid: fa43645ff6c44a3489bdce0e1a054d25, type: 3}
+  sigilRenderer: {fileID: 212458743160526488}
+  sigil: {fileID: 21300000, guid: 13daa4bda92b629498c9d0104eed27ad, type: 3}
+  sigilWithGuide: {fileID: 21300000, guid: bace15b6886a34d489440546e7980f3e, type: 3}
   magicHapticAudio: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
 --- !u!114 &114017560104380738
 MonoBehaviour:
@@ -4357,6 +4360,7 @@ MonoBehaviour:
   audioSource: {fileID: 82129963842926168}
   healSound: {fileID: 8300000, guid: 597ad7321f0eac244a76ba3d46481dd8, type: 3}
   slowSound: {fileID: 8300000, guid: aa559baa44e1d2144aae2245c67a30b2, type: 3}
+  sword: {fileID: 0}
 --- !u!114 &114222871684412264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4430,6 +4434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swingTimeExceeded: 0
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
+  Fireball: {fileID: 1094952711545862, guid: b540abd5edd195d408751d7cb7572b50, type: 2}
   slashEffect: {fileID: 1320487892062564, guid: b4d946b1f5edf584c8694fabe48f2730,
     type: 2}
   vibeAudioClip: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
@@ -4442,6 +4447,8 @@ MonoBehaviour:
   swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
   activeMaterial: {fileID: 2100000, guid: 71d4012ba1c08e04baca1d8fb5a6e489, type: 2}
   inactiveMaterial: {fileID: 2100000, guid: d7d98c80fbc1f924e92002fa709cd671, type: 2}
+  chargedMaterial: {fileID: 0}
+  fireMaterial: {fileID: 0}
 --- !u!114 &114434230823427598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4711,6 +4718,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   magicTouchClip: {fileID: 8300000, guid: fa43645ff6c44a3489bdce0e1a054d25, type: 3}
+  sigilRenderer: {fileID: 212458743160526488}
+  sigil: {fileID: 21300000, guid: 13daa4bda92b629498c9d0104eed27ad, type: 3}
+  sigilWithGuide: {fileID: 21300000, guid: bace15b6886a34d489440546e7980f3e, type: 3}
   magicHapticAudio: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
 --- !u!114 &114708745938590500
 MonoBehaviour:
@@ -4831,6 +4841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swingTimeExceeded: 0
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
+  Fireball: {fileID: 1094952711545862, guid: b540abd5edd195d408751d7cb7572b50, type: 2}
   slashEffect: {fileID: 1320487892062564, guid: b4d946b1f5edf584c8694fabe48f2730,
     type: 2}
   vibeAudioClip: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
@@ -4843,6 +4854,8 @@ MonoBehaviour:
   swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
   activeMaterial: {fileID: 2100000, guid: 71d4012ba1c08e04baca1d8fb5a6e489, type: 2}
   inactiveMaterial: {fileID: 2100000, guid: d7d98c80fbc1f924e92002fa709cd671, type: 2}
+  chargedMaterial: {fileID: 0}
+  fireMaterial: {fileID: 0}
 --- !u!114 &114810036695010986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5212,7 +5225,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.01
+  m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136028653338560352
 CapsuleCollider:
@@ -5432,7 +5445,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 13daa4bda92b629498c9d0104eed27ad, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bace15b6886a34d489440546e7980f3e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
