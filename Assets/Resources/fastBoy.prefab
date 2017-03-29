@@ -676,6 +676,7 @@ GameObject:
   - component: {fileID: 82673846343881388}
   - component: {fileID: 114788728731955384}
   - component: {fileID: 82545567011935522}
+  - component: {fileID: 82422040332441726}
   m_Layer: 16
   m_Name: fastBoy
   m_TagString: Untagged
@@ -1360,6 +1361,92 @@ Transform:
   m_Father: {fileID: 4875108086728718}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &82422040332441726
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1914272463144170}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 1636d630795b3f947942b12fe0e9d305, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.601
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 50
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.70679677
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.40777102
+      value: 0.44712692
+      inSlope: -0.58084726
+      outSlope: -0.58084726
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: -0.20734392
+      outSlope: -0.20734392
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!82 &82545567011935522
 AudioSource:
   m_ObjectHideFlags: 1
@@ -1584,6 +1671,7 @@ MonoBehaviour:
   beingHit: {fileID: 8300000, guid: 676cf1a311c647a4181c50262c0cb7f8, type: 3}
   deathSound: {fileID: 8300000, guid: 19b4dbe5d7858de4397d5983895453f5, type: 3}
   gruntSource: {fileID: 82545567011935522}
+  walkingSource: {fileID: 82422040332441726}
   badHapticAudio: {fileID: 8300000, guid: 5cfa74aaada64294e9938ea34d85d62f, type: 3}
   goodHapticAudio: {fileID: 8300000, guid: 42ee317c8a383fe42b380ad2d6d43da9, type: 3}
   perfectHapticAudio: {fileID: 8300000, guid: fd7190687ab9fc84ba0f2e2b88c56226, type: 3}
