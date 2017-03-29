@@ -22,6 +22,8 @@ public class EnemyRunner : Enemy{
 
     public AudioClip runnerRoarClip;
 
+    public AudioSource walkingSource;
+
     bool spawning = false;
     bool attacking = false;
     bool parryable = false;
@@ -74,12 +76,15 @@ public class EnemyRunner : Enemy{
 				if (!spawning) StartCoroutine ("spawn");
 				break;
             case runnerState.idle:
-			    searchPlayer();
+                walkingSource.Stop();
+                searchPlayer();
 			    break;
             case runnerState.follow:
+                if (!walkingSource.isPlaying) walkingSource.Play();
                 moveTowardsPlayer();
 			    break;
             case runnerState.attack:
+                walkingSource.Stop();
                 if (!attacking) StartCoroutine("attack");
                 break;
 		}
@@ -199,6 +204,7 @@ public class EnemyRunner : Enemy{
             currentState = runnerState.attack;
             agent.Stop();
             facePlayer();
+            walkingSource.Stop();
             return true;
         }
         return false;

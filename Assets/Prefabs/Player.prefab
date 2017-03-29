@@ -740,6 +740,7 @@ GameObject:
   - component: {fileID: 4273480935055942}
   - component: {fileID: 114595972730223150}
   - component: {fileID: 82797643130111944}
+  - component: {fileID: 82179572507771192}
   m_Layer: 0
   m_Name: PlayerStatManager
   m_TagString: Untagged
@@ -3422,6 +3423,92 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!82 &82179572507771192
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1502568006746324}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 50
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.39981997
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.41987425
+      value: 0.35534185
+      inSlope: -0.58084726
+      outSlope: -0.58084726
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: -0.20734392
+      outSlope: -0.20734392
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!82 &82202997869520680
 AudioSource:
   m_ObjectHideFlags: 1
@@ -4071,11 +4158,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.35
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -4758,7 +4845,8 @@ MonoBehaviour:
   MANA_SLIDER: {fileID: 224328185381543130}
   STAMINA_SLIDER: {fileID: 224080932197363822}
   audioSource: {fileID: 82797643130111944}
-  beingHit: {fileID: 8300000, guid: 8f102a25780538f438a73a66bfef3bc2, type: 3}
+  owSource: {fileID: 82179572507771192}
+  beingHit: {fileID: 8300000, guid: ead92250809284b13a3af1abed65ca97, type: 3}
   hapticAudio: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
 --- !u!114 &114644005032536390
 MonoBehaviour:

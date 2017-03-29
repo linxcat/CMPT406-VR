@@ -31,6 +31,7 @@ public class EnemySpeedBoy : Enemy{
     public AudioClip deathSound;
 
     public AudioSource gruntSource;
+    public AudioSource walkingSource;
     // Haptics
     public AudioClip badHapticAudio;
     public AudioClip goodHapticAudio;
@@ -72,15 +73,19 @@ public class EnemySpeedBoy : Enemy{
         fall();
         switch (currentState) {
 			case runnerState.spawning:
-				if (!spawning) StartCoroutine ("spawn");
+                walkingSource.Stop();
+                if (!spawning) StartCoroutine ("spawn");
 				break;
             case runnerState.idle:
-			    searchPlayer();
+                walkingSource.Stop();
+                searchPlayer();
 			    break;
             case runnerState.follow:
+                if (!walkingSource.isPlaying) walkingSource.Play();
                 moveTowardsPlayer();
 			    break;
             case runnerState.attack:
+                walkingSource.Stop();
                 if (!attacking) StartCoroutine("attack");
                 break;
 		}
@@ -202,6 +207,7 @@ public class EnemySpeedBoy : Enemy{
             agent.Stop();
             agent.destination = transform.position;
             facePlayer();
+            walkingSource.Stop();
             return true;
         }
         return false;

@@ -23,6 +23,8 @@ public class EnemyRanged : Enemy {
 
     public AudioSource gruntSource;
 
+    public AudioSource walkingSource;
+
     public AudioClip deathClip;
     public AudioClip hitClip;
     public AudioClip attackClip;
@@ -72,12 +74,15 @@ public class EnemyRanged : Enemy {
     void Update() {
         switch (currentState) {
             case rangedState.idle:
+                walkingSource.Stop();
                 searchPlayer();
                 break;
             case rangedState.spawn:
+                walkingSource.Stop();
                 if (!spawning) StartCoroutine("spawn");
                 break;
             case rangedState.follow:
+                if (!walkingSource.isPlaying) walkingSource.Play();
                 moveTowardsPlayer();
                 break;
             /*case rangedState.backup:
@@ -85,6 +90,7 @@ public class EnemyRanged : Enemy {
                 backUp();
                 break;*/
             case rangedState.attack:
+                walkingSource.Stop();
                 facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
                 break;
@@ -163,6 +169,7 @@ public class EnemyRanged : Enemy {
             if (hit.collider.name == "Hitbox") {
                 currentState = rangedState.attack;
                 facePlayer();
+                walkingSource.Stop();
                 return true;
             }
         }

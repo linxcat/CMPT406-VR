@@ -35,6 +35,8 @@ public class CharacterStats : MonoBehaviour {
 
     public AudioSource audioSource;
 
+    public AudioSource owSource;
+
     public AudioClip beingHit;
 
     public AudioClip hapticAudio;
@@ -81,7 +83,7 @@ public class CharacterStats : MonoBehaviour {
         if (isInvincible) return;
         StartCoroutine ("startInvincible");
         fader.SendMessage("damageEdge");
-        audioSource.PlayOneShot(beingHit);
+        owSource.PlayOneShot(beingHit);
         if (PLAYER_HEALTH > damage) {
             PLAYER_HEALTH = PLAYER_HEALTH - damage;
         }

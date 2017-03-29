@@ -1584,6 +1584,31 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 82179572507771192, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 82797643130111944, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: m_Volume
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 82797643130111944, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 82797643130111944, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bf542023497b7b24282b25aaff2e94a5, type: 3}
+    - target: {fileID: 82797643130111944, guid: a560a5b237eaf9b489b671a6f034d074,
+        type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
   m_IsPrefabParent: 0
