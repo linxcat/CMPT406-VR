@@ -81,7 +81,7 @@ Material:
       second: 10
     - first:
         name: _LightStr
-      second: 0.5107143
+      second: 0.79
     - first:
         name: _Opacity
       second: 1
