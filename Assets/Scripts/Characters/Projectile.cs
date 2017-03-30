@@ -5,8 +5,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour {
     GameObject originator;
     GameObject target;
-    GameObject explode;
-    Vector3 orignalDirection;
+
+    CharacterStats playerStats;
+    int PROJECTILE_MANA = 15;
+    int PROJECTILE_DAMAGE = 40;
+
+    bool reflected = false;
 
     float speed = 0.15f;
     float homingSpeed = 7f;
@@ -14,11 +18,10 @@ public class Projectile : MonoBehaviour {
     public AudioSource trailingSource;
 	// Use this for initialization
 	void Start () {
-
         target = GameObject.FindGameObjectWithTag("MainCamera");
-        orignalDirection = originator.transform.forward + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+        playerStats = FindObjectOfType<CharacterStats>();
+        transform.forward = originator.transform.forward + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
         trailingSource.Play();
-
     }
 
     public void setOriginator(GameObject origin) {
@@ -27,38 +30,34 @@ public class Projectile : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (target!= null && Vector3.Distance(transform.position,target.transform.position) < 4f)
-        {
-            //gameObject.transform.position = Vector3.MoveTowards(transform.position, target.transform.position, homingSpeed * Time.deltaTime);
-            //transform.position = Vector3.Lerp(transform.position, target.transform.position, 0.05f);
-            transform.position = Vector3.SmoothDamp(transform.position, target.transform.position, ref(orignalDirection), 0.3f, 6f );
+        if (target != null && Vector3.Distance(transform.position, target.transform.position) < 4f) {
+            Quaternion a = transform.rotation;
+            Quaternion b = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
+            transform.rotation = Quaternion.Lerp(a, b, 0.1f);
         }
-        else{
-
-            gameObject.transform.position += orignalDirection * speed * Time.timeScale;
-       }
-
-     
-        
+            gameObject.transform.position += transform.forward * speed * Time.timeScale;
     }
 
-    private void OnCollisionEnter(Collision collision) {
-
-        if (collision.gameObject == target.gameObject) {
-            GameObject x = (GameObject) Instantiate(explode);
-            x.transform.position = transform.position;
+    private void OnTriggerEnter(Collider other) {
+        if (other.tag == "PlayerHitBox") {
+            other.SendMessage("getHit", PROJECTILE_DAMAGE);
+            trailingSource.Stop();
+            Destroy(gameObject);
+        }
+        else if (reflected && other.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
+            other.SendMessage("takeDamage", PROJECTILE_DAMAGE);
             trailingSource.Stop();
             Destroy(gameObject);
         }
     }
     public void reflect() {
         target = originator;
-        orignalDirection *= -1;
+        reflected = true;
+        transform.forward *= -1;
     }
 
     public void absorb() {
-        //replace this code with code that increases mana
+        playerStats.addMana(PROJECTILE_MANA);
         Destroy(gameObject);
     }
 

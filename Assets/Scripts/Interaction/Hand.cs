@@ -233,7 +233,7 @@ public class Hand : MonoBehaviour {
 
     public static void absorb() {
         if(currentProjectile != null) {
-            Destroy(currentProjectile);
+            currentProjectile.SendMessage("absorb");
         }
     }
 

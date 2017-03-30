@@ -85,10 +85,6 @@ public class EnemyRanged : Enemy {
                 if (!walkingSource.isPlaying) walkingSource.Play();
                 moveTowardsPlayer();
                 break;
-            /*case rangedState.backup:
-                facePlayer();
-                backUp();
-                break;*/
             case rangedState.attack:
                 walkingSource.Stop();
                 facePlayer();
@@ -121,13 +117,6 @@ public class EnemyRanged : Enemy {
         attackCheck();
     }
 
-    //void move(bool forward) {
-    //    float step = speed * Time.deltaTime;
-    //    if (!forward) step = -step;
-    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    //}
-
     void fall() {
         RaycastHit hitPoint = new RaycastHit();
         Vector3 aboveGround = transform.position;
@@ -143,21 +132,6 @@ public class EnemyRanged : Enemy {
         yield return new WaitForSeconds(spawnTimer);
         currentState = rangedState.idle;
     }
-
-    /*
-    private void backUp() {
-        Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
-        float angle = Vector3.Angle(axisRotate, transform.forward);
-
-        if (angle > 5) {
-            slowFacePlayer();
-        }
-        else {
-            anim.SetBool("moving", true);
-            move(false);
-            fall();
-        }
-    }*/
 
     bool attackCheck()
     {
