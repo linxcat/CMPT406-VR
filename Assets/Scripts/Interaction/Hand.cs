@@ -162,13 +162,15 @@ public class Hand : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (IS_PRIMARY) return;
-        currentProjectile = other.gameObject;
+        
         if (getSpeed() > speedThreshold) {
             InitiateHapticFeedback(hapticClip, 0);
             audioSource.PlayOneShot(counterSound);
             if (other.gameObject.tag == "Projectile"){
-                    counterProjectile();
-                    other.gameObject.GetComponent<Projectile>().reflect();
+                currentProjectile = other.gameObject;
+                counterProjectile();
+
+                other.gameObject.GetComponent<Projectile>().reflect();
             }
             else {
                 other.SendMessageUpwards("counter");
@@ -223,7 +225,7 @@ public class Hand : MonoBehaviour {
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
         
         GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
-        counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 1f - new Vector3(0,0.4f,0);
+        counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 0.1f - new Vector3(0,0.4f,0);
         counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
         
     }

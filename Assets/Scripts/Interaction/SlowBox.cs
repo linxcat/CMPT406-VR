@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SlowBox : MonoBehaviour {
-
+    static float timeInstantiated;
 	// Use this for initialization
 	void Start () {
-		
+        timeInstantiated = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -17,25 +17,31 @@ public class SlowBox : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(gameObject.tag == "absorb")
+        if (Time.time > timeInstantiated + 0.1f)
         {
+            //do nothing if slow gui is less then 0.1f old
+
+            if (gameObject.tag == "absorb")
+            {
 
 
-            resetTimeSlow();
-            Hand.absorb();
-                
+                resetTimeSlow();
+                Hand.absorb();
+                Destroy(GameObject.FindGameObjectWithTag("slow"));
+
+            }
+            if (gameObject.tag == "reflect")
+            {
+
+
+                resetTimeSlow();
+                Destroy(GameObject.FindGameObjectWithTag("slow"));
+                //reflect
+
+            }
+            //resetTimeSlow();
             
         }
-        if (gameObject.tag == "reflect")
-        {
-
-
-            resetTimeSlow();
-            //reflect
-
-        }
-        resetTimeSlow();
-        Destroy(GameObject.FindGameObjectWithTag("slow"));
 
     }
 
