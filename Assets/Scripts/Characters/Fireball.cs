@@ -24,7 +24,7 @@ public class Fireball : MonoBehaviour {
     void explode() {
         foreach (Collider enemy in Physics.OverlapSphere(transform.position, 6f, LayerMask.GetMask("Enemy")))
             burn(enemy);
-        Instantiate(explosion, transform.position, transform.rotation);
+        Destroy( Instantiate(explosion, transform.position, transform.rotation), 2.0f );
         Destroy(gameObject);
     }
 
