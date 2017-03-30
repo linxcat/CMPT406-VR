@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour {
     GameObject target;
     GameObject explode;
     Vector3 orignalDirection;
+
     float speed = 0.15f;
     float homingSpeed = 7f;
 
@@ -14,8 +15,8 @@ public class Projectile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        target = GameObject.FindGameObjectWithTag("Player");
-        orignalDirection = originator.transform.forward;
+        target = GameObject.FindGameObjectWithTag("MainCamera");
+        orignalDirection = originator.transform.forward + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
         trailingSource.Play();
 
     }
@@ -27,11 +28,18 @@ public class Projectile : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (target!= null && Vector3.Distance(transform.position,target.transform.position)<2f  )
+        {
+            //gameObject.transform.position = Vector3.MoveTowards(transform.position, target.transform.position, homingSpeed * Time.deltaTime);
+            //transform.position = Vector3.Lerp(transform.position, target.transform.position, 0.05f);
+            transform.position = Vector3.SmoothDamp(transform.position, target.transform.position, ref(orignalDirection), 0.3f, 6f );
+        }
+        else{
 
+            gameObject.transform.position += orignalDirection * speed * Time.timeScale;
+       }
 
-        gameObject.transform.position += orignalDirection * speed * Time.timeScale;
-        
-
+     
         
     }
 
