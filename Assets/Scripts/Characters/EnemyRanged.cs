@@ -21,6 +21,10 @@ public class EnemyRanged : Enemy {
     bool attacking = false;
     bool parryable = false;
 
+    public AudioSource gruntSource;
+
+    public AudioSource walkingSource;
+
     public AudioClip deathClip;
     public AudioClip hitClip;
     public AudioClip attackClip;
@@ -63,18 +67,22 @@ public class EnemyRanged : Enemy {
         badHapticClip = new OVRHapticsClip(badHapticAudio);
         goodHapticClip = new OVRHapticsClip(goodHapticAudio);
         perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
+
     }
 
     // Update is called once per frame
     void Update() {
         switch (currentState) {
             case rangedState.idle:
+                walkingSource.Stop();
                 searchPlayer();
                 break;
             case rangedState.spawn:
+                walkingSource.Stop();
                 if (!spawning) StartCoroutine("spawn");
                 break;
             case rangedState.follow:
+                if (!walkingSource.isPlaying) walkingSource.Play();
                 moveTowardsPlayer();
                 break;
             /*case rangedState.backup:
@@ -82,6 +90,7 @@ public class EnemyRanged : Enemy {
                 backUp();
                 break;*/
             case rangedState.attack:
+                walkingSource.Stop();
                 facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
                 break;
@@ -129,7 +138,7 @@ public class EnemyRanged : Enemy {
 
     IEnumerator spawn()
     {
-        audioSource.PlayOneShot(spawnClip);
+        gruntSource.PlayOneShot(spawnClip);
         spawning = true;
         yield return new WaitForSeconds(spawnTimer);
         currentState = rangedState.idle;
@@ -160,6 +169,7 @@ public class EnemyRanged : Enemy {
             if (hit.collider.name == "Hitbox") {
                 currentState = rangedState.attack;
                 facePlayer();
+                walkingSource.Stop();
                 return true;
             }
         }
@@ -172,7 +182,7 @@ public class EnemyRanged : Enemy {
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
-        audioSource.PlayOneShot(attackClip);
+        gruntSource.PlayOneShot(attackClip);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
@@ -191,7 +201,7 @@ public class EnemyRanged : Enemy {
     }
 
     public override void swingHit(Hit hit) {
-        audioSource.PlayOneShot(hitClip);
+        gruntSource.PlayOneShot(hitClip);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
@@ -217,7 +227,7 @@ public class EnemyRanged : Enemy {
     }
 
     public override void die() {
-        audioSource.PlayOneShot(deathClip);
+        gruntSource.PlayOneShot(deathClip);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;

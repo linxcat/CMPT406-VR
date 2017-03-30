@@ -5,15 +5,18 @@ using UnityEngine;
 public class Projectile : MonoBehaviour {
     GameObject originator;
     GameObject target;
+    GameObject explode;
     Vector3 orignalDirection;
     float speed = 0.15f;
     float homingSpeed = 7f;
+
+    public AudioSource trailingSource;
 	// Use this for initialization
 	void Start () {
 
         target = GameObject.FindGameObjectWithTag("Player");
         orignalDirection = originator.transform.forward;
-
+        trailingSource.Play();
 
     }
 
@@ -35,6 +38,9 @@ public class Projectile : MonoBehaviour {
     private void OnCollisionEnter(Collision collision) {
 
         if (collision.gameObject == target.gameObject) {
+            GameObject x = (GameObject) Instantiate(explode);
+            x.transform.position = transform.position;
+            trailingSource.Stop();
             Destroy(gameObject);
         }
     }
