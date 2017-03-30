@@ -21,11 +21,11 @@ public class Fireball : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        trailingSource.Stop();
-        explode();
+            explode();
     }
 
     void explode() {
+        trailingSource.Stop();
         foreach (Collider enemy in Physics.OverlapSphere(transform.position, 6f, LayerMask.GetMask("Enemy")))
             burn(enemy);
         Destroy( Instantiate(explosion, transform.position, transform.rotation), 2.0f );
