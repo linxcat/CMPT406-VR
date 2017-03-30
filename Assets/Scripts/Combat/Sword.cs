@@ -5,9 +5,9 @@ using UnityEngine;
 public class Sword : MonoBehaviour {
 
     float SWINGTIME = 0.4F;
+    float MIN_SWING_DISTANCE = 1.2F;
     public bool swingTimeExceeded;
 
-    GameObject swordAnchor;
     HitArray hitArray;
     Transform centerEyeAnchor;
 
@@ -58,7 +58,6 @@ public class Sword : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        swordAnchor = transform.parent.gameObject;
         hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
@@ -94,21 +93,21 @@ public class Sword : MonoBehaviour {
             directionDeviations[i] = 0F;
             alignmentDeviations[i] = 0F;
         }
-        lastPoint = swordAnchor.transform.position;
-        startPoint = swordAnchor.transform.position;
+        lastPoint = transform.position;
+        startPoint = transform.position;
         isSwinging = true;
         StartCoroutine("swingTimeMax");
     }
 
     void slashStep() {
         if (timeStep % DAMPENING == 0) {
-            Vector3 stepDirection = swordAnchor.transform.position - lastPoint;
-            Vector3 stepRotation = swordAnchor.transform.right;
+            Vector3 stepDirection = transform.position - lastPoint;
+            Vector3 stepRotation = transform.right;
             stepRotation.Normalize();
 
             accumulateDeviations(stepDirection, stepRotation);
 
-            lastPoint = swordAnchor.transform.position;
+            lastPoint = transform.position;
         }
         // accumuluate deviation from sterotype direction and attentuate by decreasing function of timesteps
         // accumulate crossproduct of anchor x axis and stereotypical vector and attenutate by decreasing function of timesteps
@@ -122,7 +121,7 @@ public class Sword : MonoBehaviour {
         audioSource.PlayOneShot(swordUndrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
-        stopPoint = swordAnchor.transform.position;
+        stopPoint = transform.position;
 
         float bestDirectionDeviation = float.MaxValue;
         float bestAlignmentDeviation = float.MaxValue;
@@ -136,16 +135,14 @@ public class Sword : MonoBehaviour {
             }
         }
 
-        //Vector3 spawnOffset = (stopPoint - startPoint) / 2;
         Vector3 spawnOffset = (stopPoint - startPoint);
-        Vector3 spawn = startPoint + spawnOffset;
         Quaternion shotDirection = Quaternion.LookRotation(transform.up, transform.right);
- 
-		if (swordCharged) {
+
+        if (swordCharged) {
             FireChargedShot(shotDirection);
             swordCharged = false;
             renderer.material = inactiveMaterial;
-		}
+        }
         else if (fireballCharged) {
             FireFireball(shotDirection);
             fireballCharged = false;
@@ -155,9 +152,11 @@ public class Sword : MonoBehaviour {
         Hit.DIRECTION correctedDirection = fixDirection(swingDirection);
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
 
-        foreach (GameObject enemy in enemyContacts) {
-            CreateSlashEffect (enemy, startPoint, spawnOffset); //incorrect so far
+        if (spawnOffset.magnitude > MIN_SWING_DISTANCE) {
+            foreach (GameObject enemy in enemyContacts) {
+                CreateSlashEffect(enemy, startPoint, spawnOffset); //incorrect so far
                 enemy.SendMessageUpwards("swingHit", hit);
+            }
         }
 
         enemyContacts.Clear();
@@ -254,10 +253,11 @@ public class Sword : MonoBehaviour {
     }
 
     void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
-		    GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
-            slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
-		    slash.GetComponent<ParticleSystem>().Play();
-		    GameObject.Destroy (slash, 0.5f);
+        GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(centerEyeAnchor.position), Quaternion.identity);
+        Vector3 flatSlash = Vector3.ProjectOnPlane(facing, centerEyeAnchor.forward);
+        slash.transform.forward = flatSlash;
+        slash.GetComponent<ParticleSystem>().Play();
+        GameObject.Destroy (slash, 0.5f);
 	  }
 
     //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)

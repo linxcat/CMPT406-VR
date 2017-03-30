@@ -26,9 +26,24 @@ public class Spells : MonoBehaviour {
 
     void Awake() {
         characterStats = FindObjectOfType<CharacterStats> ();
-        spells.Add("UL.UR.DR.DL.", SPELL_NAMES.SlowTime);
+
+        spells.Add("UL.UR.DL.DR.UL.", SPELL_NAMES.SlowTime);
+        spells.Add("UL.DR.DL.UR.UL.", SPELL_NAMES.SlowTime);
+        spells.Add("UR.UL.DR.DL.UR.", SPELL_NAMES.SlowTime);
+        spells.Add("UR.DL.DR.UL.UR.", SPELL_NAMES.SlowTime);
+        spells.Add("DR.DL.UR.UL.DR.", SPELL_NAMES.SlowTime);
+        spells.Add("DR.UL.UR.DL.DR.", SPELL_NAMES.SlowTime);
+        spells.Add("DL.DR.UL.UR.DL.", SPELL_NAMES.SlowTime);
+        spells.Add("DL.UR.UL.DR.DL.", SPELL_NAMES.SlowTime);
+
         spells.Add("U.D.L.R.", SPELL_NAMES.Heal);
+        spells.Add("R.L.D.U", SPELL_NAMES.Heal);
+
         spells.Add("U.R.L.U.D.", SPELL_NAMES.Fireball);
+        spells.Add("U.L.R.U.D.", SPELL_NAMES.Fireball);
+        spells.Add("D.U.R.L.U.", SPELL_NAMES.Fireball);
+        spells.Add("D.U.L.R.U.", SPELL_NAMES.Fireball);
+
         StartCoroutine(HealTimer());
     }
 
