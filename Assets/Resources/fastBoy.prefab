@@ -1663,7 +1663,7 @@ MonoBehaviour:
   goodDamage: 100
   badDamage: 50
   audioSource: {fileID: 82673846343881388}
-  badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
+  badHitClip: {fileID: 8300000, guid: 08212ad3e8b12074dbcd3acc7c3077cb, type: 3}
   goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
   perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
   runnerRoarClip: {fileID: 8300000, guid: d567d20c5b106be4aa03a5bf4d600ec3, type: 3}
