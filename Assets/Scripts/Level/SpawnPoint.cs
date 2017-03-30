@@ -2,22 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum enemyType
+{
+    nothing,
+    runner,
+    walker,
+    ranged
+}
+
+[System.Serializable]
+public class Wave
+{
+    public enemyType[] enemy;
+    public float[] delay;
+}
+
 public class SpawnPoint : MonoBehaviour {
 
-    public enum enemyType
-    {
-        nothing,
-        runner,
-        ranged
-    }
-
-    public enemyType[] toSpawn;
-	public float[] spawnDelay;
-    private int waveCount;
+    public Wave[] waves;
+    private int waveCount, enemyCount;
+    Object runner, walker, ranged;
 
 	// Use this for initialization
 	void Start () {
         waveCount = 0;
+        enemyCount = 0;
+        runner = Resources.Load("fastBoy");
+        walker = Resources.Load("runner");
+        ranged = Resources.Load("ranged");
 	}
 	
 	// Update is called once per frame
@@ -26,30 +38,39 @@ public class SpawnPoint : MonoBehaviour {
 	}
 
     public void spawn() {
-		if (waveCount >= toSpawn.Length)
+		if (waveCount >= waves.Length)
 			return;
 		StartCoroutine ("spawnWithDelay");
     }
 
 	IEnumerator spawnWithDelay(){
 		GameObject temp;
-		if (waveCount < spawnDelay.Length)
-			yield return new WaitForSeconds (spawnDelay [waveCount]);
-		Debug.Log(gameObject.name + "spawn " + toSpawn[waveCount] + " on " + transform.position.x+" "+ transform.position.y+" "+ transform.position.z);
-		switch (toSpawn[waveCount])
-		{
-		case enemyType.nothing:
-			break;
-		case enemyType.runner:
-			temp = (GameObject) Instantiate(Resources.Load("runner"), transform.position, transform.rotation);
-			break;
-		case enemyType.ranged:
-			temp = (GameObject) Instantiate (Resources.Load ("ranged"), transform.position, transform.rotation);
-			break;
-		default:
-			break;
-		}
-
+        enemyCount = 0;
+        while (enemyCount < waves[waveCount].enemy.Length) {
+            if(enemyCount < waves[waveCount].delay.Length)
+                yield return new WaitForSeconds(waves[waveCount].delay[enemyCount]);
+            Debug.Log(gameObject.name + "spawn " + waves[waveCount] + " on " + transform.position.x + " " + transform.position.y + " " + transform.position.z);
+            switch (waves[waveCount].enemy[enemyCount])
+            {
+                case enemyType.nothing:
+                    break;
+                case enemyType.runner:
+                    temp = (GameObject)Instantiate(runner, transform.position, transform.rotation);
+                    SendMessageUpwards("EnemySpawned");
+                    break;
+                case enemyType.walker: //TODO put walker here
+                    temp = (GameObject)Instantiate(walker, transform.position, transform.rotation);
+                    SendMessageUpwards("EnemySpawned");
+                    break;
+                case enemyType.ranged:
+                    temp = (GameObject)Instantiate(ranged, transform.position, transform.rotation);
+                    SendMessageUpwards("EnemySpawned");
+                    break;
+                default:
+                    break;
+            }
+            enemyCount++;
+        }
 		waveCount++;
 	}
 }

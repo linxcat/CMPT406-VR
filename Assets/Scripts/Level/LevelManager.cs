@@ -5,36 +5,42 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
-    public int numberOfEnemies;
     public string nextScene;
 
     public GameObject fader;
-    public Material red;
-    public Material white;
-    private bool isGameOver;
+    private bool isGameOver, isGameWon;
     private bool menuShown;
     private bool goNextScene;
-    private float bufferTime = 5F;
-    private int killedEnemies;
+    private float bufferTime = 3F;
     public GameObject winningMenu;
     public GameObject gameoverMenu;
 
+    public AudioSource levelMusic;
+    public AudioSource deathMusic;
+    public AudioSource victoryMusic;
+
+
+
+    void Awake() {
+        fader = GameObject.Find("Fader");
+    }
+
 	// Use this for initialization
 	void Start () {
+        levelMusic.Play();
+
         isGameOver = false;
+        isGameWon = false;
         menuShown = false;
         goNextScene = false;
-        killedEnemies = 0;
-        //fader = GameObject.Find("Fader");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (!menuShown && !isGameOver && killedEnemies >= numberOfEnemies) {
-            isGameOver = true;
+        if (!menuShown && isGameWon) {
             menuShown = true;
             StartCoroutine ("showWinningMenu");
-        } else if (!menuShown && isGameOver && killedEnemies < numberOfEnemies) {
+        } else if (!menuShown && isGameOver) {
             menuShown = true;
             StartCoroutine ("showGameoverMenu");
         }
@@ -44,18 +50,21 @@ public class LevelManager : MonoBehaviour {
 	}
 
     public void gameOver(){
+        levelMusic.Stop();
+        deathMusic.Play();
         isGameOver = true;
+
     }
 
-    public void enemyKilled(){
-        killedEnemies++;
+    public void gameWon(){
+        levelMusic.Stop();
+        victoryMusic.Play();
+        isGameWon = true;
     }
 
     IEnumerator showWinningMenu(){
         winningMenu.SetActive (true);
-        fader.GetComponent<Renderer>().material = white;
-        fader.SetActive(true);
-        yield return new WaitForSeconds(bufferTime);
+        fader.SendMessage("white");
         Time.timeScale = 0;
         while (!goNextScene)
             yield return null;
@@ -65,9 +74,7 @@ public class LevelManager : MonoBehaviour {
 
     IEnumerator showGameoverMenu(){
         gameoverMenu.SetActive(true);
-        fader.GetComponent<Renderer>().material = red;
-        fader.SetActive(true);
-        yield return new WaitForSeconds(bufferTime);
+        fader.SendMessage("red");
         Time.timeScale = 0;
         while (!goNextScene)
             yield return null;
@@ -79,6 +86,6 @@ public class LevelManager : MonoBehaviour {
 
     public bool IsGameOver()
     {
-        return isGameOver;
+        return isGameOver||isGameWon;
     }
 }

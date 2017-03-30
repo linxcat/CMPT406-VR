@@ -13,6 +13,7 @@ TagManager:
   - reflect
   - absorb
   - PlayerHitBox
+  - TutorialEnemy
   layers:
   - Default
   - TransparentFX

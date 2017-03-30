@@ -11,7 +11,7 @@ public class SlowBox : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.LookAt((GameObject.FindGameObjectWithTag("Player").transform));
+        transform.LookAt((GameObject.FindGameObjectWithTag("MainCamera").transform));
         //transform.Rotate(new Vector3(0, 0, 1), 180f);
 	}
 
@@ -19,27 +19,29 @@ public class SlowBox : MonoBehaviour {
     {
         if(gameObject.tag == "absorb")
         {
-           
-            {
-                Destroy(GameObject.FindGameObjectWithTag("reflect"));
-                Hand.absorb();
+
+
+            resetTimeSlow();
+            Hand.absorb();
                 
-            }
+            
         }
         if (gameObject.tag == "reflect")
         {
-            
-            {
-                Destroy(GameObject.FindGameObjectWithTag("absorb"));
-                //reflect
-            }
+
+
+            resetTimeSlow();
+            //reflect
+
         }
         resetTimeSlow();
-        Destroy(gameObject);
+        Destroy(GameObject.FindGameObjectWithTag("slow"));
+
     }
 
     void resetTimeSlow()
     {
-        Hand.timeSlowed = Time.time;
+    
+        Time.timeScale = 1f;
     }
 }

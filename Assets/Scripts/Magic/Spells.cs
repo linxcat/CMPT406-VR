@@ -4,14 +4,47 @@ using UnityEngine;
 
 public class Spells : MonoBehaviour {
 
-    const float slowTimeDuration = 4F;
+    const float slowTimeDuration = 20F;
 
-    public enum SPELL_NAMES { SlowTime , Heal};
+    private const int slowTimeCost = 1200;
+    private const int healCost = 125;
+    private const int fireballCost = 300;
+    private float healTimer = 0;
+    private float healDoublePeriod = 20F;
+    private CharacterStats characterStats;
+
+    public enum SPELL_NAMES {SlowTime , Heal, Fireball};
     static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
+    public AudioSource audioSource;
+    public AudioClip healSound;
+    public AudioClip slowSound;
+    public Hand[] hands;
+
+    private void Start() {
+        hands = FindObjectsOfType<Hand>();
+    }
 
     void Awake() {
-        spells.Add("UL.UR.DR.DL.", SPELL_NAMES.SlowTime);
+        characterStats = FindObjectOfType<CharacterStats> ();
+
+        spells.Add("UL.UR.DL.DR.UL.", SPELL_NAMES.SlowTime);
+        spells.Add("UL.DR.DL.UR.UL.", SPELL_NAMES.SlowTime);
+        spells.Add("UR.UL.DR.DL.UR.", SPELL_NAMES.SlowTime);
+        spells.Add("UR.DL.DR.UL.UR.", SPELL_NAMES.SlowTime);
+        spells.Add("DR.DL.UR.UL.DR.", SPELL_NAMES.SlowTime);
+        spells.Add("DR.UL.UR.DL.DR.", SPELL_NAMES.SlowTime);
+        spells.Add("DL.DR.UL.UR.DL.", SPELL_NAMES.SlowTime);
+        spells.Add("DL.UR.UL.DR.DL.", SPELL_NAMES.SlowTime);
+
         spells.Add("U.D.L.R.", SPELL_NAMES.Heal);
+        spells.Add("R.L.D.U", SPELL_NAMES.Heal);
+
+        spells.Add("U.R.L.U.D.", SPELL_NAMES.Fireball);
+        spells.Add("U.L.R.U.D.", SPELL_NAMES.Fireball);
+        spells.Add("D.U.R.L.U.", SPELL_NAMES.Fireball);
+        spells.Add("D.U.L.R.U.", SPELL_NAMES.Fireball);
+
+        StartCoroutine(HealTimer());
     }
 
     public void cast(string spell) {
@@ -22,25 +55,53 @@ public class Spells : MonoBehaviour {
             case SPELL_NAMES.SlowTime:
                 StartCoroutine("slowTime", slowTimeDuration);
                 break;
+            case SPELL_NAMES.Heal:
+                heal();
+                break;
+            case SPELL_NAMES.Fireball:
+                fireball();
+                break;
             default:
                 return;
         }
     }
 
+    IEnumerator HealTimer(){
+        if (healTimer >= 0) {
+            healTimer -= Time.deltaTime;
+        }
+        yield return null;
+    }
+
     IEnumerator slowTime(float duration) {
-        float originalDelta = Time.fixedDeltaTime;
+        if (characterStats.removeMana (slowTimeCost)) {
+            audioSource.Stop ();
+            audioSource.PlayOneShot (slowSound);
+            float originalDelta = Time.fixedDeltaTime;
 
-        Time.timeScale = 0.5F;
-        Time.fixedDeltaTime = Time.fixedDeltaTime * 0.5F;
+            Time.timeScale = 0.5F;
+            Time.fixedDeltaTime = Time.fixedDeltaTime * 0.5F;
 
-        yield return new WaitForSecondsRealtime(duration);
+            yield return new WaitForSecondsRealtime (duration);
 
-        Time.timeScale = 1F;
-        Time.fixedDeltaTime = originalDelta;
+            Time.timeScale = 1F;
+            Time.fixedDeltaTime = originalDelta;
+        }
     }
 
     void heal() {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().addHealth(50);
+        if ((healTimer >= 0 && characterStats.removeMana (healCost * 2)) || (healTimer < 0 && characterStats.removeMana (healCost))) {
+            audioSource.Stop ();
+            audioSource.PlayOneShot(healSound);
+            healTimer = healDoublePeriod;
+            characterStats.addHealth(125);
+        }
+    }
+
+    void fireball() {
+        foreach(Hand hand in hands)
+            if( hand.storeFireball() && fireballCost < characterStats.getMana() )
+                characterStats.removeMana(fireballCost);
     }
 
     void shootProjectile() {

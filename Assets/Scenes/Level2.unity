@@ -83,7 +83,7 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 1
-    agentSlope: 60
+    agentSlope: 40
     agentClimb: 1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
@@ -892,6 +892,53 @@ Transform:
   m_PrefabParentObject: {fileID: 4061058621570488, guid: f613228ae9dcd4acf9b198b508c7ef07,
     type: 2}
   m_PrefabInternal: {fileID: 522715085}
+--- !u!1 &534121987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 534121989}
+  - component: {fileID: 534121988}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &534121988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 534121987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a8b1b2a86164dbd9f8a59263a65250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfEnemies: 7
+  nextScene: Beta_Level_2
+  fader: {fileID: 0}
+  red: {fileID: 2100000, guid: fd0b39dd466e4854f932ad7ebebe3135, type: 2}
+  white: {fileID: 2100000, guid: 5f81b30a5ca5d784892e35f9ccaabe0d, type: 2}
+  winningMenu: {fileID: 0}
+  gameoverMenu: {fileID: 0}
+--- !u!4 &534121989
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 534121987}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.108915, y: -7.0843964, z: 15.549139}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &569595337
 Prefab:
   m_ObjectHideFlags: 0
@@ -1083,7 +1130,7 @@ GameObject:
   - component: {fileID: 732644132}
   - component: {fileID: 732644131}
   - component: {fileID: 732644130}
-  m_Layer: 0
+  m_Layer: 25
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2038,7 +2085,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4694751777169452, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 4694751777169452, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2391,8 +2438,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 7
   m_Type: 1
-  m_Color: {r: 1, g: 0.88246113, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.8602941, g: 0.36689013, b: 0.36689013, a: 1}
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10

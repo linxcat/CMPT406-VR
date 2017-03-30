@@ -867,6 +867,7 @@ GameObject:
   - component: {fileID: 114725274635853294}
   - component: {fileID: 195819036122647316}
   - component: {fileID: 82626206269951944}
+  - component: {fileID: 82395739078341462}
   m_Layer: 16
   m_Name: runner
   m_TagString: Untagged
@@ -2718,6 +2719,86 @@ Transform:
   m_Father: {fileID: 4334729761089906}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &82395739078341462
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1539895977093018}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 8a6cd78d38c7ddf41a710025429e1f6f, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.3
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 50
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.008658009
+      value: 0.5267442
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: -0.20734392
+      outSlope: -0.20734392
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!82 &82626206269951944
 AudioSource:
   m_ObjectHideFlags: 1
@@ -2850,13 +2931,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2ace4025e7b8f4bbc9fe80ec4f1c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  maxDamage: 50
+  perfectDamage: 180
+  goodDamage: 100
+  badDamage: 50
   audioSource: {fileID: 82626206269951944}
-  badHitClip: {fileID: 8300000, guid: 4fe5b4fb0493d1645bfcc0054fe75603, type: 3}
+  badHitClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
   goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
   perfectHitClip: {fileID: 8300000, guid: f21515cfd64f4de41ade91a56946bb7c, type: 3}
   runnerRoarClip: {fileID: 8300000, guid: ba212728f5f374340883050a08608331, type: 3}
+  walkingSource: {fileID: 82395739078341462}
   hitAttack: {fileID: 8300000, guid: 572eace4b2361e14081eb52b04be566d, type: 3}
   beingHit: {fileID: 8300000, guid: d38bc4d987ba7da49bcf9e6ba1d24ccb, type: 3}
   deathSound: {fileID: 8300000, guid: c07835b847f54834a9430fef0efa7147, type: 3}

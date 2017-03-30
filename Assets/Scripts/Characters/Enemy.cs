@@ -8,8 +8,17 @@ public abstract class Enemy : MonoBehaviour {
     //protected Material colourMaterial;
     protected GameObject player;
     protected NavMeshAgent agent;
-    public int hp = 100;
-    public int maxDamage = 50;
+    protected int hp;
+
+    public int perfectDamage = 180;
+    public int goodDamage = 100;
+    public int badDamage = 50;
+
+    //fraction of current health
+    public float burnDamage = 0.03f;
+    //fraction of a second
+    public float burnTickSpeed = 0.25f;
+    private IEnumerator currentBurn = null;
 
     protected float turnSpeed = 3F;
 
@@ -32,6 +41,25 @@ public abstract class Enemy : MonoBehaviour {
     public virtual void takeDamage(int damage) {
         hp -= damage;
         if (!isAlive()) die();
+    }
+
+    public void startBurning(float seconds) {
+        takeBurnTick();
+        StopCoroutine(currentBurn);
+        currentBurn = burn(seconds);
+        StartCoroutine(currentBurn);
+    }
+
+    private void takeBurnTick() {
+        hp = Mathf.RoundToInt(hp * (1f - burnDamage));
+    }
+
+    private IEnumerator burn(float seconds) {
+        while (seconds > 0.0001) {
+            takeBurnTick();
+            yield return new WaitForSeconds(burnTickSpeed);
+            seconds -= burnTickSpeed;
+        }
     }
 
     public abstract void die();

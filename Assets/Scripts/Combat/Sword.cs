@@ -5,9 +5,9 @@ using UnityEngine;
 public class Sword : MonoBehaviour {
 
     float SWINGTIME = 0.4F;
+    float MIN_SWING_DISTANCE = 1.2F;
     public bool swingTimeExceeded;
 
-    GameObject swordAnchor;
     HitArray hitArray;
     Transform centerEyeAnchor;
 
@@ -32,7 +32,10 @@ public class Sword : MonoBehaviour {
     float CHARGE_DURATION = 2F;
     public GameObject ChargeShot;
 
-	public GameObject slashEffect;
+    bool fireballCharged = false;
+    public GameObject Fireball;
+
+    public GameObject slashEffect;
 
     public AudioClip vibeAudioClip;
     OVRHapticsClip vibeClip;
@@ -45,14 +48,25 @@ public class Sword : MonoBehaviour {
     public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
+    public AudioSource chargeSource;
+
+    private CharacterStats characterStats;
+    private int chargeShotCost = 100;
+    MeshRenderer renderer;
+    public Material activeMaterial;
+    public Material inactiveMaterial;
+    public Material chargedMaterial;
+    public Material fireMaterial;
+
     // Use this for initialization
     void Start () {
-        swordAnchor = transform.parent.gameObject;
         hitArray = GameObject.Find("HitArray").GetComponent<HitArray>();
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
-        audioSource = GetComponent<AudioSource>();
+        characterStats = FindObjectOfType<CharacterStats> ();
+        renderer = GetComponent<MeshRenderer>();
+        renderer.material = inactiveMaterial;
     }
 
     // Update is called once per frame
@@ -72,6 +86,7 @@ public class Sword : MonoBehaviour {
 
     public void startSlash() {
         stopSound();
+        renderer.material = activeMaterial;
         audioSource.PlayOneShot(swordDrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         timeStep = 0;
@@ -79,21 +94,21 @@ public class Sword : MonoBehaviour {
             directionDeviations[i] = 0F;
             alignmentDeviations[i] = 0F;
         }
-        lastPoint = swordAnchor.transform.position;
-        startPoint = swordAnchor.transform.position;
+        lastPoint = transform.position;
+        startPoint = transform.position;
         isSwinging = true;
         StartCoroutine("swingTimeMax");
     }
 
     void slashStep() {
         if (timeStep % DAMPENING == 0) {
-            Vector3 stepDirection = swordAnchor.transform.position - lastPoint;
-            Vector3 stepRotation = swordAnchor.transform.right;
+            Vector3 stepDirection = transform.position - lastPoint;
+            Vector3 stepRotation = transform.right;
             stepRotation.Normalize();
 
             accumulateDeviations(stepDirection, stepRotation);
 
-            lastPoint = swordAnchor.transform.position;
+            lastPoint = transform.position;
         }
         // accumuluate deviation from sterotype direction and attentuate by decreasing function of timesteps
         // accumulate crossproduct of anchor x axis and stereotypical vector and attenutate by decreasing function of timesteps
@@ -103,10 +118,11 @@ public class Sword : MonoBehaviour {
     public void stopSlash() {
         StopCoroutine("swordCharge");
         StopCoroutine("swingTimeMax");
+        renderer.material = inactiveMaterial;
         audioSource.PlayOneShot(swordUndrawClip);
         InitiateHapticFeedback(vibeClip, 1);
         isSwinging = false;
-        stopPoint = swordAnchor.transform.position;
+        stopPoint = transform.position;
 
         float bestDirectionDeviation = float.MaxValue;
         float bestAlignmentDeviation = float.MaxValue;
@@ -120,24 +136,30 @@ public class Sword : MonoBehaviour {
             }
         }
 
-		//Vector3 spawnOffset = (stopPoint - startPoint) / 2;
         Vector3 spawnOffset = (stopPoint - startPoint);
-		Vector3 spawn = startPoint + spawnOffset;
-		Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
+        Quaternion shotDirection = Quaternion.LookRotation(transform.up, transform.right);
 
-		if (swordCharged) {
-			FireChargedShot(spawn, shotDirection);
-			swordCharged = false;
-			GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-		}
+        if (swordCharged) {
+            FireChargedShot(shotDirection);
+            swordCharged = false;
+            renderer.material = inactiveMaterial;
+        }
+        else if (fireballCharged) {
+            FireFireball(shotDirection);
+            fireballCharged = false;
+            renderer.material = inactiveMaterial;
+        }
 
         Hit.DIRECTION correctedDirection = fixDirection(swingDirection);
-
         Hit hit = new Hit(bestAlignmentDeviation, correctedDirection);
-        foreach (GameObject enemy in enemyContacts) {
-			CreateSlashEffect (enemy, startPoint, spawnOffset); //incorrect so far
-            enemy.SendMessageUpwards("swingHit", hit);
+
+        if (spawnOffset.magnitude > MIN_SWING_DISTANCE) {
+            foreach (GameObject enemy in enemyContacts) {
+                CreateSlashEffect(enemy, startPoint, spawnOffset); //incorrect so far
+                enemy.SendMessageUpwards("swingHit", hit);
+            }
         }
+
         enemyContacts.Clear();
       
         if (debugMode) {
@@ -187,15 +209,16 @@ public class Sword : MonoBehaviour {
     }
 
     IEnumerator swordCharge() {
-        if (!swordCharged) {
-            audioSource.PlayOneShot(swordChargingClip);
+        if (!swordCharged && !fireballCharged && chargeShotCost < characterStats.getMana())
+        {
+            chargeSource.PlayOneShot(swordChargingClip);
             InitiateHapticFeedback(swordChargeHapticClip, 1);
             yield return new WaitForSeconds(CHARGE_DURATION);
             stopSound();
-            audioSource.PlayOneShot(swordChargedClip);
+            chargeSource.PlayOneShot(swordChargedClip);
             InitiateHapticFeedback(vibeClip, 1);
             swordCharged = true;
-            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            renderer.material = chargedMaterial;
         }
     }
 
@@ -207,21 +230,36 @@ public class Sword : MonoBehaviour {
     }
 
     public void stopSound() {
-        audioSource.Stop();
+        chargeSource.Stop();
         OVRHaptics.LeftChannel.Clear();
         OVRHaptics.RightChannel.Clear();
     }
 
-    void FireChargedShot(Vector3 startlocation, Quaternion facing) {
-        GameObject shot = Instantiate(ChargeShot, startlocation, facing);
+    void FireChargedShot(Quaternion direction) {
+        characterStats.removeMana (chargeShotCost);
+        Instantiate(ChargeShot, this.transform.position, direction);
     }
 
-	void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
-		GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(transform.position), Quaternion.identity);
-        slash.transform.forward = new Vector3(facing.x, facing.y, 0f);
-		slash.GetComponent<ParticleSystem>().Play();
-		GameObject.Destroy (slash, 0.5f);
-	}
+    void FireFireball(Quaternion direction) {
+        Instantiate(Fireball, this.transform.position, direction);
+    }
+
+    public bool storeFireball() {
+        if(fireballCharged)
+            return false;
+
+        fireballCharged = true;
+        renderer.material = fireMaterial;
+        return true;
+    }
+
+    void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
+        GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(centerEyeAnchor.position), Quaternion.identity);
+        Vector3 flatSlash = Vector3.ProjectOnPlane(facing, centerEyeAnchor.forward);
+        slash.transform.forward = flatSlash;
+        slash.GetComponent<ParticleSystem>().Play();
+        GameObject.Destroy (slash, 0.5f);
+	  }
 
     //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)
     public void InitiateHapticFeedback(OVRHapticsClip hapticsClip, int channel) {

@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class EnemyRanged : Enemy {
 
-    private LevelManager levelManager;
+    private int rangedMaxHealth = 150;
+    private SpawnManager spawnManager;
     public GameObject projectile;
     private float detectRange = 100; //tuning required
     private float backupRange = 10;
@@ -19,6 +20,10 @@ public class EnemyRanged : Enemy {
     bool spawning = false;
     bool attacking = false;
     bool parryable = false;
+
+    public AudioSource gruntSource;
+
+    public AudioSource walkingSource;
 
     public AudioClip deathClip;
     public AudioClip hitClip;
@@ -51,8 +56,8 @@ public class EnemyRanged : Enemy {
     // Use this for initialization
     void Start() {
         base.Start();
-        hp = 50;
-        levelManager = FindObjectOfType<LevelManager>();
+        hp = rangedMaxHealth;
+        spawnManager = FindObjectOfType<SpawnManager>();
         //TODO find projectile object
         turnSpeed = 4;
         anim = GetComponent<Animator>();
@@ -62,18 +67,22 @@ public class EnemyRanged : Enemy {
         badHapticClip = new OVRHapticsClip(badHapticAudio);
         goodHapticClip = new OVRHapticsClip(goodHapticAudio);
         perfectHapticClip = new OVRHapticsClip(perfectHapticAudio);
+
     }
 
     // Update is called once per frame
     void Update() {
         switch (currentState) {
             case rangedState.idle:
+                walkingSource.Stop();
                 searchPlayer();
                 break;
             case rangedState.spawn:
+                walkingSource.Stop();
                 if (!spawning) StartCoroutine("spawn");
                 break;
             case rangedState.follow:
+                if (!walkingSource.isPlaying) walkingSource.Play();
                 moveTowardsPlayer();
                 break;
             /*case rangedState.backup:
@@ -81,6 +90,7 @@ public class EnemyRanged : Enemy {
                 backUp();
                 break;*/
             case rangedState.attack:
+                walkingSource.Stop();
                 facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
                 break;
@@ -128,7 +138,7 @@ public class EnemyRanged : Enemy {
 
     IEnumerator spawn()
     {
-        audioSource.PlayOneShot(spawnClip);
+        gruntSource.PlayOneShot(spawnClip);
         spawning = true;
         yield return new WaitForSeconds(spawnTimer);
         currentState = rangedState.idle;
@@ -159,6 +169,7 @@ public class EnemyRanged : Enemy {
             if (hit.collider.name == "Hitbox") {
                 currentState = rangedState.attack;
                 facePlayer();
+                walkingSource.Stop();
                 return true;
             }
         }
@@ -171,7 +182,7 @@ public class EnemyRanged : Enemy {
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
-        audioSource.PlayOneShot(attackClip);
+        gruntSource.PlayOneShot(attackClip);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
@@ -190,22 +201,22 @@ public class EnemyRanged : Enemy {
     }
 
     public override void swingHit(Hit hit) {
-        audioSource.PlayOneShot(hitClip);
+        gruntSource.PlayOneShot(hitClip);
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
-                takeDamage(maxDamage);
+                takeDamage(perfectDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
-                takeDamage(maxDamage / 2);
+                takeDamage(goodDamage);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
-                takeDamage(maxDamage / 4);
+                takeDamage(badDamage);
                 break;
         }
     }
@@ -216,12 +227,12 @@ public class EnemyRanged : Enemy {
     }
 
     public override void die() {
-        audioSource.PlayOneShot(deathClip);
+        gruntSource.PlayOneShot(deathClip);
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
         agent.enabled = false;
-        levelManager.enemyKilled();
+        spawnManager.EnemyKilled();
         GetComponent<Collider>().enabled = false;
         StartCoroutine("sink");
     }
