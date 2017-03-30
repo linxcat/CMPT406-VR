@@ -45,6 +45,8 @@ public class Sword : MonoBehaviour {
     public AudioClip swordChargedClip;
     public AudioClip swordUndrawClip;
 
+    public AudioSource chargeSource;
+
     private CharacterStats characterStats;
     private int chargeShotCost = 100;
     MeshRenderer renderer;
@@ -58,7 +60,6 @@ public class Sword : MonoBehaviour {
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor").transform;
         vibeClip = new OVRHapticsClip(vibeAudioClip);
         swordChargeHapticClip = new OVRHapticsClip(swordChargeHapticAudio);
-        audioSource = GetComponent<AudioSource>();
         characterStats = FindObjectOfType<CharacterStats> ();
         renderer = GetComponent<MeshRenderer>();
         renderer.material = inactiveMaterial;
@@ -200,11 +201,11 @@ public class Sword : MonoBehaviour {
     IEnumerator swordCharge() {
         if (!swordCharged && chargeShotCost < characterStats.getMana())
         {
-            audioSource.PlayOneShot(swordChargingClip);
+            chargeSource.PlayOneShot(swordChargingClip);
             InitiateHapticFeedback(swordChargeHapticClip, 1);
             yield return new WaitForSeconds(CHARGE_DURATION);
             stopSound();
-            audioSource.PlayOneShot(swordChargedClip);
+            chargeSource.PlayOneShot(swordChargedClip);
             InitiateHapticFeedback(vibeClip, 1);
             swordCharged = true;
             GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
@@ -219,7 +220,7 @@ public class Sword : MonoBehaviour {
     }
 
     public void stopSound() {
-        audioSource.Stop();
+        chargeSource.Stop();
         OVRHaptics.LeftChannel.Clear();
         OVRHaptics.RightChannel.Clear();
     }

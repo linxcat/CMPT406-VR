@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 65251996888259714}
   - component: {fileID: 114598920847908430}
   - component: {fileID: 82964337132650548}
+  - component: {fileID: 82783823473644942}
   m_Layer: 9
   m_Name: Sword
   m_TagString: Untagged
@@ -110,6 +111,86 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.15, y: 1.2, z: 0.05}
   m_Center: {x: 0, y: 0.12, z: 0}
+--- !u!82 &82783823473644942
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1280360173306054}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.22023055
+      inSlope: -0.38350126
+      outSlope: -0.38350126
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: -1.002004
+      outSlope: -1.002004
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!82 &82964337132650548
 AudioSource:
   m_ObjectHideFlags: 1
@@ -208,10 +289,11 @@ MonoBehaviour:
   vibeAudioClip: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
   swordChargeHapticAudio: {fileID: 8300000, guid: a153538b8c35370419224c41749aaff0,
     type: 3}
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 82964337132650548}
   swordDrawClip: {fileID: 8300000, guid: 9c46ec15179904bcdb73e9fe8d605aab, type: 3}
   swordChargingClip: {fileID: 8300000, guid: 0ce854f468c124e4b8688eaf22c1944b, type: 3}
   swordChargedClip: {fileID: 8300000, guid: 3ef0fd5e4c0ed4158af05ce00f868f74, type: 3}
   swordUndrawClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
+  chargeSource: {fileID: 82783823473644942}
   activeMaterial: {fileID: 2100000, guid: 71d4012ba1c08e04baca1d8fb5a6e489, type: 2}
   inactiveMaterial: {fileID: 2100000, guid: d7d98c80fbc1f924e92002fa709cd671, type: 2}
