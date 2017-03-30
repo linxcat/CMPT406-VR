@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (target!= null && Vector3.Distance(transform.position,target.transform.position)<2f  )
+        if (target!= null && Vector3.Distance(transform.position,target.transform.position) < 4f)
         {
             //gameObject.transform.position = Vector3.MoveTowards(transform.position, target.transform.position, homingSpeed * Time.deltaTime);
             //transform.position = Vector3.Lerp(transform.position, target.transform.position, 0.05f);
