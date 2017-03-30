@@ -201,7 +201,6 @@ public class EnemySpeedBoy : Enemy{
 
     bool attackCheck() {
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-        Debug.Log(Vector3.Distance(temp, player.transform.position));
         if (Vector3.Distance(temp, player.transform.position) <= atkRange) {
             currentState = runnerState.attack;
             agent.Stop();

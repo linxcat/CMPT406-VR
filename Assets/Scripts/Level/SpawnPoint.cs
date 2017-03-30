@@ -49,7 +49,7 @@ public class SpawnPoint : MonoBehaviour {
         while (enemyCount < waves[waveCount].enemy.Length) {
             if(enemyCount < waves[waveCount].delay.Length)
                 yield return new WaitForSeconds(waves[waveCount].delay[enemyCount]);
-            Debug.Log(gameObject.name + "spawn " + waves[waveCount] + " on " + transform.position.x + " " + transform.position.y + " " + transform.position.z);
+            //Debug.Log(gameObject.name + "spawn " + waves[waveCount] + " on " + transform.position.x + " " + transform.position.y + " " + transform.position.z);
             switch (waves[waveCount].enemy[enemyCount])
             {
                 case enemyType.nothing:

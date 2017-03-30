@@ -45,7 +45,7 @@ public abstract class Enemy : MonoBehaviour {
 
     public void startBurning(float seconds) {
         takeBurnTick();
-        StopCoroutine(currentBurn);
+        if (currentBurn != null) StopCoroutine(currentBurn);
         currentBurn = burn(seconds);
         StartCoroutine(currentBurn);
     }

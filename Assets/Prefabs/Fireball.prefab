@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0296dd2e6b06343bd18cc4b5471ad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailingSource: {fileID: 0}
+  trailingSource: {fileID: 82336894635491754}
   explosion: {fileID: 1034994201080574, guid: 47c0aca69d850354793366899a639405, type: 2}
 --- !u!135 &135483972647501436
 SphereCollider:

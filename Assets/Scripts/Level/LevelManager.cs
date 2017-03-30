@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        levelMusic.Play();
+        if (levelMusic != null) levelMusic.Play();
 
         isGameOver = false;
         isGameWon = false;

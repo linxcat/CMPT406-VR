@@ -12,10 +12,8 @@ public class EnemyWeaponSpeedBoy : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-        Debug.Log("Hit: " + other.tag);
         if (other.tag == "PlayerHitBox" && myParent.isParriable())
         {
-            Debug.Log("Player hit");
 			other.SendMessage("getHit", myParent.getAtkDmg());
 		}
 	}

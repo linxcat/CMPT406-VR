@@ -14,7 +14,7 @@ public class Spells : MonoBehaviour {
     private CharacterStats characterStats;
 
     public enum SPELL_NAMES {SlowTime , Heal, Fireball};
-    static Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
+    Dictionary<string, SPELL_NAMES> spells = new Dictionary<string, SPELL_NAMES>();
     public AudioSource audioSource;
     public AudioClip healSound;
     public AudioClip slowSound;
@@ -27,6 +27,8 @@ public class Spells : MonoBehaviour {
     void Awake() {
         characterStats = FindObjectOfType<CharacterStats> ();
 
+        spells.Clear();
+
         spells.Add("UL.UR.DL.DR.UL.", SPELL_NAMES.SlowTime);
         spells.Add("UL.DR.DL.UR.UL.", SPELL_NAMES.SlowTime);
         spells.Add("UR.UL.DR.DL.UR.", SPELL_NAMES.SlowTime);
@@ -37,7 +39,7 @@ public class Spells : MonoBehaviour {
         spells.Add("DL.UR.UL.DR.DL.", SPELL_NAMES.SlowTime);
 
         spells.Add("U.D.L.R.", SPELL_NAMES.Heal);
-        spells.Add("R.L.D.U", SPELL_NAMES.Heal);
+        spells.Add("R.L.D.U.", SPELL_NAMES.Heal);
 
         spells.Add("U.R.L.U.D.", SPELL_NAMES.Fireball);
         spells.Add("U.L.R.U.D.", SPELL_NAMES.Fireball);
