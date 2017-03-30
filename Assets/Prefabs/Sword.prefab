@@ -130,7 +130,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 50
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -203,6 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swingTimeExceeded: 0
   ChargeShot: {fileID: 1094952711545862, guid: 58e98a361a5fa384cad31e7ac5bb8f34, type: 2}
+  Fireball: {fileID: 0}
   slashEffect: {fileID: 1320487892062564, guid: b4d946b1f5edf584c8694fabe48f2730,
     type: 2}
   vibeAudioClip: {fileID: 8300000, guid: 506c9cdec5e3d994f84885fe0c224529, type: 3}
