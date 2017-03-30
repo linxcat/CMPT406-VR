@@ -205,6 +205,13 @@ public class Hand : MonoBehaviour {
         }
     }
 
+    public bool storeFireball() {
+        if (IS_PRIMARY)
+            return sword.storeFireball();
+        else
+            return false;
+    }
+
     public void switchPrimaryHand() {
         IS_PRIMARY = !IS_PRIMARY;
         initialize();

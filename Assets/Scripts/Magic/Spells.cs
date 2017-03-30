@@ -18,10 +18,10 @@ public class Spells : MonoBehaviour {
     public AudioSource audioSource;
     public AudioClip healSound;
     public AudioClip slowSound;
-    public Sword sword;
+    public Hand[] hands;
 
     private void Start() {
-        sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
+        hands = FindObjectsOfType<Hand>();
     }
 
     void Awake() {
@@ -84,8 +84,9 @@ public class Spells : MonoBehaviour {
     }
 
     void fireball() {
-        if( sword.storeFireball() && fireballCost < characterStats.getMana() )
-          characterStats.removeMana(fireballCost);
+        foreach(Hand hand in hands)
+            if( hand.storeFireball() && fireballCost < characterStats.getMana() )
+                characterStats.removeMana(fireballCost);
     }
 
     void shootProjectile() {

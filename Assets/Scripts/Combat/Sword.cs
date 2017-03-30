@@ -139,15 +139,15 @@ public class Sword : MonoBehaviour {
         //Vector3 spawnOffset = (stopPoint - startPoint) / 2;
         Vector3 spawnOffset = (stopPoint - startPoint);
         Vector3 spawn = startPoint + spawnOffset;
-        Quaternion shotDirection = Quaternion.LookRotation(centerEyeAnchor.transform.forward, spawnOffset);
+        Quaternion shotDirection = Quaternion.LookRotation(transform.up, transform.right);
  
-		    if (swordCharged) {
-			      FireChargedShot();
-			      swordCharged = false;
+		if (swordCharged) {
+            FireChargedShot(shotDirection);
+            swordCharged = false;
             renderer.material = inactiveMaterial;
-		    }
+		}
         else if (fireballCharged) {
-            FireFireball();
+            FireFireball(shotDirection);
             fireballCharged = false;
             renderer.material = inactiveMaterial;
         }
@@ -235,22 +235,21 @@ public class Sword : MonoBehaviour {
         OVRHaptics.RightChannel.Clear();
     }
 
-    void FireChargedShot() {
+    void FireChargedShot(Quaternion direction) {
         characterStats.removeMana (chargeShotCost);
-        GameObject shot = Instantiate(ChargeShot, this.transform.position,
-          Quaternion.LookRotation(this.transform.forward));
+        Instantiate(ChargeShot, this.transform.position, direction);
     }
 
-    void FireFireball() {
-        GameObject fireball = Instantiate(Fireball, this.transform.position,
-          Quaternion.LookRotation(this.transform.forward));
+    void FireFireball(Quaternion direction) {
+        Instantiate(Fireball, this.transform.position, direction);
     }
 
     public bool storeFireball() {
-        if(!fireballCharged)
-            fireballCharged = true;
-        else
+        if(fireballCharged)
             return false;
+
+        fireballCharged = true;
+        renderer.material = fireMaterial;
         return true;
     }
 

@@ -17,7 +17,7 @@ public class MagicDraw : MonoBehaviour {
     OVRHapticsClip magicHapticClip;
 
     bool isDrawing = false;
-    bool casting;
+    bool casting = false;
 
     void Awake () {
         magicLines = GameObject.Find("SigilAnchor").GetComponent<LineRenderer>();
@@ -57,6 +57,7 @@ public class MagicDraw : MonoBehaviour {
         magicLines.numPositions = 1;
         verticies.Clear();
         sigilRenderer.sprite = sigilWithGuide;
+        casting = false;
     }
 
     public string getSpell() {
