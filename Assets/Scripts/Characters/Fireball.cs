@@ -8,17 +8,21 @@ public class Fireball : MonoBehaviour {
     float FLIGHT_SPEED = 18F;
     private float duration = 4f;
 
+    public AudioSource trailingSource;
+
     public GameObject explosion;
 
     // Use this for initialization
     void Start() {
         GetComponent<Rigidbody>().velocity = transform.forward.normalized * FLIGHT_SPEED;
         Destroy(gameObject, LIFETIME);
+        trailingSource.Play();
     }
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-          explode();
+        trailingSource.Stop();
+        explode();
     }
 
     void explode() {
