@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour {
 
     public string nextScene;
 
-    public GameObject fader;
+    Fader fader;
     private bool isGameOver, isGameWon;
     private bool menuShown;
     private bool goNextScene;
@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour {
 
 
     void Awake() {
-        fader = GameObject.Find("Fader");
+        fader = FindObjectOfType<Fader>();
     }
 
 	// Use this for initialization
@@ -64,7 +64,7 @@ public class LevelManager : MonoBehaviour {
 
     IEnumerator showWinningMenu(){
         winningMenu.SetActive (true);
-        fader.SendMessage("white");
+        fader.white();
         Time.timeScale = 0;
         while (!goNextScene)
             yield return null;
@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour {
 
     IEnumerator showGameoverMenu(){
         gameoverMenu.SetActive(true);
-        fader.SendMessage("red");
+        fader.red();
         Time.timeScale = 0;
         while (!goNextScene)
             yield return null;

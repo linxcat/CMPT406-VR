@@ -53,8 +53,10 @@ public class InputHandler : MonoBehaviour {
             return;
         }
         else {
-            charging = false;
-            playerStats.SendMessage("manaChargeOff");
+            if (charging) {
+                charging = false;
+                playerStats.SendMessage("manaChargeOff");
+            }
         }
 
         if (OVRInput.GetDown(chargeButton)) swordCharge(true);

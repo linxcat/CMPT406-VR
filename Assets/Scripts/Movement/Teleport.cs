@@ -16,7 +16,7 @@ public class Teleport : MonoBehaviour {
     private Transform[] linePoints = new Transform[3];
     GameObject player;
     GameObject avatar;
-    GameObject fader;
+    Fader fader;
     LineRenderer teleportArc;
     Renderer marker, arrow;
     Transform teleLineSpawn;
@@ -32,7 +32,7 @@ public class Teleport : MonoBehaviour {
     public AudioClip teleportExecuteClip;
 
     void Awake() {
-        fader = GameObject.Find("Fader");
+        fader = FindObjectOfType<Fader>();
     }
 
     // Use this for initialization
@@ -192,7 +192,7 @@ public class Teleport : MonoBehaviour {
     IEnumerator TeleportPosition() {
         audioSource.PlayOneShot(teleportExecuteClip, 0.2f);
         teleporting = true;
-        fader.SendMessage("teleFade", FADE_DURATION);
+        fader.teleFade(FADE_DURATION);
         avatar.SetActive(false); // otherwise we see hands in the black while teleporting
         player.GetComponentInChildren<CharacterStats>().removeStamina(staminaUsage());
         yield return new WaitForSecondsRealtime(FADE_DURATION);

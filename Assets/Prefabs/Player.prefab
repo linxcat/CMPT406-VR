@@ -4570,6 +4570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   magicTouchClip: {fileID: 8300000, guid: fa43645ff6c44a3489bdce0e1a054d25, type: 3}
+  sparks: {fileID: 1833452667785500, guid: 7a460cf301f09d54ba29d151118b7255, type: 2}
   sigilRenderer: {fileID: 212458743160526488}
   sigil: {fileID: 21300000, guid: 13daa4bda92b629498c9d0104eed27ad, type: 3}
   sigilWithGuide: {fileID: 21300000, guid: bace15b6886a34d489440546e7980f3e, type: 3}
@@ -4697,6 +4698,8 @@ MonoBehaviour:
   healSound: {fileID: 8300000, guid: 597ad7321f0eac244a76ba3d46481dd8, type: 3}
   slowSound: {fileID: 8300000, guid: aa559baa44e1d2144aae2245c67a30b2, type: 3}
   hands: []
+  healParticles: {fileID: 1611138959577130, guid: 3602f5445b1f57c4592cdf7fad746fd5,
+    type: 2}
 --- !u!114 &114222871684412264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5057,6 +5060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   magicTouchClip: {fileID: 8300000, guid: fa43645ff6c44a3489bdce0e1a054d25, type: 3}
+  sparks: {fileID: 1833452667785500, guid: 7a460cf301f09d54ba29d151118b7255, type: 2}
   sigilRenderer: {fileID: 212458743160526488}
   sigil: {fileID: 21300000, guid: 13daa4bda92b629498c9d0104eed27ad, type: 3}
   sigilWithGuide: {fileID: 21300000, guid: bace15b6886a34d489440546e7980f3e, type: 3}

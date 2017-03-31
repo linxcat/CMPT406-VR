@@ -19,10 +19,8 @@ public class Spells : MonoBehaviour {
     public AudioClip healSound;
     public AudioClip slowSound;
     public Hand[] hands;
-
-    private void Start() {
-        hands = FindObjectsOfType<Hand>();
-    }
+    GameObject centerEyeAnchor;
+    public GameObject healParticles;
 
     void Awake() {
         characterStats = FindObjectOfType<CharacterStats> ();
@@ -47,6 +45,11 @@ public class Spells : MonoBehaviour {
         spells.Add("D.U.L.R.U.", SPELL_NAMES.Fireball);
 
         StartCoroutine(HealTimer());
+    }
+
+    void Start() {
+        hands = FindObjectsOfType<Hand>();
+        centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
     }
 
     public void cast(string spell) {
@@ -96,6 +99,11 @@ public class Spells : MonoBehaviour {
             audioSource.Stop ();
             audioSource.PlayOneShot(healSound);
             healTimer = healDoublePeriod;
+            Vector3 healPosition = centerEyeAnchor.transform.position;
+            healPosition.y -= 2;
+            GameObject healEffect = Instantiate(healParticles, healPosition, Quaternion.identity);
+            healEffect.transform.forward = Vector3.up;
+            Destroy(healEffect, 5F);
             characterStats.addHealth(125);
         }
     }
@@ -104,9 +112,5 @@ public class Spells : MonoBehaviour {
         foreach(Hand hand in hands)
             if( hand.storeFireball() && fireballCost < characterStats.getMana() )
                 characterStats.removeMana(fireballCost);
-    }
-
-    void shootProjectile() {
-        //GameObject.FindGameObjectWithTag("Player").transform.forward
     }
 }

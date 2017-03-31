@@ -70,7 +70,6 @@ public class EnemyRunner : Enemy{
 	
 	// Update is called once per frame
 	void Update() {
-        fall();
         switch (currentState) {
 			case runnerState.spawning:
 				if (!spawning) StartCoroutine ("spawn");
@@ -118,31 +117,18 @@ public class EnemyRunner : Enemy{
         if (angle < searchAngle && distance < detectRange) {
             currentState = runnerState.follow;
         }
-        //fall();
+        fall();
     }
 
     private void moveTowardsPlayer() {
         Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
         float angle = Vector3.Angle(axisRotate, transform.forward);
-
-        //if (angle > 5) {
-        //    slowFacePlayer();
-        //}
-        //else {
-            anim.SetBool("moving", true);
-            //move();
-            agent.Resume();
-            agent.destination = player.transform.position;
-            //fall();
-            attackCheck();
-        //}
+        anim.SetBool("moving", true);
+        agent.Resume();
+        agent.destination = player.transform.position;
+        fall();
+        attackCheck();
     }
-
-    //void move() {
-    //    float step = speed * Time.deltaTime;
-    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    //}
     
     void fall() {
         RaycastHit hitPoint = new RaycastHit();

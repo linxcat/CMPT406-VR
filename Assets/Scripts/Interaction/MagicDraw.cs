@@ -8,6 +8,7 @@ public class MagicDraw : MonoBehaviour {
     LinkedList<string> verticies = new LinkedList<string>();
     public AudioSource audioSource;
     public AudioClip magicTouchClip;
+    public GameObject sparks;
 
     public SpriteRenderer sigilRenderer;
     public Sprite sigil;
@@ -46,6 +47,9 @@ public class MagicDraw : MonoBehaviour {
         audioSource.Stop();
         audioSource.PlayOneShot (magicTouchClip);
         InitiateHapticFeedback(magicHapticClip, 1);
+        GameObject newSparks = Instantiate(sparks, other.transform.position, Quaternion.identity);
+        newSparks.transform.forward = other.transform.right;
+        Destroy(newSparks, 0.4F);
     }
 
     public void setDrawing(bool value) {

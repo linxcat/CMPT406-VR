@@ -23,7 +23,7 @@ public class CharacterStats : MonoBehaviour {
     private float timePerStamina;
     private bool isDead, isInvincible, canRegen;
     private float invincibleTime = 2F;
-    GameObject fader;
+    Fader fader;
     private LevelManager levelManager;
     private GUIEvent healthEvent;
     private GUIEvent manaEvent;
@@ -43,7 +43,7 @@ public class CharacterStats : MonoBehaviour {
     OVRHapticsClip hapticClip;
 
     void Awake() {
-        fader = GameObject.Find("Fader");
+        fader = FindObjectOfType<Fader>();
     }
 
     // Use this for initialization
@@ -82,7 +82,7 @@ public class CharacterStats : MonoBehaviour {
     public void takeDamage(int damage) {
         if (isInvincible) return;
         StartCoroutine ("startInvincible");
-        fader.SendMessage("damageEdge");
+        fader.damageEdge();
         owSource.PlayOneShot(beingHit);
         if (PLAYER_HEALTH > damage) {
             PLAYER_HEALTH = PLAYER_HEALTH - damage;
@@ -217,7 +217,7 @@ public class CharacterStats : MonoBehaviour {
         yield return new WaitForSeconds(1F);
         audioSource.Play();
         while (true) {
-            fader.SendMessage("chargeEdge");
+            fader.chargeEdge();
             addMana(manaPerSec);
             yield return new WaitForSeconds(1F);
         }
@@ -226,6 +226,6 @@ public class CharacterStats : MonoBehaviour {
     public void manaChargeOff() {
         audioSource.Stop();
         StopCoroutine("manaCharge");
-        fader.SendMessage("turnOff");
+        fader.turnOff();
     }
 }

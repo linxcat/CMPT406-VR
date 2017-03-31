@@ -136,7 +136,6 @@ public class EnemyRanged : Enemy {
     bool attackCheck()
     {
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-        //Debug.Log(Vector3.Distance(temp, player.transform.position));
         if (Vector3.Distance(temp, player.transform.position) <= atkRange &&
             Physics.Raycast(transform.position, transform.forward, out hit, float.MaxValue, mask))
         {

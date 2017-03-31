@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class fader : MonoBehaviour {
+public class Fader : MonoBehaviour {
 
     public Material edge;
     public Material transparent;

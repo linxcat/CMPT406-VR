@@ -185,7 +185,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextScene: 
-  fader: {fileID: 0}
   winningMenu: {fileID: 0}
   gameoverMenu: {fileID: 0}
   levelMusic: {fileID: 0}
@@ -252,7 +251,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4314216165829544, guid: dd0a0bd286b5ec745b1c80b8437728e9, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1382641412542518, guid: dd0a0bd286b5ec745b1c80b8437728e9, type: 2}
       propertyPath: m_Name
@@ -754,7 +753,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2144639712
 GameObject:
