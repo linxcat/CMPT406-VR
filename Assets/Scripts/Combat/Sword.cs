@@ -155,7 +155,7 @@ public class Sword : MonoBehaviour {
 
         if (spawnOffset.magnitude > MIN_SWING_DISTANCE) {
             foreach (GameObject enemy in enemyContacts) {
-                CreateSlashEffect(enemy, startPoint, spawnOffset); //incorrect so far
+                CreateSlashEffect(enemy, startPoint, spawnOffset, hit);
                 enemy.SendMessageUpwards("swingHit", hit);
             }
         }
@@ -253,10 +253,22 @@ public class Sword : MonoBehaviour {
         return true;
     }
 
-    void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing) {
+    void CreateSlashEffect(GameObject enemy, Vector3 startlocation, Vector3 facing, Hit hit) {
         GameObject slash = Instantiate(slashEffect, enemy.GetComponent<Collider>().ClosestPointOnBounds(centerEyeAnchor.position), Quaternion.identity);
         Vector3 flatSlash = Vector3.ProjectOnPlane(facing, centerEyeAnchor.forward);
+        ParticleSystem.MainModule slashSettings = slash.GetComponent<ParticleSystem>().main;
         slash.transform.forward = flatSlash;
+        switch (hit.getAccuracy()) {
+            case Hit.ACCURACY.Perfect:
+                slashSettings.startColor = Color.red;
+                break;
+            case Hit.ACCURACY.Good:
+                slashSettings.startColor = Color.cyan;
+                break;
+            case Hit.ACCURACY.Bad:
+                slashSettings.startColor = Color.grey;
+                break;
+        }
         slash.GetComponent<ParticleSystem>().Play();
         GameObject.Destroy (slash, 0.5f);
 	  }
