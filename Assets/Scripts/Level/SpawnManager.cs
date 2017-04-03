@@ -46,4 +46,8 @@ public class SpawnManager : MonoBehaviour {
         enemiesLive--;
         enemiesKilled++;
     }
+
+    public int CurrentWave(){
+        return currentWave;
+    }
 }
