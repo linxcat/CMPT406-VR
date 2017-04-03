@@ -18,6 +18,7 @@ public class Spells : MonoBehaviour {
     public AudioSource audioSource;
     public AudioClip healSound;
     public AudioClip slowSound;
+    public AudioClip errorSound;
     public Hand[] hands;
     GameObject centerEyeAnchor;
     public GameObject healParticles;
@@ -54,7 +55,11 @@ public class Spells : MonoBehaviour {
 
     public void cast(string spell) {
         SPELL_NAMES name;
-        if (!spells.TryGetValue(spell, out name)) return;
+        if (!spells.TryGetValue(spell, out name)) {
+            audioSource.Stop();
+            audioSource.PlayOneShot(errorSound);
+            return;
+        }
 
         switch (name) {
             case SPELL_NAMES.SlowTime:
@@ -92,6 +97,10 @@ public class Spells : MonoBehaviour {
             Time.timeScale = 1F;
             Time.fixedDeltaTime = originalDelta;
         }
+        else {
+            audioSource.Stop();
+            audioSource.PlayOneShot(errorSound);
+        }
     }
 
     void heal() {
@@ -105,6 +114,10 @@ public class Spells : MonoBehaviour {
             healEffect.transform.forward = Vector3.up;
             Destroy(healEffect, 5F);
             characterStats.addHealth(125);
+        }
+        else {
+            audioSource.Stop();
+            audioSource.PlayOneShot(errorSound);
         }
     }
 

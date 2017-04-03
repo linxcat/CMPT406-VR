@@ -6,14 +6,20 @@ public class TooltipManager : MonoBehaviour {
 
     public GameObject wave1, wave2, wave3, wave4, wave5;
     private int currentWave;
-    private float oriTimeScale, timeout;
+    private float oriTimeScale, timeout, tooltipBuffer;
     private SpawnManager spawnManager;
+    private bool isPaused;
+
+    private CharacterStats characterStats;
 
 	// Use this for initialization
 	void Start () {
+        isPaused = false;
         currentWave = 0;
-        timeout = 20;
+        timeout = 30;
+        tooltipBuffer = 1;
         spawnManager = FindObjectOfType<SpawnManager> ();
+        characterStats = FindObjectOfType<CharacterStats>();
 	}
 	
 	// Update is called once per frame
@@ -23,7 +29,8 @@ public class TooltipManager : MonoBehaviour {
             oriTimeScale = Time.timeScale;
             StartCoroutine ("ShowTooltip");
         }
-        if (Time.timeScale == 0) {
+        if (isPaused) {
+            Time.timeScale = 0;
             if (OVRInput.GetDown (OVRInput.Button.PrimaryIndexTrigger))
                 StartCoroutine ("Continue");
             if (OVRInput.GetUp (OVRInput.Button.PrimaryIndexTrigger))
@@ -32,7 +39,9 @@ public class TooltipManager : MonoBehaviour {
 	}
 
     IEnumerator ShowTooltip(){
+        yield return new WaitForSeconds(tooltipBuffer);
         Time.timeScale = 0;
+        isPaused = true;
         switch (currentWave) {
         case 1:
             wave1.SetActive (true);
@@ -51,6 +60,7 @@ public class TooltipManager : MonoBehaviour {
             break;
         case 4:
             wave4.SetActive (true);
+            characterStats.maxMana();
             yield return new WaitForSecondsRealtime (timeout);
             wave4.SetActive (false);
             break;
@@ -63,11 +73,13 @@ public class TooltipManager : MonoBehaviour {
             break;
         }
         Time.timeScale = oriTimeScale;
+        isPaused = false;
     }
 
     IEnumerator Continue(){
         yield return new WaitForSecondsRealtime (2);
         Time.timeScale = oriTimeScale;
+        isPaused = false;
         StopCoroutine("ShowTooltip");
         wave1.SetActive (false);
         wave2.SetActive (false);

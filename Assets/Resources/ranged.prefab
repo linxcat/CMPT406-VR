@@ -595,8 +595,8 @@ GameObject:
   - component: {fileID: 114387535575634794}
   - component: {fileID: 136527444234060024}
   - component: {fileID: 195674919972337454}
-  - component: {fileID: 82267720470631612}
   - component: {fileID: 82731898028016622}
+  - component: {fileID: 82267720470631612}
   - component: {fileID: 82305507615513496}
   m_Layer: 16
   m_Name: ranged
@@ -1646,6 +1646,8 @@ MonoBehaviour:
   perfectDamage: 180
   goodDamage: 100
   badDamage: 50
+  burnDamage: 0.03
+  burnTickSpeed: 0.25
   audioSource: {fileID: 82731898028016622}
   badHitClip: {fileID: 8300000, guid: 08212ad3e8b12074dbcd3acc7c3077cb, type: 3}
   goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}

@@ -18,7 +18,7 @@ public class CharacterStats : MonoBehaviour {
     public Transform STAMINA_SLIDER;
     private float staminaPerSec = 75F;
     private float staminaRegenCooldown = 5F;
-    private int manaPerSec = 50;
+    private int manaPerSec = 30;
     private float timeCount;
     private float timePerStamina;
     private bool isDead, isInvincible, canRegen;
@@ -216,9 +216,11 @@ public class CharacterStats : MonoBehaviour {
 
         yield return new WaitForSeconds(1F);
         audioSource.Play();
+        int rampup = 0;
         while (true) {
             fader.chargeEdge();
-            addMana(manaPerSec);
+            addMana(manaPerSec+rampup);
+            rampup += 12;
             yield return new WaitForSeconds(1F);
         }
     }
@@ -227,5 +229,12 @@ public class CharacterStats : MonoBehaviour {
         audioSource.Stop();
         StopCoroutine("manaCharge");
         fader.turnOff();
+    }
+
+    public void maxMana()
+    {
+        PLAYER_MANA = PLAYER_MAX_MANA;
+        manaEvent = new GUIEvent("mana", (int)(PLAYER_MANA / PLAYER_MAX_MANA * 100));
+        pub.publish(manaEvent);
     }
 }

@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour {
             StartCoroutine ("showGameoverMenu");
         }
 
-        if (menuShown && OVRInput.Get (OVRInput.Button.One))
+        if (menuShown && OVRInput.GetDown (OVRInput.Button.One))
             goNextScene = true;
 	}
 
