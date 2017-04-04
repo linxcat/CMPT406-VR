@@ -237,4 +237,10 @@ public class CharacterStats : MonoBehaviour {
         manaEvent = new GUIEvent("mana", (int)(PLAYER_MANA / PLAYER_MAX_MANA * 100));
         pub.publish(manaEvent);
     }
+
+    public void maxStamina(){
+        PLAYER_STAMINA = PLAYER_MAX_STAMINA;
+        staminaEvent = new GUIEvent("stamina", (int)(PLAYER_STAMINA/PLAYER_MAX_STAMINA*100));
+        pub.publish(staminaEvent);
+    }
 }
