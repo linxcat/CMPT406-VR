@@ -18,6 +18,7 @@ public class Projectile : MonoBehaviour {
     public AudioSource trailingSource;
 	// Use this for initialization
 	void Start () {
+        Destroy(gameObject, 10.0f);
         target = GameObject.FindGameObjectWithTag("MainCamera");
         playerStats = FindObjectOfType<CharacterStats>();
         transform.forward = originator.transform.forward + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
