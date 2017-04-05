@@ -17,6 +17,7 @@ public class Spells : MonoBehaviour {
     public AudioSource audioSource;
     public AudioClip healSound;
     public AudioClip slowSound;
+	public GameObject healParticle;
 
     void Awake() {
         characterStats = FindObjectOfType<CharacterStats> ();
@@ -69,6 +70,8 @@ public class Spells : MonoBehaviour {
             audioSource.Stop ();
             audioSource.PlayOneShot(healSound);
             healTimer = healDoublePeriod;
+			GameObject go = Instantiate (healParticle, Vector3.zero, Quaternion.identity) as GameObject;
+        	Destroy (go, 10);
             characterStats.addHealth(125);
         }
     }

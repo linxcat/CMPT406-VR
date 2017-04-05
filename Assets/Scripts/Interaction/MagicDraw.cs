@@ -11,6 +11,7 @@ public class MagicDraw : MonoBehaviour {
 
     public AudioClip magicHapticAudio;
     OVRHapticsClip magicHapticClip;
+	public GameObject magicTouchParticle;
 
     bool isDrawing = false;
 
@@ -34,6 +35,10 @@ public class MagicDraw : MonoBehaviour {
         magicLines.numPositions++;
         magicLines.SetPosition(magicLines.numPositions-2, other.transform.position);
         verticies.AddLast(other.name);
+
+		GameObject go = Instantiate (magicTouchParticle, Vector3.zero, Quaternion.identity) as GameObject;
+        Destroy (go, 10);
+
         audioSource.Stop();
         audioSource.PlayOneShot (magicTouchClip);
         InitiateHapticFeedback(magicHapticClip, 1);
