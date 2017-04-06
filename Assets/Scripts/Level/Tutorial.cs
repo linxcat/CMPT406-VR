@@ -23,6 +23,6 @@ public class Tutorial : MonoBehaviour {
         else {
             leaveCount = 0f;
         }
-        characterStats.maxStamina;
+        characterStats.maxStamina();
 	}
 }
