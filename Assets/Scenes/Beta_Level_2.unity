@@ -986,7 +986,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextScene: Beta_Level_1
-  fader: {fileID: 1488883926}
   winningMenu: {fileID: 573841050}
   gameoverMenu: {fileID: 1200345222}
   levelMusic: {fileID: 534121990}
@@ -2543,10 +2542,10 @@ MonoBehaviour:
   enemiesToNextWave: 0000000001000000020000000300000004000000
   timeInterval:
   - 10
+  - 40
   - 80
-  - 130
-  - 180
-  - 240
+  - 100
+  - 140
 --- !u!4 &1424621308
 Transform:
   m_ObjectHideFlags: 0
@@ -2606,11 +2605,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a560a5b237eaf9b489b671a6f034d074, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1488883926 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1856369124416514, guid: a560a5b237eaf9b489b671a6f034d074,
-    type: 2}
-  m_PrefabInternal: {fileID: 1488883925}
 --- !u!1001 &1519543985
 Prefab:
   m_ObjectHideFlags: 0

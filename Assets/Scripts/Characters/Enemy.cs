@@ -39,8 +39,10 @@ public abstract class Enemy : MonoBehaviour {
     public abstract void counter();
 
     public virtual void takeDamage(int damage) {
-        hp -= damage;
-        if (!isAlive()) die();
+        if(isAlive()){
+            hp -= damage;
+            if (!isAlive()) die();
+        }
     }
 
     public void startBurning(float seconds) {

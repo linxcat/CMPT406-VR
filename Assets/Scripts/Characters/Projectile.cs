@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour {
     GameObject target;
 
     CharacterStats playerStats;
-    int PROJECTILE_MANA = 15;
+    int PROJECTILE_MANA = 300;
     int PROJECTILE_DAMAGE = 40;
 
     bool reflected = false;

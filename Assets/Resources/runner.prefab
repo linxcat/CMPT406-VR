@@ -2074,7 +2074,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1068742407868336}
-  m_LocalRotation: {x: 0.118425444, y: -0.87388414, z: 0.32378325, w: -0.34273347}
+  m_LocalRotation: {x: 0.11842546, y: -0.87388426, z: 0.32378328, w: -0.3427335}
   m_LocalPosition: {x: -0.86873984, y: 0.44703138, z: -0.45930612}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2749,8 +2749,8 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
-      time: 0.008658009
-      value: 0.5267442
+      time: 0
+      value: 0.27906203
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2829,8 +2829,8 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
-      time: 0.008658009
-      value: 0.5267442
+      time: 0
+      value: 0.3154859
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2934,6 +2934,8 @@ MonoBehaviour:
   perfectDamage: 180
   goodDamage: 100
   badDamage: 50
+  burnDamage: 0.03
+  burnTickSpeed: 0.25
   audioSource: {fileID: 82626206269951944}
   badHitClip: {fileID: 8300000, guid: 76dd1ad6122f1764da4cf4bd39dc9a15, type: 3}
   goodHitClip: {fileID: 8300000, guid: bebd46745b6d6bb4badcb236747d5116, type: 3}
