@@ -260,13 +260,13 @@ public class Sword : MonoBehaviour {
         slash.transform.forward = flatSlash;
         switch (hit.getAccuracy()) {
             case Hit.ACCURACY.Perfect:
-                slashSettings.startColor = Color.red;
-                break;
-            case Hit.ACCURACY.Good:
                 slashSettings.startColor = Color.cyan;
                 break;
+            case Hit.ACCURACY.Good:
+                slashSettings.startColor = Color.green;
+                break;
             case Hit.ACCURACY.Bad:
-                slashSettings.startColor = Color.grey;
+                slashSettings.startColor = Color.red;
                 break;
         }
         slash.GetComponent<ParticleSystem>().Play();
