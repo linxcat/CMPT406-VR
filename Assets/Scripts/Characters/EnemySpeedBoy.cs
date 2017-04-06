@@ -9,7 +9,7 @@ public class EnemySpeedBoy : Enemy{
     private SpawnManager spawnManager;
     private float detectRange = 100;
     private float atkRange;
-    private float atkWindUp = 0F;
+    private float atkWindUp = 0.15F;
     private float atkDuration = 1.2F;
     private float atkCD = 4F;
     private float speed = 2F;
@@ -155,9 +155,9 @@ public class EnemySpeedBoy : Enemy{
         anim.SetBool("moving", false);
         agent.Stop();
         anim.SetTrigger("attack");
+        parryable = true;
         gruntSource.PlayOneShot(hitAttack);
         yield return new WaitForSeconds(atkWindUp);
-        parryable = true;
         yield return new WaitForSeconds(atkDuration);
         parryable = false;
         if(!attackCheck())

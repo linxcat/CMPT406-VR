@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour {
         Destroy(gameObject, 10.0f);
         target = GameObject.FindGameObjectWithTag("MainCamera");
         playerStats = FindObjectOfType<CharacterStats>();
-        transform.forward = originator.transform.forward + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+        transform.forward = originator.transform.forward + new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f));
         trailingSource.Play();
     }
 
@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour {
         if (target != null && Vector3.Distance(transform.position, target.transform.position) < 4f) {
             Quaternion a = transform.rotation;
             Quaternion b = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
-            transform.rotation = Quaternion.Lerp(a, b, 0.1f);
+            transform.rotation = Quaternion.Lerp(a, b, 0.05f);
         }
             gameObject.transform.position += transform.forward * speed * Time.timeScale;
     }
@@ -52,9 +52,9 @@ public class Projectile : MonoBehaviour {
         }
     }
     public void reflect() {
+        if (!reflected) transform.forward *= -1;
         target = originator;
         reflected = true;
-        transform.forward *= -1;
     }
 
     public void absorb() {

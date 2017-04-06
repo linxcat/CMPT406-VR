@@ -16,13 +16,14 @@ public class Hand : MonoBehaviour {
     GameObject player;
     //difference between this and the current time is the duration the time is still slowed
 
-
     bool swordIsOn = true;
     bool locked = false;
     bool locking = false;
 
     float speedThreshold = 0.025F;
     private float[] pastSpeeds = new float[23];
+
+    static bool counterUIisUp = false;
 
     static GameObject counterUI;
     GameObject sigilAnchor;
@@ -50,6 +51,7 @@ public class Hand : MonoBehaviour {
     // Use this for initialization
     void Start () {
         player = GameObject.FindGameObjectWithTag("MainCamera");
+        counterUI = Resources.Load<GameObject>("CounterProjectile");
         hitArray = GameObject.Find("HitArray");
         //GUIAnchor = GameObject.Find("GUIAnchor");
         wristAnchor = transform.FindChild("WristAnchor");
@@ -79,10 +81,6 @@ public class Hand : MonoBehaviour {
             if (swordIsOn && !locking && locked && !sword.swingTimeExceeded) sword.stopSlash();
         }
        else {
-            // gauntlet
- 
-
-
             placeGUI();
         }
 
@@ -173,7 +171,7 @@ public class Hand : MonoBehaviour {
                 other.gameObject.GetComponent<Projectile>().reflect();
             }
             else {
-                other.SendMessageUpwards("counter");
+                other.SendMessageUpwards("counter", SendMessageOptions.DontRequireReceiver);
             }
         }
     }
@@ -220,21 +218,21 @@ public class Hand : MonoBehaviour {
     }
 
     public void counterProjectile() {
-       
-        Time.timeScale = 0.111111f;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        
-        GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("CounterProjectile"));
-        counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 0.1f - new Vector3(0,0.4f,0);
-        counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
-        
+        if (!counterUIisUp) {
+            counterUIisUp = true;
+            Instantiate(counterUI);
+        }
     }
-
 
     public static void absorb() {
         if(currentProjectile != null) {
             currentProjectile.SendMessage("absorb");
         }
+        counterUIisUp = false;
+    }
+
+    public static void reflect() {
+        counterUIisUp = false;
     }
 
     //Call to initiate haptic feedback on a controller depending on the channel perameter. (Left controller is 0, right is 1)

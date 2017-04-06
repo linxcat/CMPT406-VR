@@ -94,6 +94,8 @@ public class Spells : MonoBehaviour {
 
             yield return new WaitForSecondsRealtime (duration);
 
+            CounterGUI.endTimeSpell();
+
             Time.timeScale = 1F;
             Time.fixedDeltaTime = originalDelta;
         }
@@ -123,7 +125,7 @@ public class Spells : MonoBehaviour {
 
     void fireball() {
         foreach(Hand hand in hands)
-            if( hand.storeFireball() && fireballCost < characterStats.getMana() )
+            if (fireballCost < characterStats.getMana() && hand.storeFireball())
                 characterStats.removeMana(fireballCost);
     }
 }

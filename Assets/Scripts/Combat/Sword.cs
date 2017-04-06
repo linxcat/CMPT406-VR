@@ -245,7 +245,7 @@ public class Sword : MonoBehaviour {
     }
 
     public bool storeFireball() {
-        if(fireballCharged)
+        if(fireballCharged || swordCharged)
             return false;
 
         fireballCharged = true;

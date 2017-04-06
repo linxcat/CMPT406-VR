@@ -309,7 +309,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Now the ranged globins are coming!  Parry their fireballs!
+  m_Text: Now the ranged goblins are coming!  Parry their fireballs!
 --- !u!222 &42226564
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -580,7 +580,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold non-dominant index finger trigger to continue
+  m_Text: Hold non-dominant index-trigger to continue.
 --- !u!222 &190821333
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -713,7 +713,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold left index finger trigger to continue
+  m_Text: Hold non-dominant index-trigger to continue.
 --- !u!222 &265428068
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1262,7 +1262,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Make sure to use TIME SLOW
 
-    when it''s overwhelming'
+    when it''s overwhelming.'
 --- !u!222 &609205713
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1340,7 +1340,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold non-dominant index finger trigger to continue
+  m_Text: Hold non-dominant index-trigger to continue.
 --- !u!222 &625381755
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1520,7 +1520,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Try killing them using parry and \nyour sword!"
+  m_Text: Try parrying them, and using your sword!
 --- !u!222 &672227048
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1603,7 +1603,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Be careful! They are fast!
+  m_Text: They will be much harder to parry.
 --- !u!222 &728228198
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2160,7 +2160,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Here are some basic walkers
+  m_Text: Here are some heavy hitters.
 --- !u!222 &1021959808
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3026,7 +3026,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold non-dominant index finger trigger to continue
+  m_Text: Hold non-dominant index-trigger to continue.
 --- !u!222 &1474541833
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3269,7 +3269,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Good job killing the walkers
+  m_Text: Good job killing the walkers.
 --- !u!222 &1587980227
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3994,7 +3994,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold non-dominant index finger trigger to continue
+  m_Text: Hold non-dominant index-trigger to continue.
 --- !u!222 &2072764297
 CanvasRenderer:
   m_ObjectHideFlags: 0
