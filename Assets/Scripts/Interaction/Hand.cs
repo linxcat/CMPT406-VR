@@ -224,7 +224,7 @@ public class Hand : MonoBehaviour {
         Time.timeScale = 0.111111f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
         
-        GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/CounterProjectile"));
+        GameObject counterUI = Instantiate<GameObject>(Resources.Load<GameObject>("CounterProjectile"));
         counterUI.transform.position = player.transform.position + centerEyeAnchor.transform.forward * 0.1f - new Vector3(0,0.4f,0);
         counterUI.transform.Rotate(new Vector3(0, 1, 0), 90);
         
