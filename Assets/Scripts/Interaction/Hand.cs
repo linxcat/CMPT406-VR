@@ -27,7 +27,7 @@ public class Hand : MonoBehaviour {
     static GameObject counterUI;
     GameObject sigilAnchor;
     GameObject hitArray;
-    GameObject GUIAnchor;
+    //GameObject GUIAnchor;
     Transform wristAnchor;
     Sword sword;
     Transform teleLineSpawn;
@@ -51,7 +51,7 @@ public class Hand : MonoBehaviour {
     void Start () {
         player = GameObject.FindGameObjectWithTag("MainCamera");
         hitArray = GameObject.Find("HitArray");
-        GUIAnchor = GameObject.Find("GUIAnchor");
+        //GUIAnchor = GameObject.Find("GUIAnchor");
         wristAnchor = transform.FindChild("WristAnchor");
         sword = transform.parent.Find("SwordAnchor/Sword").GetComponent<Sword>();
         teleLineSpawn = transform.Find("teleLineSpawn");
@@ -137,8 +137,8 @@ public class Hand : MonoBehaviour {
     }
 
     void placeGUI() {
-        GUIAnchor.transform.position = wristAnchor.position;
-        GUIAnchor.transform.forward = GUIAnchor.transform.position - centerEyeAnchor.transform.position;
+        //GUIAnchor.transform.position = wristAnchor.position;
+        //GUIAnchor.transform.forward = GUIAnchor.transform.position - centerEyeAnchor.transform.position;
     }
 
     IEnumerator trackSpeed() {
