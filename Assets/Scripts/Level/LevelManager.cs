@@ -66,9 +66,9 @@ public class LevelManager : MonoBehaviour {
         winningMenu.SetActive (true);
         fader.white();
         Time.timeScale = 0;
-        while (!goNextScene)
-            yield return null;
+        while (!goNextScene) yield return null;
         Time.timeScale = 1;
+        fader.teleFade(5F);
         SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
     }
 

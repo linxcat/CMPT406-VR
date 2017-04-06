@@ -31,7 +31,7 @@ public class Fader : MonoBehaviour {
 
     public void chargeEdge() {
         edgeMode(chargingBlue);
-        turnOn(); //up to caller to turn off
+        turnOn();
     }
 
     public void white() {
