@@ -156,6 +156,7 @@ public class EnemyRanged : Enemy {
         attacking = true;
         parryable = true;
         gruntSource.PlayOneShot(attackClip);
+        yield return new WaitForSeconds(0.15F);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 

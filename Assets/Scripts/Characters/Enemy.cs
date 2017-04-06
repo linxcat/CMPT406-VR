@@ -19,6 +19,7 @@ public abstract class Enemy : MonoBehaviour {
     //fraction of a second
     public float burnTickSpeed = 0.25f;
     private IEnumerator currentBurn = null;
+    private GameObject fire;
 
     protected float turnSpeed = 3F;
 
@@ -32,6 +33,8 @@ public abstract class Enemy : MonoBehaviour {
         agent = GetComponent<NavMeshAgent> ();
         audioSource = GetComponent<AudioSource>();
         player = GameObject.Find("Hitbox");
+        fire = transform.FindChild("Fire").gameObject;
+        fire.SetActive(false);
 	}
 
     public abstract void swingHit(Hit hit);
@@ -57,11 +60,13 @@ public abstract class Enemy : MonoBehaviour {
     }
 
     private IEnumerator burn(float seconds) {
+        fire.SetActive(true);
         while (seconds > 0.0001) {
             takeBurnTick();
             yield return new WaitForSeconds(burnTickSpeed);
             seconds -= burnTickSpeed;
         }
+        fire.SetActive(false);
     }
 
     public abstract void die();

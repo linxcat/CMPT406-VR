@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TutorialRangedEnemy : Enemy {
 
-    //private SpawnManager spawnManager;
     public GameObject projectile;
     private float detectRange = 100; //tuning required
     private float backupRange = 10;
@@ -40,7 +39,6 @@ public class TutorialRangedEnemy : Enemy {
         spawn,
         idle,
         follow,
-        //backup,
         attack,
         dead
     };
@@ -51,7 +49,6 @@ public class TutorialRangedEnemy : Enemy {
     void Start() {
         base.Start();
         hp = 50;
-        //spawnManager = FindObjectOfType<SpawnManager>();
         //TODO find projectile object
         turnSpeed = 4;
         anim = GetComponent<Animator>();
@@ -68,22 +65,14 @@ public class TutorialRangedEnemy : Enemy {
     void Update() {
         switch (currentState) {
             case rangedState.idle:
-                //searchPlayer();
                 attackCheck();
                 break;
             case rangedState.spawn:
                 if (!spawning) StartCoroutine("spawn");
                 break;
             case rangedState.follow:
-                //moveTowardsPlayer();
-
                 break;
-            /*case rangedState.backup:
-                facePlayer();
-                backUp();
-                break;*/
             case rangedState.attack:
-                //facePlayer();
                 if (!attacking) StartCoroutine("fireProjectile");
                 break;
         }
@@ -107,18 +96,9 @@ public class TutorialRangedEnemy : Enemy {
         float angle = Vector3.Angle(axisRotate, transform.forward);
 
         anim.SetBool("moving", true);
-        ////agent.Resume();
-        ////agent.destination = player.transform.position;
         fall();
         attackCheck();
     }
-
-    //void move(bool forward) {
-    //    float step = speed * Time.deltaTime;
-    //    if (!forward) step = -step;
-    //    Vector3 targetPos = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    //}
 
     void fall() {
         RaycastHit hitPoint = new RaycastHit();
@@ -136,25 +116,9 @@ public class TutorialRangedEnemy : Enemy {
         currentState = rangedState.idle;
     }
 
-    /*
-    private void backUp() {
-        Vector3 axisRotate = Vector3.ProjectOnPlane(player.transform.position - transform.position, Vector3.up);
-        float angle = Vector3.Angle(axisRotate, transform.forward);
-
-        if (angle > 5) {
-            slowFacePlayer();
-        }
-        else {
-            anim.SetBool("moving", true);
-            move(false);
-            fall();
-        }
-    }*/
-
     bool attackCheck()
     {
         Vector3 temp = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-        //Debug.Log(Vector3.Distance(temp, player.transform.position));
         if (Vector3.Distance(temp, player.transform.position) <= atkRange &&
             Physics.Raycast(transform.position, transform.forward, out hit, float.MaxValue, mask))
         {
@@ -168,12 +132,12 @@ public class TutorialRangedEnemy : Enemy {
     }
 
     IEnumerator fireProjectile() {
-        //agent.Stop();
         anim.SetBool("moving", false);
         anim.SetTrigger("attack");
         attacking = true;
         parryable = true;
         audioSource.PlayOneShot(attackClip);
+        yield return new WaitForSeconds(0.15F);
         Invoke("spawnProjectile", 0.4f);
         yield return new WaitForSeconds(atkDelay);
 
@@ -197,17 +161,14 @@ public class TutorialRangedEnemy : Enemy {
             case Hit.ACCURACY.Perfect:
                 audioSource.PlayOneShot(perfectHitClip);
                 InitiateHapticFeedback(perfectHapticClip, 1);
-                //takeDamage(maxDamage);
                 break;
             case Hit.ACCURACY.Good:
                 audioSource.PlayOneShot(goodHitClip);
                 InitiateHapticFeedback(goodHapticClip, 1);
-                //takeDamage(maxDamage / 2);
                 break;
             case Hit.ACCURACY.Bad:
                 audioSource.PlayOneShot(badHitClip);
                 InitiateHapticFeedback(badHapticClip, 1);
-                //takeDamage(maxDamage / 4);
                 break;
         }
     }
@@ -222,8 +183,6 @@ public class TutorialRangedEnemy : Enemy {
         GetComponent<Animator>().SetTrigger("kill");
         StopAllCoroutines();
         currentState = rangedState.dead;
-        //agent.enabled = false;
-        //spawnManager.EnemyKilled();
         GetComponent<Collider>().enabled = false;
         StartCoroutine("sink");
     }
